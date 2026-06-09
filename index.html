@@ -225,6 +225,9 @@ input,textarea,select{font-family:inherit}
 .gh-import-title{font-size:12.5px;font-weight:600;color:var(--text-light)}
 .gh-import-btn{height:30px;padding:0 14px;border-radius:8px;font-size:12.5px;font-weight:600;background:#4A4A4A;color:#fff;flex-shrink:0}
 .gh-import-btn:hover{background:#2E2E2E}
+.gh-import-btns{display:flex;gap:6px;margin-top:9px}
+.gh-import-btn.alt{background:var(--input-bg);color:var(--text-light)}
+.gh-import-btn.alt:hover{background:var(--hover);color:var(--text)}
 .gh-import-status{font-size:11.5px;color:var(--text-faint);margin-top:9px;line-height:1.45}
 .gh-clear{margin-top:8px;font-size:11.5px;color:var(--text-faint);text-decoration:underline}
 .gh-clear:hover{color:#eb5747}
@@ -575,7 +578,7 @@ textarea.guide-input:focus{border-color:#4A4A4A}
 .emoji-mini-btn:hover{background:var(--hover)}
 
 /* ============ LAYOUT PICKER ============ */
-.layout-pick{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.layout-pick{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .lay-opt{display:flex;flex-direction:column;align-items:center;gap:7px;padding:10px 6px;border:1.5px solid var(--divider);
   border-radius:10px;transition:.12s;background:var(--bg)}
 .lay-opt:hover{border-color:var(--text-faint)}
@@ -599,6 +602,12 @@ textarea.guide-input:focus{border-color:#4A4A4A}
   background:linear-gradient(var(--text-faint) 0 0) 50% 2px/40% 5px no-repeat,
     linear-gradient(var(--text-faint) 0 0) 50% 12px/64% 3px no-repeat,
     linear-gradient(var(--text-faint) 0 0) 50% 20px/64% 3px no-repeat;opacity:.5}
+.lt-tab::before{content:"";position:absolute;inset:6px;border-radius:3px;
+  background:linear-gradient(#4A4A4A 0 0) 0 0/24% 5px no-repeat,
+    linear-gradient(var(--text-faint) 0 0) 28% 0/24% 5px no-repeat,
+    linear-gradient(var(--text-faint) 0 0) 56% 0/24% 5px no-repeat,
+    linear-gradient(var(--text-faint) 0 0) 0 14px/100% 3px no-repeat,
+    linear-gradient(var(--text-faint) 0 0) 0 22px/80% 3px no-repeat;opacity:.6}
 
 
 /* ============ STYLE PICKER ============ */
@@ -886,6 +895,7 @@ const PAGE_CSS = `
 .np-item-role{font-size:13px;color:var(--text-faint);margin-top:4px;font-weight:500}
 .np-item-result{display:flex;gap:8px;align-items:flex-start;margin-top:8px;font-size:14px;color:var(--text-light);line-height:1.55;white-space:pre-wrap}
 .np-res-badge{flex-shrink:0;font-size:11px;font-weight:700;padding:2px 7px;border-radius:5px;background:var(--accent);color:#fff;opacity:.9;margin-top:1px}
+.np-star{flex-shrink:0;font-size:12.5px;font-weight:600;color:var(--text-faint);margin-left:auto;white-space:nowrap}
 .np-item-link{font-size:13.5px;color:#4A4A4A;text-decoration:none;display:inline-flex;align-items:center;gap:5px;margin-top:8px}
 .np-links{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px}
 .np-link-btn{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:var(--text);
@@ -961,8 +971,20 @@ const PAGE_CSS = `
 .lay-notion.wide.notion-page{max-width:1100px}
 .lay-sidebar.wide.notion-page{max-width:1240px}
 .lay-minimal.wide.notion-page{max-width:880px}
+.lay-tab.wide.notion-page{max-width:1100px}
 .wide .np-body{padding-left:72px;padding-right:72px}
 .lay-minimal.wide .np-body{padding-left:52px;padding-right:52px}
+
+/* ===== LAYOUT: TAB (섹션 탭 바로가기) ===== */
+.lay-tab .np-tabbar{display:flex;flex-wrap:wrap;gap:4px;margin:10px 0 26px;border-bottom:1px solid var(--divider)}
+.lay-tab .np-tab{padding:10px 15px;font-size:14.5px;font-weight:600;color:var(--text-faint);border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .12s,border-color .12s;white-space:nowrap}
+.lay-tab .np-tab:hover{color:var(--text)}
+.lay-tab .np-tab.on{color:var(--accent);border-bottom-color:var(--accent)}
+.lay-tab .np-tab-pane{display:none}
+.lay-tab .np-tab-pane.on{display:block;animation:np-tabfade .26s ease}
+.lay-tab .np-tab-pane .np-section{margin-bottom:0}
+@keyframes np-tabfade{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+@media print{.lay-tab .np-tabbar{display:none}.lay-tab .np-tab-pane{display:block!important;margin-bottom:30px}}
 
 /* =========================================================
    DESIGN STYLES (스킨) — 같은 콘텐츠, 다른 디자인
@@ -1349,11 +1371,6 @@ function buildBody(i){
   }else if(s.id==='contact'){
     body=
       `<div class="inp-row">${field('위치',inp('profile.location','Seoul, Korea',p.location))}${field('이메일',inp('profile.email','me@example.com',p.email))}</div>`+
-      field('GitHub',inp('profile.github','github.com/username',p.github))+
-      (()=>{ const u=(state.github&&state.github.user)||'', c=(state.github&&state.github.repos&&state.github.repos.length)||0;
-        return `<div class="gh-import"><div class="gh-import-head"><span class="gh-import-title">🐙 GitHub 저장소 자동 추가</span><button class="gh-import-btn" id="gh-fetch">${c?'새로고침':'불러오기'}</button></div>`+
-        `<div class="gh-import-status" id="gh-status">${c?`✓ ${esc(u)} · 대표 저장소 ${c}개 (별 많은 순)`:'위 GitHub 주소를 기준으로 대표 저장소를 자동으로 가져옵니다'}</div>`+
-        `${c?'<button class="gh-clear" id="gh-clear">지우기</button>':''}</div>`; })()+
       field('웹사이트 / 블로그',inp('profile.website','mysite.dev',p.website))+
       `<label class="field-label" style="margin-top:6px">추가 링크</label><div id="rep-links"></div>`;
   }else if(s.id==='about'){
@@ -1364,7 +1381,16 @@ function buildBody(i){
       `<div class="skill-sugg-wrap"><span class="skill-sugg-label">추천 기술 — 클릭하면 추가돼요</span><div class="skill-sugg-chips" id="skill-suggest"></div></div>`;
   }else if(s.id==='tools'){ body=`<div id="tools-picker"></div>`; }
   else if(s.id==='experience'){ body=`<div id="rep-experience"></div>`; }
-  else if(s.id==='projects'){ body=`<div id="rep-projects"></div>`; }
+  else if(s.id==='projects'){
+    const gu=(state.github&&state.github.user)||(ghParse(p.github).owner)||'';
+    body=`<div class="gh-import">
+      <div class="gh-import-head"><span class="gh-import-title">🐙 GitHub에서 프로젝트 가져오기</span></div>
+      <input id="gh-input" class="inp" style="margin:9px 0 0" placeholder="사용자명 또는 github.com/user/repo" value="${esc(gu)}" autocomplete="off">
+      <div class="gh-import-btns"><button class="gh-import-btn alt" id="gh-one">이 저장소</button><button class="gh-import-btn" id="gh-bulk">대표 저장소 일괄</button></div>
+      <div class="gh-import-status" id="gh-status">저장소 주소(<b>user/repo</b>)면 하나만, 사용자명이면 대표 저장소를 불러옵니다.</div>
+    </div>
+    <div id="rep-projects"></div>`;
+  }
   else if(s.id==='education'){ body=`<div id="rep-education"></div>`; }
   else if(s.id==='finish'){
     body=`<div class="notion-guide">
@@ -1425,11 +1451,13 @@ function bindOpenBody(){
   if(s.id==='skills'){ renderSkillsPreview(); renderSkillSuggestions(); }
   if(s.id==='contact'){
     renderRepeater('links',document.getElementById('rep-links'),LINK_FIELDS,'링크');
-    const gf=scope.querySelector('#gh-fetch'); if(gf) gf.onclick=importGitHub;
-    const gc=scope.querySelector('#gh-clear'); if(gc) gc.onclick=()=>{ state.github={user:'',repos:[]}; renderStep(); liveUpdate(); };
   }
   if(s.id==='experience') renderRepeater('experience',document.getElementById('rep-experience'),EXP_FIELDS,'경력');
-  if(s.id==='projects') renderRepeater('projects',document.getElementById('rep-projects'),PROJ_FIELDS,'프로젝트');
+  if(s.id==='projects'){
+    renderRepeater('projects',document.getElementById('rep-projects'),PROJ_FIELDS,'프로젝트');
+    const one=scope.querySelector('#gh-one'); if(one) one.onclick=()=>importGitHubProjects('one');
+    const bulk=scope.querySelector('#gh-bulk'); if(bulk) bulk.onclick=()=>importGitHubProjects('bulk');
+  }
   if(s.id==='education') renderRepeater('education',document.getElementById('rep-education'),EDU_FIELDS,'학력');
   if(s.id==='finish'){ const fp=document.getElementById('fin-present'); if(fp) fp.onclick=openSlides; }
 }
@@ -1858,8 +1886,8 @@ function setPath(path,val){
    RENDER: NOTION PREVIEW (pure-ish — uses state + theme)
    ========================================================= */
 /* 섹션 순서 ── 표준 5종 + 커스텀(cs:id) */
-const SEC_LABEL={skills:'🛠️ 기술 스택',tools:'🧰 서비스 · 도구',experience:'💼 경력',projects:'🚀 프로젝트',github:'🐙 GitHub',education:'🎓 교육'};
-function sectionKeys(st){ const base=['skills','tools','experience','projects']; if(st.github&&st.github.repos&&st.github.repos.length) base.push('github'); base.push('education'); return [...base,...(st.custom||[]).map(c=>'cs:'+c.id)]; }
+const SEC_LABEL={skills:'🛠️ 기술 스택',tools:'🧰 서비스 · 도구',experience:'💼 경력',projects:'🚀 프로젝트',education:'🎓 교육'};
+function sectionKeys(st){ return ['skills','tools','experience','projects','education',...(st.custom||[]).map(c=>'cs:'+c.id)]; }
 function orderedSections(st){
   const all=sectionKeys(st), ord=st.sectionOrder||[];
   return all.slice().sort((a,b)=>{
@@ -1888,7 +1916,6 @@ function renderPageHTML(st, opts){
   if(p.role) props.push(`<div class="np-prop"><span class="pk">직무</span><span class="pv"${ed('profile.role','직무')}>${esc(p.role)}</span></div>`);
   if(p.location) props.push(`<div class="np-prop"><span class="pk">위치</span><span class="pv"${ed('profile.location','위치')}>${esc(p.location)}</span></div>`);
   if(p.email) props.push(`<div class="np-prop"><span class="pk">이메일</span>${edit?`<span class="pv pv-link"${ed('profile.email','이메일')}>${esc(p.email)}</span>`:`<a class="pv" href="mailto:${esc(p.email)}">${esc(p.email)}</a>`}</div>`);
-  if(p.github) props.push(`<div class="np-prop"><span class="pk">GitHub</span>${edit?`<span class="pv pv-link"${ed('profile.github','GitHub')}>${esc(p.github)}</span>`:`<a class="pv" href="${normUrl(p.github)}" target="_blank" rel="noopener">${esc(p.github)}</a>`}</div>`);
   if(p.website) props.push(`<div class="np-prop"><span class="pk">웹사이트</span>${edit?`<span class="pv pv-link"${ed('profile.website','웹사이트')}>${esc(p.website)}</span>`:`<a class="pv" href="${normUrl(p.website)}" target="_blank" rel="noopener">${esc(p.website)}</a>`}</div>`);
   (p.links||[]).forEach((l,li)=>{ if(l.label||l.url) props.push(`<div class="np-prop"><span class="pk"${ed('profile.links.'+li+'.label','링크명')}>${esc(l.label||'링크')}</span>${edit?`<span class="pv pv-link"${ed('profile.links.'+li+'.url','URL')}>${esc(l.url||'')}</span>`:`<a class="pv" href="${normUrl(l.url)}" target="_blank" rel="noopener">${esc(l.url||l.label)}</a>`}</div>`); });
 
@@ -1952,7 +1979,8 @@ function renderPageHTML(st, opts){
         const roleEl=(x.role||edit)?`<div class="np-item-role"${ed('projects.'+i+'.role','담당 역할')}>${esc(x.role||'')}</div>`:'';
         const dsc=(x.desc||edit)?`<div class="np-item-desc"${ed('projects.'+i+'.desc','프로젝트 설명')}>${esc(x.desc||'')}</div>`:'';
         const resEl=(x.result||edit)?`<div class="np-item-result"><span class="np-res-badge">성과</span><span${ed('projects.'+i+'.result','주요 성과')}>${esc(x.result||'')}</span></div>`:'';
-        return `<div class="np-item"><div class="np-item-top"><span class="np-item-title"${ed('projects.'+i+'.name','프로젝트명')}>${esc(x.name||'프로젝트')}</span>${per}</div>${roleEl}${dsc}${resEl}${tg}${lk}</div>`;
+        const star=x.stars?`<span class="np-star">★ ${x.stars}</span>`:'';
+        return `<div class="np-item"><div class="np-item-top"><span class="np-item-title"${ed('projects.'+i+'.name','프로젝트명')}>${esc(x.name||'프로젝트')}</span>${star}${per}</div>${roleEl}${dsc}${resEl}${tg}${lk}</div>`;
       }).join('')
     : `<div class="np-empty-ph">프로젝트를 추가해보세요</div>`;
   const projSec=(st.projects.length||edit)?sectionWrap('🚀','프로젝트',projInner,6,edit):'';
@@ -1962,17 +1990,6 @@ function renderPageHTML(st, opts){
     ? st.education.map((x,i)=>`<div class="np-item"><div class="np-item-top"><div><span class="np-item-title"${ed('education.'+i+'.school','학교')}>${esc(x.school||'학교')}</span> <span class="np-item-sub">· <span${ed('education.'+i+'.degree','전공/학위')}>${esc(x.degree||'전공')}</span></span></div>${(x.period||edit)?`<span class="np-item-period"${ed('education.'+i+'.period','기간')}>${esc(x.period||'')}</span>`:''}</div></div>`).join('')
     : `<div class="np-empty-ph">학력을 추가해보세요</div>`;
   const eduSec=(st.education.length||edit)?sectionWrap('🎓','교육',eduInner,7,edit):'';
-
-  // GitHub 저장소 (자동 연동)
-  const ghRepos=(st.github&&st.github.repos)||[];
-  let githubSec='';
-  if(ghRepos.length){
-    const cards=ghRepos.map(r=>`<a class="np-gh-card" href="${esc(r.url||'#')}"${edit?'':' target="_blank" rel="noopener"'}>`+
-      `<div class="np-gh-top"><span class="np-gh-name">${esc(r.name||'')}</span>${r.stars?`<span class="np-gh-star">★ ${r.stars}</span>`:''}</div>`+
-      `${r.desc?`<div class="np-gh-desc">${esc(r.desc)}</div>`:''}`+
-      `${r.lang?`<div class="np-gh-lang"><span class="np-gh-dot"></span>${esc(r.lang)}</div>`:''}</a>`).join('');
-    githubSec=sectionWrap('🐙','GitHub',`<div class="np-gh-grid">${cards}</div>`,1,edit);
-  }
 
   const titleCls = p.name?'np-title':'np-title faint';
   const titleTxt = p.name||'제목 없음';
@@ -1999,7 +2016,7 @@ function renderPageHTML(st, opts){
     customMap['cs:'+cs.id]=`<div class="np-section"><div class="np-h"><span class="he">${esc(cs.emoji||'📌')}</span><span${ed('custom.'+ci+'.title','섹션 이름')}>${esc(cs.title||'커스텀 섹션')}</span></div>${inner}</div>`;
   });
   // 섹션 순서대로 조립 (skipSkills: 사이드바는 skills를 aside에 별도 배치)
-  const secMap={skills:skillsSec,tools:toolsSec,experience:expSec,projects:projSec,github:githubSec,education:eduSec,...customMap};
+  const secMap={skills:skillsSec,tools:toolsSec,experience:expSec,projects:projSec,education:eduSec,...customMap};
   const bodySections=(skipKeys)=>orderedSections(st).filter(k=>!(skipKeys&&skipKeys.includes(k))).map(k=>secMap[k]||'').join('');
 
   const layout=(st.theme&&st.theme.layout)||'notion';
@@ -2027,6 +2044,19 @@ function renderPageHTML(st, opts){
         <div class="np-min-head">${iconEl}${titleEl}${tagEl}${propsBlock}</div>
         ${callout}
         ${bodySections()}
+      </div>
+    </div>`;
+  }
+  if(layout==='tab'){
+    const tabKeys=orderedSections(st).filter(k=>secMap[k]);
+    const tabs=tabKeys.map((k,i)=>`<button class="np-tab${i===0?' on':''}" data-tabi="${i}" type="button">${esc(secLabel(st,k))}</button>`).join('');
+    const panes=tabKeys.map((k,i)=>`<div class="np-tab-pane${i===0?' on':''}">${secMap[k]}</div>`).join('');
+    return `<div class="notion-page lay-tab${wideCls}${styCls}${noIconCls}${noCoverCls}" style="${accVar}">
+      ${coverEl}
+      <div class="np-body">
+        ${iconEl}${titleEl}${tagEl}${propsBlock}${callout}
+        <div class="np-tabbar">${tabs}</div>
+        <div class="np-tab-panes">${panes}</div>
       </div>
     </div>`;
   }
@@ -2060,6 +2090,20 @@ function svgIcon(name){
 /* =========================================================
    LIVE UPDATE
    ========================================================= */
+let pvTab=0; // 미리보기 탭 레이아웃 활성 인덱스 유지
+function applyTab(page,idx){
+  const bar=page.querySelector('.np-tabbar'), panesWrap=page.querySelector('.np-tab-panes');
+  if(!bar||!panesWrap) return;
+  const tabs=bar.querySelectorAll('.np-tab'), panes=panesWrap.querySelectorAll('.np-tab-pane');
+  if(idx<0||idx>=tabs.length) idx=0;
+  tabs.forEach((t,n)=>t.classList.toggle('on',n===idx));
+  panes.forEach((p,n)=>p.classList.toggle('on',n===idx));
+}
+function wireTabs(scope){
+  const page=scope.querySelector('.lay-tab'); if(!page) return;
+  applyTab(page,pvTab);
+  page.querySelectorAll('.np-tabbar .np-tab').forEach((t,i)=>t.onclick=(e)=>{ e.stopPropagation(); pvTab=i; applyTab(page,i); });
+}
 function liveUpdate(){
   if(!isUndoing){
     const cur=snapshot();
@@ -2069,6 +2113,7 @@ function liveUpdate(){
   const root=document.getElementById('preview-root');
   root.innerHTML=renderPageHTML(state,{edit:true});
   root.querySelectorAll('.pv-edit').forEach(n=>n.onclick=(e)=>{e.stopPropagation();goStep(+n.dataset.goto);});
+  wireTabs(root); // 탭 레이아웃 전환 + 활성 탭 유지
   renderNav();
   if(STEPS[currentStep]?.id==='skills'){ renderSkillsPreview(); renderSkillSuggestions(); }
   if(STEPS[currentStep]?.id==='tools') renderToolsPicker();
@@ -2104,66 +2149,93 @@ function buildSlidesHTML(st){
   const tags=st.skills.split(',').map(t=>t.trim()).filter(Boolean);
   const chip=(t,big)=>{const c=tagColor(t,dark);return `<span class="${big?'sl-tag-chip':'np-tag'}" style="background:${c.bg};color:${c.fg}">${esc(t)}</span>`;};
 
-  // Slide 1: title
-  const s1=`<div class="slide" data-i="0">
-    <div class="slide-cover band" style="background:${cover}"></div>
-    <div style="position:relative;display:flex;flex-direction:column;height:100%">
+  const band=`<div class="slide-cover band" style="background:${cover}"></div>`;
+  const listInner=(emoji,title,items)=>`<div class="sl-kicker">${title}</div>
+    <div class="sl-h"><span>${emoji}</span>${title}</div>
+    <div class="sl-list">${items}</div>`;
+  const slides=[]; // 각 슬라이드 내용(밴드·페이지번호 제외)
+
+  // 1. 타이틀
+  slides.push(`<div style="position:relative;display:flex;flex-direction:column;height:100%">
       <div class="sl-emoji">${slEmoji}</div>
       <div class="sl-name">${esc(p.name||'Your Name')}</div>
       <div class="sl-role">${esc(p.role||'Your Role')}</div>
       ${p.tagline?`<div class="sl-tag">“${esc(p.tagline)}”</div>`:'<div style="margin-top:auto"></div>'}
-    </div>
-    <div class="sl-pageno">01 / 05</div></div>`;
+    </div>`);
 
-  // Slide 2: about + skills
-  const s2=`<div class="slide" data-i="1">
-    <div class="slide-cover band" style="background:${cover}"></div>
-    <div class="sl-kicker">소개</div>
+  // 2. 소개 + 기술 스택
+  slides.push(`<div class="sl-kicker">소개</div>
     ${st.about?`<div class="sl-callout"><span class="e">💡</span><span>${esc(st.about)}</span></div>`:''}
     <div class="sl-h"><span>🛠️</span>기술 스택</div>
-    <div class="sl-tags">${tags.length?tags.map(t=>chip(t,true)).join(''):'<span style="color:var(--text-faint)">—</span>'}</div>
-    <div class="sl-pageno">02 / 05</div></div>`;
+    <div class="sl-tags">${tags.length?tags.map(t=>chip(t,true)).join(''):'<span style="color:var(--text-faint)">—</span>'}</div>`);
 
-  const listSlide=(i,emoji,title,items)=>`<div class="slide" data-i="${i}">
-    <div class="slide-cover band" style="background:${cover}"></div>
-    <div class="sl-kicker">${title}</div>
-    <div class="sl-h"><span>${emoji}</span>${title}</div>
-    <div class="sl-list">${items}</div>
-    <div class="sl-pageno">0${i+1} / 05</div></div>`;
+  // 3. 서비스 · 도구 (있을 때)
+  const selT=st.tools||[];
+  if(selT.length) slides.push(`<div class="sl-kicker">서비스 · 도구</div>
+    <div class="sl-h"><span>🧰</span>서비스 · 도구</div>
+    <div class="sl-tags">${selT.map(t=>chip(t,true)).join('')}</div>`);
 
+  // 4. 경력
   const exItems = st.experience.length? st.experience.slice(0,4).map(x=>`<div><div class="sl-li-top"><div><span class="sl-li-title">${esc(x.role||'')}</span> <span class="sl-li-sub">· ${esc(x.company||'')}${x.level?` · ${esc(x.level)}`:''}</span></div><span class="sl-li-period">${esc(x.period||'')}</span></div>${x.desc?`<div class="sl-li-desc">${esc(x.desc)}</div>`:''}</div>`).join('') : '<div style="color:var(--text-faint)">경력 정보 없음</div>';
-  const s3=listSlide(2,'💼','경력',exItems);
+  slides.push(listInner('💼','경력',exItems));
 
-  const prItems = st.projects.length? st.projects.slice(0,4).map(x=>{const t=(x.tech||'').split(',').map(s=>s.trim()).filter(Boolean);const sub=x.role?` <span class="sl-li-sub">· ${esc(x.role)}</span>`:'';return `<div><div class="sl-li-top"><div><span class="sl-li-title">${esc(x.name||'')}</span>${sub}</div></div>${x.desc?`<div class="sl-li-desc">${esc(x.desc)}</div>`:''}${x.result?`<div class="sl-li-desc">🏆 ${esc(x.result)}</div>`:''}${t.length?`<div class="sl-tags" style="margin-top:8px">${t.map(s=>chip(s,false)).join('')}</div>`:''}</div>`;}).join('') : '<div style="color:var(--text-faint)">프로젝트 정보 없음</div>';
-  const s4=listSlide(3,'🚀','프로젝트',prItems);
+  // 5. 프로젝트 — 한 장에 하나씩 (내용 풍부히)
+  if(st.projects.length){
+    st.projects.forEach((x,pi)=>{
+      const t=(x.tech||'').split(',').map(s=>s.trim()).filter(Boolean);
+      const star=x.stars?`<span class="sl-li-period" style="font-size:19px;align-self:center;white-space:nowrap">★ ${x.stars}</span>`:'';
+      const meta=[]; if(x.role&&x.role.trim())meta.push(esc(x.role)); if(x.period)meta.push(esc(x.period));
+      const demo=x.demo||x.link, urls=[];
+      if(x.repo)urls.push('🔗 '+esc(String(x.repo).replace(/^https?:\/\//,'')));
+      if(demo)urls.push('🌐 '+esc(String(demo).replace(/^https?:\/\//,'')));
+      slides.push(`<div class="sl-kicker">프로젝트 ${pi+1} / ${st.projects.length}</div>
+        <div class="sl-h" style="justify-content:space-between;align-items:flex-start;gap:20px"><span><span style="margin-right:14px">🚀</span>${esc(x.name||'프로젝트')}</span>${star}</div>
+        ${meta.length?`<div class="sl-li-sub" style="margin:-18px 0 22px;font-size:21px">${meta.join('  ·  ')}</div>`:''}
+        ${x.desc?`<div class="sl-li-desc" style="font-size:22px;line-height:1.65;margin-bottom:18px">${esc(x.desc)}</div>`:''}
+        ${x.result?`<div class="sl-li-desc" style="font-size:20px;margin-bottom:18px">🏆 ${esc(x.result)}</div>`:''}
+        ${t.length?`<div class="sl-tags">${t.map(s=>chip(s,true)).join('')}</div>`:''}
+        ${urls.length?`<div class="sl-li-desc" style="color:var(--text-faint);margin-top:20px;font-size:17px">${urls.join('     ')}</div>`:''}`);
+    });
+  } else {
+    slides.push(listInner('🚀','프로젝트','<div style="color:var(--text-faint)">프로젝트 정보 없음</div>'));
+  }
 
-  // Slide 5: education + contact
+  // 6. 커스텀 섹션들 (항목 있을 때)
+  (st.custom||[]).forEach(cs=>{
+    const items=(cs.items||[]).filter(it=>it.title);
+    if(!cs.title || !items.length) return;
+    const ci=items.slice(0,4).map(it=>`<div><div class="sl-li-top"><div><span class="sl-li-title">${esc(it.title)}</span>${it.sub?` <span class="sl-li-sub">· ${esc(it.sub)}</span>`:''}</div>${it.period?`<span class="sl-li-period">${esc(it.period)}</span>`:''}</div>${it.desc?`<div class="sl-li-desc">${esc(it.desc)}</div>`:''}</div>`).join('');
+    slides.push(listInner(cs.emoji||'📌',cs.title,ci));
+  });
+
+  // 8. 교육 + 연락처 (마지막)
   const eduItems = st.education.length? st.education.map(x=>`<div><div class="sl-li-top"><div><span class="sl-li-title">${esc(x.school||'')}</span> <span class="sl-li-sub">· ${esc(x.degree||'')}</span></div><span class="sl-li-period">${esc(x.period||'')}</span></div></div>`).join('') : '<div style="color:var(--text-faint)">학력 정보 없음</div>';
   const contacts=[];
   if(p.email)contacts.push(`<div>✉️ ${esc(p.email)}</div>`);
   if(p.github)contacts.push(`<div>🐙 ${esc(p.github)}</div>`);
   if(p.website)contacts.push(`<div>🌐 ${esc(p.website)}</div>`);
   if(p.location)contacts.push(`<div>📍 ${esc(p.location)}</div>`);
-  const s5=`<div class="slide" data-i="4">
-    <div class="slide-cover band" style="background:${cover}"></div>
-    <div class="sl-kicker">교육 · 연락처</div>
+  slides.push(`<div class="sl-kicker">교육 · 연락처</div>
     <div class="sl-h"><span>🎓</span>교육</div>
     <div class="sl-list">${eduItems}</div>
-    ${contacts.length?`<div class="sl-h" style="font-size:30px;margin-top:34px"><span>📬</span>연락처</div><div class="sl-contact">${contacts.join('')}</div>`:''}
-    <div class="sl-pageno">05 / 05</div></div>`;
+    ${contacts.length?`<div class="sl-h" style="font-size:30px;margin-top:34px"><span>📬</span>연락처</div><div class="sl-contact">${contacts.join('')}</div>`:''}`);
 
-  return s1+s2+s3+s4+s5;
+  // 조립 — data-i·페이지번호 자동
+  const total=slides.length, pad=n=>String(n).padStart(2,'0');
+  return slides.map((inner,i)=>`<div class="slide" data-i="${i}">${band}${inner}<div class="sl-pageno">${pad(i+1)} / ${pad(total)}</div></div>`).join('');
 }
 function openSlides(){
   closeMenus();
   const ov=document.getElementById('slides-overlay');
   ov.classList.remove('hidden');
+  const slidesHTML=buildSlidesHTML(state);
+  const nSlides=(slidesHTML.match(/class="slide"/g)||[]).length;
   ov.innerHTML=`
-    <div class="slide-stage"><div class="slide-canvas" id="slide-canvas" style="--accent:${accentHex(state)}">${buildSlidesHTML(state)}</div></div>
+    <div class="slide-stage"><div class="slide-canvas" id="slide-canvas" style="--accent:${accentHex(state)}">${slidesHTML}</div></div>
     <button class="slide-exit" id="sl-exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     <button class="slide-arrow prev" id="sl-prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg></button>
     <button class="slide-arrow next" id="sl-next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg></button>
-    <div class="slide-dots" id="sl-dots">${[0,1,2,3,4].map(i=>`<div class="slide-dot" data-i="${i}"></div>`).join('')}</div>`;
+    <div class="slide-dots" id="sl-dots">${Array.from({length:nSlides},(_,i)=>`<div class="slide-dot" data-i="${i}"></div>`).join('')}</div>`;
   slideIdx=0; showSlide(0); scaleSlides();
   document.getElementById('sl-exit').onclick=closeSlides;
   document.getElementById('sl-prev').onclick=()=>showSlide(slideIdx-1);
@@ -2334,20 +2406,9 @@ function getPath(path){ const parts=String(path).split('.'); let o=state; for(co
 function toMarkdown(st){
   const p=st.profile; let m='';
   const PH=(v,hint)=> v && String(v).trim() ? String(v).trim() : `_${hint}_`;
-  const cell=v=> v && String(v).trim() ? String(v).trim() : ' ';
 
   m+=`# ${p.emoji||'👋'} ${p.name||'이름'}\n\n`;
   m+=`**${PH(p.role,'직무 / 타이틀')}** — ${PH(p.tagline,'한 줄 태그라인')}\n\n`;
-
-  // 연락처·링크 표 — 항상 전체 행(빈 칸은 비워둠) → 노션에서 채우기
-  m+=`| | |\n| --- | --- |\n`;
-  m+=`| 💼 직무 | ${cell(p.role)} |\n`;
-  m+=`| 📍 위치 | ${cell(p.location)} |\n`;
-  m+=`| ✉️ 이메일 | ${cell(p.email)} |\n`;
-  m+=`| 🐙 GitHub | ${cell(p.github)} |\n`;
-  m+=`| 🌐 웹사이트 | ${cell(p.website)} |\n`;
-  (p.links||[]).forEach(l=>{ if(l.label||l.url) m+=`| 🔗 ${l.label||'링크'} | ${cell(l.url)} |\n`; });
-  m+='\n';
 
   m+=`## 💡 소개\n\n${st.about&&st.about.trim()?st.about:'_여기에 자기소개를 작성하세요._'}\n\n`;
 
@@ -2366,7 +2427,7 @@ function toMarkdown(st){
     }); secMd.experience=s; }
   { let s=`## 🚀 프로젝트\n\n`;
     (st.projects.length?st.projects:[{}]).forEach(x=>{
-      s+=`### ${PH(x.name,'프로젝트명')}${x.period?` (${x.period})`:''}\n`;
+      s+=`### ${PH(x.name,'프로젝트명')}${x.period?` (${x.period})`:''}${x.stars?` · ⭐ ${x.stars}`:''}\n`;
       if(x.role&&x.role.trim()) s+=`**담당 역할:** ${x.role}\n\n`;
       s+=`${x.desc&&x.desc.trim()?x.desc:'_프로젝트 설명 / 담당 업무를 작성하세요._'}\n\n`;
       if(x.result&&x.result.trim()) s+=`**성과:** ${x.result.replace(/\n/g,'\n> ')}\n\n`;
@@ -2379,10 +2440,6 @@ function toMarkdown(st){
     (st.education.length?st.education:[{}]).forEach(x=>{
       s+=`- **${PH(x.school,'학교명')}** · ${PH(x.degree,'전공 / 학위')}${x.period?` _(${x.period})_`:''}\n`;
     }); s+='\n'; secMd.education=s; }
-  { const gr=(st.github&&st.github.repos)||[];
-    if(gr.length){ let s=`## 🐙 GitHub\n\n`;
-      gr.forEach(r=>{ s+=`- **[${r.name}](${r.url})**${r.stars?` · ⭐ ${r.stars}`:''}${r.lang?` · ${r.lang}`:''}${r.desc?` — ${r.desc}`:''}\n`; });
-      s+='\n'; secMd.github=s; } }
   (st.custom||[]).forEach(cs=>{
     if(!cs.title) return;
     let s=`## ${cs.emoji||'📌'} ${cs.title}\n\n`;
@@ -2400,8 +2457,8 @@ function toMarkdown(st){
 
 function buildStandalone(st){
   // pure helpers + constants serialized into the viewer
-  const consts = `var GRADIENTS=${JSON.stringify(GRADIENTS)};var TAG_LIGHT=${JSON.stringify(TAG_LIGHT)};var TAG_DARK=${JSON.stringify(TAG_DARK)};var TOOL_CATS=${JSON.stringify(TOOL_CATS)};`;
-  const helpers = consts+'\n'+[esc, normUrl, svgIcon, gradientCss, coverBg, accentHex, tagColor, sectionWrap, sectionKeys, orderedSections, renderPageHTML, buildSlidesHTML].map(f=>f.toString()).join('\n');
+  const consts = `var GRADIENTS=${JSON.stringify(GRADIENTS)};var TAG_LIGHT=${JSON.stringify(TAG_LIGHT)};var TAG_DARK=${JSON.stringify(TAG_DARK)};var TOOL_CATS=${JSON.stringify(TOOL_CATS)};var SEC_LABEL=${JSON.stringify(SEC_LABEL)};`;
+  const helpers = consts+'\n'+[esc, normUrl, svgIcon, gradientCss, coverBg, accentHex, tagColor, sectionWrap, sectionKeys, orderedSections, secLabel, renderPageHTML, buildSlidesHTML].map(f=>f.toString()).join('\n');
   const data=JSON.stringify(st);
   const title=`${st.profile.name||'Portfolio'} — Portfolio`;
   // assemble; escape closing script tags
@@ -2454,6 +2511,14 @@ ${helpers}
 var STATE=${data};
 function gid(x){return document.getElementById(x);}
 document.getElementById('root').innerHTML=renderPageHTML(STATE,{});
+/* 탭 레이아웃 — 섹션 전환 (이벤트 위임, 재렌더에도 유지) */
+document.addEventListener('click',function(e){
+  var t=e.target.closest&&e.target.closest('.np-tabbar .np-tab'); if(!t) return;
+  var bar=t.parentElement, panes=bar.nextElementSibling;
+  var idx=Array.prototype.indexOf.call(bar.children,t);
+  bar.querySelectorAll('.np-tab').forEach(function(b,n){b.classList.toggle('on',n===idx);});
+  if(panes) panes.querySelectorAll('.np-tab-pane').forEach(function(p,n){p.classList.toggle('on',n===idx);});
+});
 /* dark toggle */
 gid('v-mode').onclick=function(){
   STATE.theme.mode = STATE.theme.mode==='dark'?'light':'dark';
@@ -2474,11 +2539,14 @@ function scale(){var c=gid('s-canvas');if(!c)return;var s=Math.min(innerWidth/12
 function show(i){var ov=gid('slides-overlay');var sl=ov.querySelectorAll('.slide');if(!sl.length)return;slideIdx=(i+sl.length)%sl.length;sl.forEach(function(s,n){s.classList.toggle('on',n===slideIdx);});ov.querySelectorAll('.slide-dot').forEach(function(d,n){d.classList.toggle('on',n===slideIdx);});}
 function present(){
   var ov=gid('slides-overlay');ov.classList.remove('hidden');
-  ov.innerHTML='<div class="slide-stage"><div class="slide-canvas" id="s-canvas" style="--accent:'+accentHex(STATE)+'">'+buildSlidesHTML(STATE)+'</div></div>'+
+  var slidesHTML=buildSlidesHTML(STATE);
+  var nSlides=(slidesHTML.match(/class="slide"/g)||[]).length, dots='';
+  for(var di=0;di<nSlides;di++) dots+='<div class="slide-dot" data-i="'+di+'"></div>';
+  ov.innerHTML='<div class="slide-stage"><div class="slide-canvas" id="s-canvas" style="--accent:'+accentHex(STATE)+'">'+slidesHTML+'</div></div>'+
    '<button class="slide-exit" id="s-exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg></button>'+
    '<button class="slide-arrow prev" id="s-prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg></button>'+
    '<button class="slide-arrow next" id="s-next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg></button>'+
-   '<div class="slide-dots">'+[0,1,2,3,4].map(function(i){return '<div class="slide-dot" data-i="'+i+'"></div>';}).join('')+'</div>';
+   '<div class="slide-dots">'+dots+'</div>';
   slideIdx=0;show(0);scale();
   gid('s-exit').onclick=close;gid('s-prev').onclick=function(){show(slideIdx-1);};gid('s-next').onclick=function(){show(slideIdx+1);};
   ov.querySelectorAll('.slide-dot').forEach(function(d){d.onclick=function(){show(+d.dataset.i);};});
@@ -2742,6 +2810,13 @@ function renderStylePanel(){
     <div class="sp-sec">
       <div class="sp-sec-head"><span class="sp-sec-title">세부 조정</span></div>
       <div class="sp-ctrl"><label class="sp-ctrl-label">커버</label><div id="cover-edit-ui"></div></div>
+      <div class="sp-ctrl"><label class="sp-ctrl-label">포인트 컬러</label>
+        <div class="accent-pick">
+          <button class="acc-sw acc-auto${!th.accent?' on':''}" data-accent="" title="커버 기준 자동">자동</button>
+          ${ACCENT_SWATCHES.map(c=>`<button class="acc-sw${th.accent&&th.accent.toLowerCase()===c.toLowerCase()?' on':''}" data-accent="${c}" style="background:${c}" aria-label="${c}" title="${c}"></button>`).join('')}
+          <label class="acc-sw acc-custom${th.accent&&!ACCENT_SWATCHES.includes(th.accent.toLowerCase())?' on':''}" title="직접 선택" style="${th.accent&&!ACCENT_SWATCHES.includes(th.accent.toLowerCase())?`background:${th.accent}`:''}"><input type="color" id="acc-color" value="${th.accent||accentHex(state)}"><span class="acc-plus">＋</span></label>
+        </div>
+        <div class="accent-hint">제목·링크·강조 요소에 적용돼요</div></div>
       <div class="sp-ctrl"><label class="sp-ctrl-label">화면 모드</label>
         <div class="seg" style="width:100%"><button data-emode="light" class="${!dark?'on':''}" style="flex:1">☀︎ Light</button><button data-emode="dark" class="${dark?'on':''}" style="flex:1">☾ Dark</button></div></div>
       <div class="sp-ctrl"><label class="sp-ctrl-label">폰트</label>
@@ -2751,17 +2826,11 @@ function renderStylePanel(){
           <button class="lay-opt${lay==='notion'?' on':''}" data-layout="notion"><span class="lay-thumb lt-notion"></span><span class="lay-name">노션 기본</span></button>
           <button class="lay-opt${lay==='sidebar'?' on':''}" data-layout="sidebar"><span class="lay-thumb lt-sidebar"></span><span class="lay-name">사이드바</span></button>
           <button class="lay-opt${lay==='minimal'?' on':''}" data-layout="minimal"><span class="lay-thumb lt-minimal"></span><span class="lay-name">미니멀</span></button>
+          <button class="lay-opt${lay==='tab'?' on':''}" data-layout="tab"><span class="lay-thumb lt-tab"></span><span class="lay-name">탭</span></button>
         </div>
         <div class="seg" style="margin-top:9px;width:100%"><button data-wide="0" class="${!th.wide?'on':''}" style="flex:1">↔ 기본 폭</button><button data-wide="1" class="${th.wide?'on':''}" style="flex:1">⤢ 전체 너비</button></div></div>
       <div class="sp-ctrl"><label class="sp-ctrl-label">디자인 스타일</label>
         <div class="style-pick">${[['classic','클래식','이모지·컬러 태그'],['line','라인','대문자·아웃라인'],['bold','볼드','강조색 큰 헤더'],['mono','모노','개발자·터미널']].map(o=>`<button class="sty-opt sty-prev-${o[0]}${sty===o[0]?' on':''}" data-style="${o[0]}"><span class="sty-prev"></span><span class="sty-name">${o[1]}</span><span class="sty-desc">${o[2]}</span></button>`).join('')}</div></div>
-      <div class="sp-ctrl"><label class="sp-ctrl-label">포인트 컬러</label>
-        <div class="accent-pick">
-          <button class="acc-sw acc-auto${!th.accent?' on':''}" data-accent="" title="커버 기준 자동">자동</button>
-          ${ACCENT_SWATCHES.map(c=>`<button class="acc-sw${th.accent&&th.accent.toLowerCase()===c.toLowerCase()?' on':''}" data-accent="${c}" style="background:${c}" aria-label="${c}" title="${c}"></button>`).join('')}
-          <label class="acc-sw acc-custom${th.accent&&!ACCENT_SWATCHES.includes(th.accent.toLowerCase())?' on':''}" title="직접 선택" style="${th.accent&&!ACCENT_SWATCHES.includes(th.accent.toLowerCase())?`background:${th.accent}`:''}"><input type="color" id="acc-color" value="${th.accent||accentHex(state)}"><span class="acc-plus">＋</span></label>
-        </div>
-        <div class="accent-hint">제목·링크·강조 요소에 적용돼요</div></div>
       <div class="sp-ctrl"><label class="sp-ctrl-label">섹션 순서</label>
         <div class="sec-order">${orderedSections(state).map((k,i,arr)=>`<div class="sec-order-row"><span class="sec-order-name">${esc(secLabel(state,k))}</span><div class="sec-order-btns"><button data-secmv="${k}" data-dir="-1" ${i===0?'disabled':''} aria-label="위로">↑</button><button data-secmv="${k}" data-dir="1" ${i===arr.length-1?'disabled':''} aria-label="아래로">↓</button></div></div>`).join('')}</div>
       </div>
@@ -2920,26 +2989,46 @@ function initResizer(){
    WIRE UP
    ========================================================= */
 /* GitHub 저장소 자동 연동 — 사용자명/주소 → 대표 저장소 6개 */
-function importGitHub(){
-  const raw=(state.profile.github||'').trim();
-  const m=raw.match(/github\.com\/([A-Za-z0-9-]+)/i) || raw.match(/^@?([A-Za-z0-9-]+)$/);
-  const user=m?m[1]:'';
-  const status=document.getElementById('gh-status');
+/* GitHub 저장소 → 프로젝트로 가져오기 (단일 / 일괄) */
+function ghParse(raw){
+  raw=(raw||'').trim();
+  let m=raw.match(/github\.com\/([A-Za-z0-9-]+)\/([A-Za-z0-9._-]+)/i) || raw.match(/^([A-Za-z0-9-]+)\/([A-Za-z0-9._-]+)$/);
+  if(m) return {owner:m[1], repo:m[2].replace(/\.git$/,'')};
+  m=raw.match(/github\.com\/([A-Za-z0-9-]+)/i) || raw.match(/^@?([A-Za-z0-9-]+)$/);
+  return {owner:m?m[1]:'', repo:''};
+}
+function repoToProject(x){
+  const topics=Array.isArray(x.topics)?x.topics:[];
+  const tech=(topics.length?topics:(x.language?[x.language]:[])).join(', ');
+  return {name:x.name||'', period:'', role:'', tech, desc:x.description||'', result:'', repo:x.html_url||'', demo:x.homepage||'', stars:x.stargazers_count||0};
+}
+function importGitHubProjects(mode){
+  const input=document.getElementById('gh-input'), status=document.getElementById('gh-status');
   const setS=t=>{ if(status) status.textContent=t; };
-  if(!user){ setS('GitHub 사용자명 또는 주소를 먼저 입력하세요'); return; }
-  setS('불러오는 중…');
-  fetch('https://api.github.com/users/'+encodeURIComponent(user)+'/repos?per_page=100&sort=updated')
-    .then(r=>{ if(!r.ok) throw new Error(r.status===404?'사용자를 찾을 수 없어요':(r.status===403?'요청 한도 초과 — 잠시 후 다시 시도하세요':'요청 실패('+r.status+')')); return r.json(); })
-    .then(list=>{
-      if(!Array.isArray(list)) throw new Error('응답 형식 오류');
-      const repos=list.filter(x=>!x.fork).sort((a,b)=>(b.stargazers_count||0)-(a.stargazers_count||0)).slice(0,6)
-        .map(x=>({name:x.name||'',desc:x.description||'',url:x.html_url||'',stars:x.stargazers_count||0,lang:x.language||''}));
-      state.github={user,repos};
-      renderStep(); liveUpdate();
-      const st2=document.getElementById('gh-status'); if(st2) st2.textContent=repos.length?`✓ ${user} · 대표 저장소 ${repos.length}개 추가`:'표시할 저장소가 없어요';
-      toast(repos.length?`🐙 GitHub 저장소 ${repos.length}개를 추가했어요`:'표시할 저장소가 없어요');
-    })
-    .catch(e=>{ setS('⚠️ '+e.message); });
+  const {owner,repo}=ghParse(input?input.value:'');
+  if(!owner){ setS('사용자명 또는 저장소 주소를 입력하세요'); return; }
+  state.github={user:owner}; // 기본 계정 기억
+  const HDR={headers:{Accept:'application/vnd.github+json'}};
+  const err=s=> s===404?'찾을 수 없어요':(s===403?'요청 한도 초과 — 잠시 후 다시':'요청 실패('+s+')');
+  if(mode==='one'){
+    if(!repo){ setS('“user/repo” 형태로 저장소를 지정하세요 (예: vercel/next.js)'); return; }
+    setS('가져오는 중…');
+    fetch(`https://api.github.com/repos/${owner}/${repo}`,HDR)
+      .then(r=>{ if(!r.ok) throw new Error(err(r.status)); return r.json(); })
+      .then(x=>{ state.projects.push(repoToProject(x)); renderStep(); liveUpdate(); setS(`✓ ${x.name} 추가됨`); toast('🐙 저장소를 프로젝트로 추가했어요'); })
+      .catch(e=>setS('⚠️ '+e.message));
+  } else {
+    setS('가져오는 중…');
+    fetch(`https://api.github.com/users/${owner}/repos?per_page=100&sort=updated`,HDR)
+      .then(r=>{ if(!r.ok) throw new Error(err(r.status)); return r.json(); })
+      .then(list=>{ if(!Array.isArray(list)) throw new Error('응답 형식 오류');
+        const top=list.filter(x=>!x.fork).sort((a,b)=>(b.stargazers_count||0)-(a.stargazers_count||0)).slice(0,6);
+        top.forEach(x=>state.projects.push(repoToProject(x)));
+        renderStep(); liveUpdate(); setS(`✓ 대표 저장소 ${top.length}개 추가됨`);
+        toast(`🐙 저장소 ${top.length}개를 프로젝트로 추가했어요`);
+      })
+      .catch(e=>setS('⚠️ '+e.message));
+  }
 }
 
 /* 모바일로 바로 보기 — 현재 작업을 압축해 링크+QR로 공유 (이미지 제외) */
