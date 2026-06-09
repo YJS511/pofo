@@ -43,6 +43,29 @@ input,textarea,select{font-family:inherit}
 /* 이미지 로고 — 연회색 둥근 박스 안에 투명 PNG */
 .logo-img{background-color:var(--input-bg);background-size:90%;background-position:center;background-repeat:no-repeat;overflow:hidden;flex-shrink:0}
 .brand .logo:hover{filter:brightness(.97)}
+/* QR 코드 오버레이 */
+.qr-ov{position:fixed;inset:0;z-index:300;display:grid;place-items:center;background:rgba(15,15,15,.55);animation:lzFade .15s ease;padding:20px}
+.qr-ov.hidden{display:none}
+.qr-card{background:var(--bg);border-radius:20px;padding:24px;width:340px;max-width:100%;box-shadow:0 24px 70px rgba(0,0,0,.4);animation:lzPop .22s cubic-bezier(.16,1,.3,1)}
+.qr-title{font-size:17px;font-weight:700;letter-spacing:-.01em;margin-bottom:6px}
+.qr-desc{font-size:12.5px;color:var(--text-faint);line-height:1.5;margin-bottom:14px}
+.qr-card .inp{margin-bottom:14px}
+.qr-box{width:100%;aspect-ratio:1;border-radius:14px;background:var(--input-bg);display:grid;place-items:center;overflow:hidden;margin-bottom:16px}
+.qr-box img{width:100%;height:100%;object-fit:contain;background:#fff}
+.qr-empty{font-size:12.5px;color:var(--text-faint);text-align:center;padding:0 20px}
+.share-link-row{display:flex;gap:6px;margin-bottom:11px}
+.share-link-row .inp{margin-bottom:0;font-size:12px;color:var(--text-light)}
+.share-copy{flex-shrink:0;width:42px;display:grid;place-items:center;border-radius:9px;background:var(--input-bg);color:var(--text-light);transition:.12s}
+.share-copy:hover{background:var(--hover);color:var(--text)}
+.share-copy svg{width:15px;height:15px}
+.qr-base{margin-bottom:10px}
+.qr-base-label{display:block;font-size:10.5px;font-weight:600;color:var(--text-faint);margin-bottom:5px;line-height:1.4}
+.qr-base .inp{margin-bottom:0;font-size:12px}
+.qr-status{font-size:11px;color:var(--text-faint);line-height:1.55;margin-bottom:14px}
+.qr-actions{display:flex;gap:8px;justify-content:flex-end}
+.qr-actions .vbtn{height:36px;padding:0 14px;border-radius:8px;font-size:13px;font-weight:600;color:var(--text-light)}
+.qr-actions .vbtn:hover{background:var(--hover)}
+.qr-actions .tbtn.primary{height:36px}
 /* 로고 확대 라이트박스 */
 .logo-zoom{position:fixed;inset:0;z-index:300;display:grid;place-items:center;background:rgba(15,15,15,.55);animation:lzFade .15s ease}
 .logo-zoom.hidden{display:none}
@@ -79,6 +102,17 @@ input,textarea,select{font-family:inherit}
 .menu-item .ico{width:18px;text-align:center;opacity:.8}
 .menu-item .desc{display:block;font-size:11.5px;color:var(--text-faint);margin-top:1px}
 .menu-sep{height:1px;background:var(--divider);margin:6px 4px}
+/* 공유 메뉴 — 형식 선택 + 복사/다운로드 */
+.fmt-pick{padding:4px 6px 6px}
+.fmt-select{width:100%;height:38px;padding:0 10px;border:1px solid var(--divider);border-radius:9px;background:var(--input-bg);color:var(--text);font-size:13px;font-family:inherit;font-weight:500;cursor:pointer}
+.fmt-select:focus{outline:none;border-color:#4A4A4A}
+.fmt-actions{display:flex;gap:6px;margin-top:8px}
+.fmt-btn{flex:1;height:36px;display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:9px;font-size:13px;font-weight:600;color:var(--text-light);background:var(--input-bg);transition:.12s}
+.fmt-btn svg{width:15px;height:15px}
+.fmt-btn:hover:not(:disabled){background:var(--hover);color:var(--text)}
+.fmt-btn.primary{background:#4A4A4A;color:#fff}
+.fmt-btn.primary:hover{background:#2E2E2E}
+.fmt-btn:disabled{opacity:.4;cursor:not-allowed}
 /* 제작자 정보 카드 */
 .tbtn.icon-only{padding:0;width:36px;justify-content:center;flex-shrink:0}
 .tbtn.icon-only svg{width:18px;height:18px}
@@ -185,6 +219,15 @@ input,textarea,select{font-family:inherit}
 .field{margin-bottom:18px}
 .field-label{display:block;font-size:12.5px;font-weight:600;color:var(--text-light);margin-bottom:7px}
 .field-hint{font-size:12px;color:var(--text-faint);margin-top:6px;line-height:1.45}
+/* GitHub 자동 추가 컨트롤 */
+.gh-import{margin:-6px 0 18px;padding:13px 14px;border:1px solid var(--divider);border-radius:11px;background:var(--card-bg)}
+.gh-import-head{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.gh-import-title{font-size:12.5px;font-weight:600;color:var(--text-light)}
+.gh-import-btn{height:30px;padding:0 14px;border-radius:8px;font-size:12.5px;font-weight:600;background:#4A4A4A;color:#fff;flex-shrink:0}
+.gh-import-btn:hover{background:#2E2E2E}
+.gh-import-status{font-size:11.5px;color:var(--text-faint);margin-top:9px;line-height:1.45}
+.gh-clear{margin-top:8px;font-size:11.5px;color:var(--text-faint);text-decoration:underline}
+.gh-clear:hover{color:#eb5747}
 .inp{
   width:100%;background:var(--input-bg);border:1px solid transparent;border-radius:8px;
   padding:11px 13px;font-size:14.5px;color:var(--text);transition:border .12s,background .12s;
@@ -676,25 +719,32 @@ body.printing .preview-pane{height:auto}
 
   <div class="menu-wrap">
     <button class="tbtn primary" id="btn-export">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>
-      내보내기 <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>
+      공유 <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg>
     </button>
     <div class="menu hidden" id="menu-export">
-      <div class="menu-label">파일 다운로드</div>
-      <button class="menu-item" data-export="html"><span class="ico">🌐</span><span>단독 HTML<span class="desc">배포·임베드 가능한 웹사이트</span></span></button>
-      <button class="menu-item" data-export="pdf"><span class="ico">📄</span><span>PDF로 저장<span class="desc">인쇄형 포트폴리오 문서</span></span></button>
-      <button class="menu-item" data-export="pptx"><span class="ico">📽️</span><span>PowerPoint (.pptx)<span class="desc">편집 가능한 5장 슬라이드</span></span></button>
-      <button class="menu-item" data-export="md-file"><span class="ico">📝</span><span>노션 마크다운 (.md)<span class="desc">노션에 가져오기 / 붙여넣기용</span></span></button>
-      <button class="menu-item" data-export="json-file"><span class="ico">🗂️</span><span>JSON 데이터 (.json)<span class="desc">구조화된 백업본</span></span></button>
+      <div class="menu-label">공유</div>
+      <button class="menu-item" data-export="qr"><span>모바일로 보기<span class="desc">현재 작업을 휴대폰에서 바로 — 링크·QR</span></span></button>
       <div class="menu-sep"></div>
-      <div class="menu-label">클립보드 복사</div>
-      <button class="menu-item" data-export="md"><span class="ico">📋</span><span>마크다운 복사<span class="desc">노션에 바로 붙여넣기</span></span></button>
-      <button class="menu-item" data-export="json"><span class="ico">📋</span><span>JSON 복사</span></button>
+      <div class="menu-label">데이터</div>
+      <button class="menu-item" data-export="import-json"><span>JSON 불러오기<span class="desc">백업 JSON으로 복원</span></span></button>
       <div class="menu-sep"></div>
-      <div class="menu-label">템플릿 & 데이터</div>
-      <button class="menu-item" data-export="styles"><span class="ico">🎨</span><span>디자인 스타일<span class="desc">레이아웃·색·스타일 고르기</span></span></button>
-      <button class="menu-item" data-export="import-json"><span class="ico">📥</span><span>JSON 불러오기<span class="desc">백업 JSON으로 복원</span></span></button>
-      <button class="menu-item" data-export="reset"><span class="ico">🧹</span><span style="color:#eb5747">전체 초기화</span></button>
+      <div class="menu-label">내보내기</div>
+      <div class="fmt-pick">
+        <select id="fmt-select" class="fmt-select">
+          <option value="md">노션 마크다운 (.md)</option>
+          <option value="json">JSON 데이터 (.json)</option>
+          <option value="html">단독 HTML (.html)</option>
+          <option value="pdf">PDF 문서</option>
+          <option value="pptx">PowerPoint (.pptx)</option>
+        </select>
+        <div class="fmt-actions">
+          <button class="fmt-btn" id="fmt-copy"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>복사</button>
+          <button class="fmt-btn primary" id="fmt-download"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>다운로드</button>
+        </div>
+      </div>
+      <div class="menu-sep"></div>
+      <button class="menu-item" data-export="reset"><span style="color:#eb5747">전체 초기화</span></button>
     </div>
   </div>
 </header>
@@ -843,6 +893,17 @@ const PAGE_CSS = `
 .np-link-btn:hover{background:var(--active-bg);color:#4A4A4A}
 .np-lnk-ic{width:15px;height:15px}
 .np-proj-tags{margin-top:9px}
+/* GitHub 저장소 카드 */
+.np-gh-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.np-gh-card{display:block;border:1px solid var(--divider);border-radius:10px;padding:14px 15px;transition:border .12s,box-shadow .12s;text-decoration:none;color:inherit}
+.np-gh-card:hover{border-color:var(--accent);box-shadow:0 4px 14px rgba(15,15,15,.06)}
+.np-gh-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:5px}
+.np-gh-name{font-size:14.5px;font-weight:700;color:var(--accent);word-break:break-all}
+.np-gh-star{flex-shrink:0;font-size:12px;font-weight:600;color:var(--text-faint)}
+.np-gh-desc{font-size:13px;color:var(--text-light);line-height:1.5;margin-bottom:8px}
+.np-gh-lang{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--text-faint)}
+.np-gh-dot{width:9px;height:9px;border-radius:50%;background:var(--accent);display:inline-block}
+@media(max-width:720px){.np-gh-grid{grid-template-columns:1fr}}
 .np-empty-ph{color:var(--text-faint);font-size:14px;font-style:italic;padding:6px 0}
 /* edit affordance */
 .pv-edit{cursor:pointer;border-radius:6px;transition:background .12s,box-shadow .12s;position:relative}
@@ -959,7 +1020,7 @@ const SLIDE_CSS = `
 .sl-name{font-size:74px;font-weight:800;letter-spacing:-.03em;line-height:1.05}
 .sl-role{font-size:30px;color:var(--text-light);margin-top:14px;font-weight:600}
 .sl-tag{font-size:21px;color:var(--text-light);margin-top:auto;font-style:italic;max-width:80%;line-height:1.5}
-.sl-h{font-size:42px;font-weight:800;letter-spacing:-.02em;margin-bottom:30px;display:flex;align-items:center;gap:16px}
+.sl-h{font-size:42px;font-weight:800;letter-spacing:-.02em;margin-bottom:30px;display:flex;align-items:center;gap:16px;color:var(--accent)}
 .sl-tags{display:flex;flex-wrap:wrap;gap:11px}
 .sl-tag-chip{font-size:18px;font-weight:600;padding:8px 16px;border-radius:9px}
 .sl-callout{background:var(--callout-bg);border-radius:14px;padding:26px 30px;font-size:22px;line-height:1.6;display:flex;gap:18px;margin-bottom:30px}
@@ -1089,6 +1150,7 @@ function emptyState(){
     education:[],
     tools:[],
     custom:[],
+    github:{user:'',repos:[]},
     sectionOrder:['skills','tools','experience','projects','education'],
     theme:{mode:'light',font:'sans',cover:'graphite',coverImg:'',solidColor:'',accent:'',layout:'notion',wide:true,style:'classic',noCover:false}
   };
@@ -1102,7 +1164,7 @@ let infoCollapsed = false; // 표준 스텝 전체 접힘
 /* ---- Undo ---- */
 let undoStack=[], prevSnap=null, isUndoing=false;
 const MAX_UNDO=30;
-function snapshot(){ return JSON.stringify({profile:state.profile,about:state.about,skills:state.skills,experience:state.experience,projects:state.projects,education:state.education,tools:state.tools||[],custom:state.custom||[],sectionOrder:state.sectionOrder||[]}); }
+function snapshot(){ return JSON.stringify({profile:state.profile,about:state.about,skills:state.skills,experience:state.experience,projects:state.projects,education:state.education,tools:state.tools||[],custom:state.custom||[],github:state.github||{user:'',repos:[]},sectionOrder:state.sectionOrder||[]}); }
 function undo(){
   if(!undoStack.length){ toast('더 이상 되돌릴 수 없어요'); return; }
   isUndoing=true;
@@ -1110,6 +1172,7 @@ function undo(){
   state.profile=d.profile; state.about=d.about; state.skills=d.skills;
   state.experience=d.experience; state.projects=d.projects; state.education=d.education;
   state.tools=d.tools||[]; state.custom=d.custom||[];
+  state.github=d.github||{user:'',repos:[]};
   prevSnap=snapshot();
   afterDataSwap();
   isUndoing=false;
@@ -1196,6 +1259,7 @@ function load(){
       state.profile=Object.assign(emptyState().profile,d.state.profile||{});
       state.tools=Array.isArray(d.state.tools)?d.state.tools:[];
       state.custom=Array.isArray(d.state.custom)?d.state.custom:[];
+      state.github=(d.state.github&&typeof d.state.github==='object')?{user:d.state.github.user||'',repos:Array.isArray(d.state.github.repos)?d.state.github.repos:[]}:{user:'',repos:[]};
       state.sectionOrder=Array.isArray(d.state.sectionOrder)?d.state.sectionOrder:['skills','tools','experience','projects','education'];
     }
     if(typeof d.currentStep==='number') currentStep=d.currentStep;
@@ -1286,6 +1350,10 @@ function buildBody(i){
     body=
       `<div class="inp-row">${field('위치',inp('profile.location','Seoul, Korea',p.location))}${field('이메일',inp('profile.email','me@example.com',p.email))}</div>`+
       field('GitHub',inp('profile.github','github.com/username',p.github))+
+      (()=>{ const u=(state.github&&state.github.user)||'', c=(state.github&&state.github.repos&&state.github.repos.length)||0;
+        return `<div class="gh-import"><div class="gh-import-head"><span class="gh-import-title">🐙 GitHub 저장소 자동 추가</span><button class="gh-import-btn" id="gh-fetch">${c?'새로고침':'불러오기'}</button></div>`+
+        `<div class="gh-import-status" id="gh-status">${c?`✓ ${esc(u)} · 대표 저장소 ${c}개 (별 많은 순)`:'위 GitHub 주소를 기준으로 대표 저장소를 자동으로 가져옵니다'}</div>`+
+        `${c?'<button class="gh-clear" id="gh-clear">지우기</button>':''}</div>`; })()+
       field('웹사이트 / 블로그',inp('profile.website','mysite.dev',p.website))+
       `<label class="field-label" style="margin-top:6px">추가 링크</label><div id="rep-links"></div>`;
   }else if(s.id==='about'){
@@ -1355,7 +1423,11 @@ function bindOpenBody(){
   }
   if(s.id==='tools') renderToolsPicker();
   if(s.id==='skills'){ renderSkillsPreview(); renderSkillSuggestions(); }
-  if(s.id==='contact') renderRepeater('links',document.getElementById('rep-links'),LINK_FIELDS,'링크');
+  if(s.id==='contact'){
+    renderRepeater('links',document.getElementById('rep-links'),LINK_FIELDS,'링크');
+    const gf=scope.querySelector('#gh-fetch'); if(gf) gf.onclick=importGitHub;
+    const gc=scope.querySelector('#gh-clear'); if(gc) gc.onclick=()=>{ state.github={user:'',repos:[]}; renderStep(); liveUpdate(); };
+  }
   if(s.id==='experience') renderRepeater('experience',document.getElementById('rep-experience'),EXP_FIELDS,'경력');
   if(s.id==='projects') renderRepeater('projects',document.getElementById('rep-projects'),PROJ_FIELDS,'프로젝트');
   if(s.id==='education') renderRepeater('education',document.getElementById('rep-education'),EDU_FIELDS,'학력');
@@ -1687,7 +1759,7 @@ function renderToolsPicker(){
 }
 
 /* cs:N 접두사로 커스텀 섹션 아이템 리스트 접근 */
-function getRepList(key){ return key.startsWith('cs:') ? state.custom[+key.slice(3)].items : state[key]; }
+function getRepList(key){ if(key==='links') return state.profile.links||(state.profile.links=[]); return key.startsWith('cs:') ? state.custom[+key.slice(3)].items : state[key]; }
 
 /* 기간 문자열 ↔ 월 선택 변환 */
 function parsePeriod(str){
@@ -1786,8 +1858,8 @@ function setPath(path,val){
    RENDER: NOTION PREVIEW (pure-ish — uses state + theme)
    ========================================================= */
 /* 섹션 순서 ── 표준 5종 + 커스텀(cs:id) */
-const SEC_LABEL={skills:'🛠️ 기술 스택',tools:'🧰 서비스 · 도구',experience:'💼 경력',projects:'🚀 프로젝트',education:'🎓 교육'};
-function sectionKeys(st){ return ['skills','tools','experience','projects','education',...(st.custom||[]).map(c=>'cs:'+c.id)]; }
+const SEC_LABEL={skills:'🛠️ 기술 스택',tools:'🧰 서비스 · 도구',experience:'💼 경력',projects:'🚀 프로젝트',github:'🐙 GitHub',education:'🎓 교육'};
+function sectionKeys(st){ const base=['skills','tools','experience','projects']; if(st.github&&st.github.repos&&st.github.repos.length) base.push('github'); base.push('education'); return [...base,...(st.custom||[]).map(c=>'cs:'+c.id)]; }
 function orderedSections(st){
   const all=sectionKeys(st), ord=st.sectionOrder||[];
   return all.slice().sort((a,b)=>{
@@ -1891,6 +1963,17 @@ function renderPageHTML(st, opts){
     : `<div class="np-empty-ph">학력을 추가해보세요</div>`;
   const eduSec=(st.education.length||edit)?sectionWrap('🎓','교육',eduInner,7,edit):'';
 
+  // GitHub 저장소 (자동 연동)
+  const ghRepos=(st.github&&st.github.repos)||[];
+  let githubSec='';
+  if(ghRepos.length){
+    const cards=ghRepos.map(r=>`<a class="np-gh-card" href="${esc(r.url||'#')}"${edit?'':' target="_blank" rel="noopener"'}>`+
+      `<div class="np-gh-top"><span class="np-gh-name">${esc(r.name||'')}</span>${r.stars?`<span class="np-gh-star">★ ${r.stars}</span>`:''}</div>`+
+      `${r.desc?`<div class="np-gh-desc">${esc(r.desc)}</div>`:''}`+
+      `${r.lang?`<div class="np-gh-lang"><span class="np-gh-dot"></span>${esc(r.lang)}</div>`:''}</a>`).join('');
+    githubSec=sectionWrap('🐙','GitHub',`<div class="np-gh-grid">${cards}</div>`,1,edit);
+  }
+
   const titleCls = p.name?'np-title':'np-title faint';
   const titleTxt = p.name||'제목 없음';
   const shapeCls = p.iconShape==='circle'?' circ':'';
@@ -1916,7 +1999,7 @@ function renderPageHTML(st, opts){
     customMap['cs:'+cs.id]=`<div class="np-section"><div class="np-h"><span class="he">${esc(cs.emoji||'📌')}</span><span${ed('custom.'+ci+'.title','섹션 이름')}>${esc(cs.title||'커스텀 섹션')}</span></div>${inner}</div>`;
   });
   // 섹션 순서대로 조립 (skipSkills: 사이드바는 skills를 aside에 별도 배치)
-  const secMap={skills:skillsSec,tools:toolsSec,experience:expSec,projects:projSec,education:eduSec,...customMap};
+  const secMap={skills:skillsSec,tools:toolsSec,experience:expSec,projects:projSec,github:githubSec,education:eduSec,...customMap};
   const bodySections=(skipKeys)=>orderedSections(st).filter(k=>!(skipKeys&&skipKeys.includes(k))).map(k=>secMap[k]||'').join('');
 
   const layout=(st.theme&&st.theme.layout)||'notion';
@@ -2023,7 +2106,7 @@ function buildSlidesHTML(st){
 
   // Slide 1: title
   const s1=`<div class="slide" data-i="0">
-    <div class="slide-cover" style="background:${cover};opacity:${dark?0.32:0.22}"></div>
+    <div class="slide-cover band" style="background:${cover}"></div>
     <div style="position:relative;display:flex;flex-direction:column;height:100%">
       <div class="sl-emoji">${slEmoji}</div>
       <div class="sl-name">${esc(p.name||'Your Name')}</div>
@@ -2076,7 +2159,7 @@ function openSlides(){
   const ov=document.getElementById('slides-overlay');
   ov.classList.remove('hidden');
   ov.innerHTML=`
-    <div class="slide-stage"><div class="slide-canvas" id="slide-canvas">${buildSlidesHTML(state)}</div></div>
+    <div class="slide-stage"><div class="slide-canvas" id="slide-canvas" style="--accent:${accentHex(state)}">${buildSlidesHTML(state)}</div></div>
     <button class="slide-exit" id="sl-exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
     <button class="slide-arrow prev" id="sl-prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg></button>
     <button class="slide-arrow next" id="sl-next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg></button>
@@ -2296,6 +2379,10 @@ function toMarkdown(st){
     (st.education.length?st.education:[{}]).forEach(x=>{
       s+=`- **${PH(x.school,'학교명')}** · ${PH(x.degree,'전공 / 학위')}${x.period?` _(${x.period})_`:''}\n`;
     }); s+='\n'; secMd.education=s; }
+  { const gr=(st.github&&st.github.repos)||[];
+    if(gr.length){ let s=`## 🐙 GitHub\n\n`;
+      gr.forEach(r=>{ s+=`- **[${r.name}](${r.url})**${r.stars?` · ⭐ ${r.stars}`:''}${r.lang?` · ${r.lang}`:''}${r.desc?` — ${r.desc}`:''}\n`; });
+      s+='\n'; secMd.github=s; } }
   (st.custom||[]).forEach(cs=>{
     if(!cs.title) return;
     let s=`## ${cs.emoji||'📌'} ${cs.title}\n\n`;
@@ -2387,7 +2474,7 @@ function scale(){var c=gid('s-canvas');if(!c)return;var s=Math.min(innerWidth/12
 function show(i){var ov=gid('slides-overlay');var sl=ov.querySelectorAll('.slide');if(!sl.length)return;slideIdx=(i+sl.length)%sl.length;sl.forEach(function(s,n){s.classList.toggle('on',n===slideIdx);});ov.querySelectorAll('.slide-dot').forEach(function(d,n){d.classList.toggle('on',n===slideIdx);});}
 function present(){
   var ov=gid('slides-overlay');ov.classList.remove('hidden');
-  ov.innerHTML='<div class="slide-stage"><div class="slide-canvas" id="s-canvas">'+buildSlidesHTML(STATE)+'</div></div>'+
+  ov.innerHTML='<div class="slide-stage"><div class="slide-canvas" id="s-canvas" style="--accent:'+accentHex(STATE)+'">'+buildSlidesHTML(STATE)+'</div></div>'+
    '<button class="slide-exit" id="s-exit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 6l12 12M18 6L6 18"/></svg></button>'+
    '<button class="slide-arrow prev" id="s-prev"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M15 18l-6-6 6-6"/></svg></button>'+
    '<button class="slide-arrow next" id="s-next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 18l6-6-6-6"/></svg></button>'+
@@ -2733,6 +2820,7 @@ function importJSON(){
         state.theme=Object.assign({mode:'light',font:'sans',cover:'graphite',coverImg:'',solidColor:'',accent:'',layout:'notion',wide:true,style:'classic',noCover:false},d.theme||{});
         state.profile=Object.assign(emptyState().profile,d.profile||{});
         state.custom=Array.isArray(d.custom)?d.custom:[];
+        state.github=(d.github&&typeof d.github==='object')?{user:d.github.user||'',repos:Array.isArray(d.github.repos)?d.github.repos:[]}:{user:'',repos:[]};
         state.sectionOrder=Array.isArray(d.sectionOrder)?d.sectionOrder:['skills','tools','experience','projects','education'];
         prevSnap=null; activeCustom=-1;
         afterDataSwap();
@@ -2747,10 +2835,19 @@ function importJSON(){
 /* =========================================================
    ACTIONS (export menu / sidebar)
    ========================================================= */
+/* 내보내기 형식별 복사/다운로드 라우팅 */
+const EXPORT_FMTS={
+  md:  {copy:'md',       download:'md-file',   hint:'노션에 붙여넣거나 .md 파일로 가져오기'},
+  json:{copy:'json',     download:'json-file', hint:'구조화된 백업본 — 다른 기기로 이전'},
+  html:{copy:'html-copy',download:'html',      hint:'배포·임베드 가능한 단독 웹사이트'},
+  pdf: {copy:null,       download:'pdf',       hint:'인쇄형 문서 — 복사는 지원하지 않아요'},
+  pptx:{copy:null,       download:'pptx',      hint:'편집 가능한 5장 슬라이드 — 복사는 지원하지 않아요'}
+};
 function handleAction(act){
   closeMenus();
   const fname=(state.profile.name||'portfolio').replace(/\s+/g,'-').toLowerCase();
   if(act==='md'){ copyText(toMarkdown(state)).then(()=>showPasteGuide()); }
+  else if(act==='html-copy'){ copyText(buildStandalone(state)).then(()=>toast('🌐 HTML 소스를 복사했어요')); }
   else if(act==='md-file'){ download(`${fname}.md`,toMarkdown(state),'text/markdown;charset=utf-8'); toast('📝 노션 마크다운(.md)을 다운로드했어요'); }
   else if(act==='pdf'){ exportPDF(); }
   else if(act==='pptx'){ exportPPTX(); }
@@ -2758,6 +2855,7 @@ function handleAction(act){
   else if(act==='json'){ copyText(JSON.stringify(state,null,2)).then(()=>toast('📋 JSON 데이터가 복사되었어요')); }
   else if(act==='html'){ const name=(state.profile.name||'portfolio').replace(/\s+/g,'-').toLowerCase(); download(`${name}-portfolio.html`,buildStandalone(state),'text/html;charset=utf-8'); toast('🌐 단독 HTML 파일을 다운로드했어요'); }
   else if(act==='styles'){ setEditorTab('style'); }
+  else if(act==='qr'){ openQR(); }
   else if(act==='import-json'){ importJSON(); }
   else if(act==='reset'){ if(confirm('정말 모든 내용을 초기화할까요? 되돌릴 수 없습니다.')){ state=emptyState();currentStep=0;visited=new Set([0]);activeCustom=-1;prevSnap=null;afterDataSwap();toast('🧹 초기화되었어요'); } }
 }
@@ -2821,6 +2919,118 @@ function initResizer(){
 /* =========================================================
    WIRE UP
    ========================================================= */
+/* GitHub 저장소 자동 연동 — 사용자명/주소 → 대표 저장소 6개 */
+function importGitHub(){
+  const raw=(state.profile.github||'').trim();
+  const m=raw.match(/github\.com\/([A-Za-z0-9-]+)/i) || raw.match(/^@?([A-Za-z0-9-]+)$/);
+  const user=m?m[1]:'';
+  const status=document.getElementById('gh-status');
+  const setS=t=>{ if(status) status.textContent=t; };
+  if(!user){ setS('GitHub 사용자명 또는 주소를 먼저 입력하세요'); return; }
+  setS('불러오는 중…');
+  fetch('https://api.github.com/users/'+encodeURIComponent(user)+'/repos?per_page=100&sort=updated')
+    .then(r=>{ if(!r.ok) throw new Error(r.status===404?'사용자를 찾을 수 없어요':(r.status===403?'요청 한도 초과 — 잠시 후 다시 시도하세요':'요청 실패('+r.status+')')); return r.json(); })
+    .then(list=>{
+      if(!Array.isArray(list)) throw new Error('응답 형식 오류');
+      const repos=list.filter(x=>!x.fork).sort((a,b)=>(b.stargazers_count||0)-(a.stargazers_count||0)).slice(0,6)
+        .map(x=>({name:x.name||'',desc:x.description||'',url:x.html_url||'',stars:x.stargazers_count||0,lang:x.language||''}));
+      state.github={user,repos};
+      renderStep(); liveUpdate();
+      const st2=document.getElementById('gh-status'); if(st2) st2.textContent=repos.length?`✓ ${user} · 대표 저장소 ${repos.length}개 추가`:'표시할 저장소가 없어요';
+      toast(repos.length?`🐙 GitHub 저장소 ${repos.length}개를 추가했어요`:'표시할 저장소가 없어요');
+    })
+    .catch(e=>{ setS('⚠️ '+e.message); });
+}
+
+/* 모바일로 바로 보기 — 현재 작업을 압축해 링크+QR로 공유 (이미지 제외) */
+function qrSrc(url){ return 'https://api.qrserver.com/v1/create-qr-code/?size=560x560&margin=12&ecc=L&data='+encodeURIComponent(url); }
+const _hasCS = typeof CompressionStream!=='undefined' && typeof DecompressionStream!=='undefined';
+async function gzipB64(str){
+  const plain='j'+btoa(unescape(encodeURIComponent(str))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  if(plain.length<=1800 || !_hasCS) return plain; // 소형/미지원 → 범용(어느 기기서나 해독)
+  const buf=await new Response(new Blob([str]).stream().pipeThrough(new CompressionStream('gzip'))).arrayBuffer();
+  let bin=''; const u8=new Uint8Array(buf); for(let i=0;i<u8.length;i++) bin+=String.fromCharCode(u8[i]);
+  const gz='g'+btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  return gz.length<plain.length?gz:plain;
+}
+async function gunzipB64(tok){
+  const tag=tok[0], b64=tok.slice(1).replace(/-/g,'+').replace(/_/g,'/'), bin=atob(b64);
+  if(tag==='j') return decodeURIComponent(escape(bin));
+  const u8=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) u8[i]=bin.charCodeAt(i);
+  const buf=await new Response(new Blob([u8]).stream().pipeThrough(new DecompressionStream('gzip'))).arrayBuffer();
+  return new TextDecoder().decode(buf);
+}
+function shareState(){ const s=JSON.parse(JSON.stringify(state)); if(s.profile)s.profile.iconImg=''; if(s.theme)s.theme.coverImg=''; return s; }
+let _shareBase='';
+function openQR(){
+  let ov=document.getElementById('qr-overlay');
+  if(!ov){
+    ov=document.createElement('div'); ov.id='qr-overlay'; ov.className='qr-ov hidden';
+    ov.setAttribute('role','dialog'); ov.setAttribute('aria-label','모바일로 보기');
+    ov.innerHTML='<div class="qr-card"><div class="qr-title">모바일로 바로 보기</div>'+
+      '<div class="qr-box"><div id="qr-empty" class="qr-empty">생성 중…</div><img id="qr-img" alt="QR 코드" style="display:none"></div>'+
+      '<div class="share-link-row"><input id="share-link" class="inp" readonly><button class="share-copy" id="share-copy" title="링크 복사" aria-label="링크 복사"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button></div>'+
+      '<div class="qr-base"><label class="qr-base-label">POFO 주소 (배포 주소 또는 같은 WiFi의 PC IP)</label><input id="share-base" class="inp" autocomplete="off"></div>'+
+      '<div class="qr-status" id="share-status"></div>'+
+      '<div class="qr-actions"><button class="vbtn" id="qr-close">닫기</button><button class="tbtn primary" id="qr-dl">QR 저장</button></div></div>';
+    document.body.appendChild(ov);
+    ov.onclick=(e)=>{ if(e.target===ov) ov.classList.add('hidden'); };
+    document.getElementById('qr-close').onclick=()=>ov.classList.add('hidden');
+    document.getElementById('qr-dl').onclick=downloadQR;
+    document.getElementById('share-copy').onclick=()=>{ const l=document.getElementById('share-link'); copyText(l.value).then(()=>toast('🔗 링크를 복사했어요')); };
+    document.getElementById('share-base').addEventListener('input',()=>{ _shareBase=document.getElementById('share-base').value.trim(); renderShare(); });
+  }
+  if(!_shareBase) _shareBase=(location.origin+location.pathname).replace(/#.*$/,'');
+  document.getElementById('share-base').value=_shareBase;
+  ov.classList.remove('hidden'); renderShare();
+}
+async function renderShare(){
+  const img=document.getElementById('qr-img'), empty=document.getElementById('qr-empty');
+  const linkInp=document.getElementById('share-link'), status=document.getElementById('share-status');
+  if(!img) return;
+  empty.style.display='grid'; empty.textContent='생성 중…'; img.style.display='none';
+  let token; try{ token=await gzipB64(JSON.stringify(shareState())); }catch(e){ empty.textContent='생성 실패'; return; }
+  const base=(_shareBase||location.origin+location.pathname).replace(/#.*$/,'');
+  const url=base+'#p='+token;
+  linkInp.value=url;
+  status.innerHTML = url.length>2500 ? '⚠️ 내용이 많아 QR이 복잡해요 — 스캔이 안 되면 링크를 직접 공유하세요.' : '';
+  img.crossOrigin='anonymous';
+  img.onload=()=>{ img.style.display='block'; empty.style.display='none'; };
+  img.onerror=()=>{ empty.textContent='QR 생성 실패'; };
+  img.src=qrSrc(url);
+}
+function downloadQR(){
+  const img=document.getElementById('qr-img');
+  if(!img||!img.complete||!img.naturalWidth){ toast('QR이 아직 준비되지 않았어요'); return; }
+  try{
+    const c=document.createElement('canvas'); c.width=img.naturalWidth; c.height=img.naturalHeight;
+    c.getContext('2d').drawImage(img,0,0);
+    const a=document.createElement('a'); a.href=c.toDataURL('image/png'); a.download='portfolio-qr.png'; a.click();
+    toast('🔳 QR 코드를 저장했어요');
+  }catch(e){ const l=document.getElementById('share-link'); if(l) window.open(qrSrc(l.value),'_blank'); toast('새 탭에서 이미지를 저장하세요'); }
+}
+/* 공유 링크(#p=)로 열렸을 때 현재 데이터로 로드 */
+function tryHashLoad(){
+  const h=location.hash||'';
+  if(h.indexOf('#p=')!==0) return false;
+  const token=h.slice(3); if(!token) return false;
+  gunzipB64(token).then(json=>{
+    const d=JSON.parse(json);
+    state=Object.assign(emptyState(),d);
+    state.theme=Object.assign(emptyState().theme,d.theme||{});
+    state.profile=Object.assign(emptyState().profile,d.profile||{});
+    state.tools=Array.isArray(d.tools)?d.tools:[];
+    state.custom=Array.isArray(d.custom)?d.custom:[];
+    state.github=(d.github&&typeof d.github==='object')?{user:d.github.user||'',repos:Array.isArray(d.github.repos)?d.github.repos:[]}:{user:'',repos:[]};
+    state.sectionOrder=Array.isArray(d.sectionOrder)?d.sectionOrder:['skills','tools','experience','projects','education'];
+    currentStep=0; visited=new Set([0]); activeCustom=-1; prevSnap=null;
+    try{ history.replaceState(null,'',location.pathname+location.search); }catch(_){}
+    afterDataSwap();
+    toast('📱 공유된 포트폴리오를 불러왔어요');
+  }).catch(()=>{ toast('공유 링크의 데이터를 읽지 못했어요'); });
+  return true;
+}
+
 function openLogoZoom(src){
   let ov=document.getElementById('logo-zoom');
   if(!ov){
@@ -2859,6 +3069,14 @@ function init(){
   document.getElementById('btn-slides').onclick=openSlides;
   document.getElementById('btn-about').onclick=(e)=>toggleMenu('menu-about',e);
   document.getElementById('btn-export').onclick=(e)=>toggleMenu('menu-export',e);
+  // 공유 메뉴 — 형식 선택 + 복사/다운로드
+  const _fsel=document.getElementById('fmt-select');
+  if(_fsel){
+    const upd=()=>{ const f=EXPORT_FMTS[_fsel.value]; const cb=document.getElementById('fmt-copy'); cb.disabled=!f.copy; cb.title=f.copy?'클립보드로 복사':'이 형식은 복사할 수 없어요'; };
+    _fsel.onchange=upd; upd();
+    document.getElementById('fmt-copy').onclick=()=>{ const f=EXPORT_FMTS[_fsel.value]; if(f.copy) handleAction(f.copy); };
+    document.getElementById('fmt-download').onclick=()=>{ handleAction(EXPORT_FMTS[_fsel.value].download); };
+  }
 
 
   // actions (export menu + sidebar + finish step use data-export / delegate)
@@ -2894,8 +3112,10 @@ function init(){
     if(e.key==='ArrowRight')next(); else if(e.key==='ArrowLeft')prev();
   });
 
+  // 공유 링크(#p=)로 열렸으면 그 데이터로 로드 (저장본보다 우선)
+  const fromHash=tryHashLoad();
   // first run → open the guided 자동 입력 flow automatically
-  if(!hadSave) setTimeout(openGuide,260);
+  if(!hadSave && !fromHash) setTimeout(openGuide,260);
 }
 init();
 </script>
