@@ -1,68 +1,31 @@
 import { useState, useEffect, useRef } from 'react';
 import { X, ChevronRight, ChevronLeft, ArrowRight, Notebook } from 'lucide-react';
 import { usePortfolio } from '../hooks/usePortfolioState';
-import { GUIDE_STEPS, GuideStep, EXP_FIELDS, PROJ_FIELDS, EDU_FIELDS } from '../constants';
+import { GUIDE_STEPS, GuideStep, EXP_FIELDS, PROJ_FIELDS, EDU_FIELDS, LINK_FIELDS } from '../constants';
+import { getDeptData } from '../departmentData';
 import { IconControl } from './IconControl';
 import { SkillSuggestions } from './SkillSuggestions';
 import { RepeaterForm } from './RepeaterForm';
-import { Experience, Project, Education } from '../types';
+import { CustomSectionEditor } from './CustomSectionEditor';
+import { Experience, Project, Education, Link, CustomSection } from '../types';
 
 interface GuideOverlayProps {
   onClose: () => void;
 }
 
+const TEXT_PATHS = [
+  'profile.name', 'profile.role', 'profile.tagline', 'profile.location',
+  'profile.email', 'profile.github', 'profile.website', 'about', 'skills',
+];
+
 export function GuideOverlay({ onClose }: GuideOverlayProps) {
-  const { state, updateProfile, updateState } = usePortfolio();
+  const { state, updateProfile, updateState, selectedPresetId } = usePortfolio();
+  const deptToolCats = getDeptData(selectedPresetId).toolCats;
   const [currentIndex, setCurrentIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
 
   const currentStep = GUIDE_STEPS[currentIndex];
   const progress = Math.round((currentIndex / (GUIDE_STEPS.length - 1)) * 100);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-        return;
-      }
-      if (e.key === 'Enter' && !e.shiftKey) {
-        const target = e.target as HTMLElement;
-        if (target.tagName === 'TEXTAREA' && target.id !== 'g-input') return;
-        e.preventDefault();
-        handleNext();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [currentIndex]);
-
-  useEffect(() => {
-    if (inputRef.current) {
-      setTimeout(() => inputRef.current?.focus(), 60);
-    }
-  }, [currentIndex]);
-
-  const handleNext = () => {
-    if (currentIndex < GUIDE_STEPS.length - 1) {
-      setCurrentIndex(currentIndex + 1);
-    } else {
-      onClose();
-    }
-  };
-
-  const handlePrev = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-    }
-  };
-
-  const handleSkip = () => {
-    if (currentStep.type === 'intro') {
-      onClose();
-    } else {
-      handleNext();
-    }
-  };
 
   const getPathValue = (path: string): string => {
     const parts = path.split('.');
@@ -85,6 +48,81 @@ export function GuideOverlay({ onClose }: GuideOverlayProps) {
     }
   };
 
+  const [presetSnap] = useState<Record<string, string>>(() => {
+    const snap: Record<string, string> = {};
+    for (const p of TEXT_PATHS) {
+      const parts = p.split('.');
+      let v: any = state;
+      for (const k of parts) { if (v == null) break; v = v[k]; }
+      snap[p] = v == null ? '' : String(v);
+    }
+    return snap;
+  });
+
+  const [drafts, setDrafts] = useState<Record<string, string>>({});
+
+  const guideVal = (path: string) => drafts[path] ?? '';
+  const guidePh = (path: string, fallback: string) => presetSnap[path] || fallback;
+  const guideSet = (path: string, value: string) => {
+    setDrafts(prev => ({ ...prev, [path]: value }));
+  };
+
+  const syncDrafts = () => {
+    for (const [path, val] of Object.entries(drafts)) {
+      if (val) setPathValue(path, val);
+    }
+  };
+
+  const handleClose = () => {
+    syncDrafts();
+    onClose();
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        handleClose();
+        return;
+      }
+      if (e.key === 'Enter' && !e.shiftKey) {
+        const target = e.target as HTMLElement;
+        if (target.tagName === 'TEXTAREA' && target.id !== 'g-input') return;
+        e.preventDefault();
+        handleNext();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [currentIndex, drafts]);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      setTimeout(() => inputRef.current?.focus(), 60);
+    }
+  }, [currentIndex]);
+
+  const handleNext = () => {
+    if (currentIndex < GUIDE_STEPS.length - 1) {
+      setCurrentIndex(currentIndex + 1);
+    } else {
+      handleClose();
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  };
+
+  const handleSkip = () => {
+    if (currentStep.type === 'intro') {
+      handleClose();
+    } else {
+      handleNext();
+    }
+  };
+
   const renderStepContent = () => {
     if (currentStep.type === 'intro') {
       return (
@@ -97,7 +135,7 @@ export function GuideOverlay({ onClose }: GuideOverlayProps) {
             한 항목씩 차근차근 안내해 드릴게요. 언제든 건너뛰거나 나갈 수 있어요.
           </div>
           <ul className="max-w-[300px] mx-auto text-left space-y-2">
-            {['기본 정보 · 연락처', '소개 · 기술 스택', '경력 · 프로젝트 · 학력'].map((text, idx) => (
+            {['기본 정보 · 연락처 · 링크', '소개 · 기술 스택 · 도구', '경력 · 프로젝트 · 학력 · 커스텀'].map((text, idx) => (
               <li key={idx} className="flex items-center gap-3 text-[15px] text-gray-600 dark:text-gray-400">
                 <span className="w-6 h-6 rounded-full border border-gray-300 dark:border-gray-700 flex items-center justify-center text-xs text-gray-400 dark:text-gray-600 flex-shrink-0">
                   {idx + 1}
@@ -144,9 +182,9 @@ export function GuideOverlay({ onClose }: GuideOverlayProps) {
             ref={inputRef as React.RefObject<HTMLInputElement>}
             id="g-input"
             type="text"
-            value={getPathValue(currentStep.path)}
-            onChange={(e) => setPathValue(currentStep.path!, e.target.value)}
-            placeholder={currentStep.ph || ''}
+            value={guideVal(currentStep.path)}
+            onChange={(e) => guideSet(currentStep.path!, e.target.value)}
+            placeholder={guidePh(currentStep.path, currentStep.ph || '')}
             className="w-full bg-transparent border-none border-b-2 border-gray-300 dark:border-gray-700 px-0.5 py-2.5 text-2xl font-medium text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:outline-none focus:border-gray-800 dark:focus:border-white transition-colors"
           />
           <div className="flex items-center gap-2 mt-4 text-xs text-gray-500 dark:text-gray-400">
@@ -163,9 +201,9 @@ export function GuideOverlay({ onClose }: GuideOverlayProps) {
           <textarea
             ref={inputRef as React.RefObject<HTMLTextAreaElement>}
             id="g-input"
-            value={getPathValue(currentStep.path)}
-            onChange={(e) => setPathValue(currentStep.path!, e.target.value)}
-            placeholder={currentStep.ph || ''}
+            value={guideVal(currentStep.path)}
+            onChange={(e) => guideSet(currentStep.path!, e.target.value)}
+            placeholder={guidePh(currentStep.path, currentStep.ph || '')}
             rows={6}
             className="w-full bg-transparent border-[1.5px] border-gray-300 dark:border-gray-700 rounded-xl px-4 py-4 text-lg font-normal text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 leading-relaxed min-h-[140px] resize-vertical focus:outline-none focus:border-gray-800 dark:focus:border-white transition-colors"
           />
@@ -180,20 +218,21 @@ export function GuideOverlay({ onClose }: GuideOverlayProps) {
     }
 
     if (currentStep.type === 'skills' && currentStep.path) {
+      const skillsDraft = guideVal(currentStep.path);
       inputArea = (
         <>
           <input
             ref={inputRef as React.RefObject<HTMLInputElement>}
             id="g-input"
             type="text"
-            value={getPathValue(currentStep.path)}
-            onChange={(e) => setPathValue(currentStep.path!, e.target.value)}
-            placeholder={currentStep.ph || ''}
+            value={skillsDraft}
+            onChange={(e) => guideSet(currentStep.path!, e.target.value)}
+            placeholder={guidePh(currentStep.path, currentStep.ph || '')}
             className="w-full bg-transparent border-none border-b-2 border-gray-300 dark:border-gray-700 px-0.5 py-2.5 text-2xl font-medium text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:outline-none focus:border-gray-800 dark:focus:border-white transition-colors"
           />
-          {state.skills && (
+          {skillsDraft && (
             <div className="flex flex-wrap gap-2 mt-5">
-              {state.skills.split(',').map((skill, idx) => {
+              {skillsDraft.split(',').map((skill, idx) => {
                 const trimmed = skill.trim();
                 if (!trimmed) return null;
                 return (
@@ -208,12 +247,12 @@ export function GuideOverlay({ onClose }: GuideOverlayProps) {
             </div>
           )}
           <SkillSuggestions
-            currentSkills={state.skills}
+            currentSkills={skillsDraft}
             onAdd={(skill) => {
-              const newSkills = state.skills.trim()
-                ? `${state.skills.trim()}, ${skill}`
+              const next = skillsDraft.trim()
+                ? `${skillsDraft.trim()}, ${skill}`
                 : skill;
-              updateState({ skills: newSkills });
+              guideSet(currentStep.path!, next);
             }}
           />
         </>
@@ -224,6 +263,68 @@ export function GuideOverlay({ onClose }: GuideOverlayProps) {
       inputArea = (
         <div className="mt-2">
           <IconControl />
+        </div>
+      );
+    }
+
+    if (currentStep.type === 'tools') {
+      inputArea = (
+        <div className="space-y-5 mt-2">
+          {deptToolCats.map((category) => (
+            <div key={category.name}>
+              <h4 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2.5">
+                {category.name}
+              </h4>
+              <div className="flex flex-wrap gap-2">
+                {category.items.map((tool) => {
+                  const isSelected = state.tools.includes(tool);
+                  return (
+                    <button
+                      key={tool}
+                      onClick={() => {
+                        const tools = isSelected
+                          ? state.tools.filter((t) => t !== tool)
+                          : [...state.tools, tool];
+                        updateState({ tools });
+                      }}
+                      className={`px-3 py-1.5 rounded-lg text-sm font-medium border-2 transition-all ${
+                        isSelected
+                          ? 'border-gray-800 dark:border-white bg-gray-800 dark:bg-white text-white dark:text-gray-900'
+                          : 'border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:border-gray-400 dark:hover:border-gray-600'
+                      }`}
+                    >
+                      {tool}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    if (currentStep.type === 'links') {
+      inputArea = (
+        <div className="mt-4">
+          <RepeaterForm<Link>
+            items={state.profile.links}
+            fields={LINK_FIELDS}
+            label="링크"
+            onChange={(links) => updateProfile({ links })}
+            emptyItem={{ label: '', url: '' }}
+          />
+        </div>
+      );
+    }
+
+    if (currentStep.type === 'custom') {
+      inputArea = (
+        <div className="mt-4">
+          <CustomSectionEditor
+            sections={state.custom || []}
+            onChange={(custom) => updateState({ custom })}
+          />
         </div>
       );
     }
@@ -338,7 +439,7 @@ export function GuideOverlay({ onClose }: GuideOverlayProps) {
           </button>
           <div className="flex-1" />
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="h-11 px-5 rounded-lg text-[15px] font-semibold bg-gray-800 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-700 dark:hover:bg-gray-100 transition-colors flex items-center gap-2"
           >
             미리보기로 이동
@@ -397,7 +498,7 @@ export function GuideOverlay({ onClose }: GuideOverlayProps) {
           {Math.min(currentIndex + 1, GUIDE_STEPS.length)} / {GUIDE_STEPS.length}
         </span>
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="w-9 h-9 rounded-lg flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
           title="나가기 (Esc)"
         >

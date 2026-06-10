@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Notebook } from 'lucide-react';
+import { Notebook, X } from 'lucide-react';
 import { usePortfolio } from '../hooks/usePortfolioState';
 import { PORTFOLIO_PRESETS } from '../constants';
 import type { PortfolioPreset } from '../portfolioPresets';
@@ -67,24 +67,27 @@ export function DepartmentPicker() {
 
   return (
     <div className="fixed inset-0 z-[160] bg-white dark:bg-gray-950 flex flex-col">
-      {/* Header */}
-      <div className="flex items-center gap-3 px-7 py-5 border-b border-gray-200 dark:border-gray-800">
-        <span className="w-7 h-7 rounded-lg bg-gray-900 dark:bg-white text-white dark:text-gray-900 grid place-items-center">
-          <Notebook className="w-4 h-4" />
-        </span>
-        <span className="font-bold text-base text-gray-900 dark:text-white">POFO</span>
+      {/* Header — 입력 도우미와 동일 스타일, 구분선 없음 */}
+      <div className="flex items-center gap-4 px-7 py-5">
+        <div className="flex items-center gap-2.5 font-bold text-[15px] text-gray-900 dark:text-white">
+          <span className="w-6 h-6 rounded-md bg-gray-900 dark:bg-white text-white dark:text-gray-900 grid place-items-center">
+            <Notebook className="w-3.5 h-3.5" />
+          </span>
+          POFO
+        </div>
         <div className="flex-1" />
         <button
           onClick={handleSkip}
-          className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+          className="w-9 h-9 rounded-lg flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+          title="닫기"
         >
-          건너뛰기
+          <X className="w-5 h-5" />
         </button>
       </div>
 
       {/* Body */}
-      <div className="flex-1 overflow-y-auto">
-        <div className="max-w-[720px] mx-auto px-6 py-10">
+      <div className="flex-1 overflow-y-auto flex flex-col items-center justify-start">
+        <div className="max-w-[720px] w-full px-6 py-10">
           <div className="text-center mb-8">
             <div className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-3">
               전공을 선택해주세요
@@ -133,6 +136,24 @@ export function DepartmentPicker() {
               </button>
             ))}
           </div>
+        </div>
+      </div>
+
+      {/* Footer — 입력 도우미와 동일 스타일 */}
+      <div className="flex items-center justify-center gap-3 px-7 py-5 border-t border-gray-200 dark:border-gray-800">
+        <div className="w-full max-w-[520px] flex items-center justify-between">
+          <button
+            onClick={handleSkip}
+            className="text-sm text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
+          >
+            건너뛰기
+          </button>
+          <button
+            onClick={handleSkip}
+            className="h-11 px-6 rounded-xl text-sm font-semibold bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
+          >
+            빈 템플릿으로 시작
+          </button>
         </div>
       </div>
     </div>

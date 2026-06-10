@@ -25,7 +25,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '다양한 분야를 융합한 자기주도 포트폴리오',
     department: '자유전공학과',
     state: {
-      profile: { name: '이하늘', role: '융합 전공자', tagline: '경계를 넘나들며 나만의 길을 설계하는 자유전공 인재입니다.', location: '서울, 대한민국', email: 'haneul@pofo.dev', github: '', website: '', emoji: '🌐', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김자유', role: '융합 전공자', tagline: '경계를 넘나들며 나만의 길을 설계하는 자유전공 인재입니다.', location: '서울, 대한민국', email: 'haneul@pofo.dev', github: '', website: '', emoji: '🌐', iconImg: '', iconShape: 'circle', links: [] },
       about: '다양한 학문 분야를 자기주도적으로 탐색하고 융합하여 고유한 역량을 설계하고 있습니다. 기획력과 데이터 분석 능력을 바탕으로 다학제적 프로젝트를 주도해왔습니다.',
       skills: '기획, 데이터 분석, 프레젠테이션, 커뮤니케이션, 리서치, Python, Excel',
       tools: ['Notion', 'Slack', 'Figma', 'Google Sheets'],
@@ -46,7 +46,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '웹·앱·시스템 소프트웨어 개발',
     department: '공학부',
     state: {
-      profile: { name: '홍길동', role: 'Software Developer', tagline: '사용자 경험을 최우선으로 생각하는 소프트웨어 개발자입니다.', location: '서울, 대한민국', email: 'gildong@pofo.dev', github: 'github.com/gildong-dev', website: '', emoji: '💻', iconImg: '', iconShape: 'circle', links: [{ label: 'GitHub', url: 'github.com/gildong-dev' }] },
+      profile: { name: '김컴공', role: '소프트웨어 개발자', tagline: '사용자 경험을 최우선으로 생각하는 소프트웨어 개발자입니다.', location: '서울, 대한민국', email: 'gildong@pofo.dev', github: 'github.com/gildong-dev', website: '', emoji: '💻', iconImg: '', iconShape: 'circle', links: [{ label: 'GitHub', url: 'github.com/gildong-dev' }] },
       about: '웹 풀스택 개발과 클라우드 인프라에 관심이 있는 컴퓨터소프트웨어 전공자입니다. React, Spring Boot 기반 프로젝트를 주도해왔으며, 협업 도구를 적극 활용한 애자일 개발 경험이 있습니다.',
       skills: 'Java, Python, JavaScript, React, Spring Boot, MySQL, Git, REST API',
       tools: ['VS Code', 'IntelliJ', 'GitHub', 'Slack', 'Notion', 'Docker'],
@@ -63,7 +63,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '기계 설계·제조 및 시스템 엔지니어링',
     department: '공학부',
     state: {
-      profile: { name: '김도현', role: '기계 엔지니어', tagline: '정밀한 설계와 시뮬레이션으로 가치를 만드는 기계공학 전공자입니다.', location: '서울, 대한민국', email: 'dohyun@pofo.dev', github: '', website: '', emoji: '⚙️', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김기계', role: '기계 엔지니어', tagline: '정밀한 설계와 시뮬레이션으로 가치를 만드는 기계공학 전공자입니다.', location: '서울, 대한민국', email: 'dohyun@pofo.dev', github: '', website: '', emoji: '⚙️', iconImg: '', iconShape: 'circle', links: [] },
       about: 'CAD/CAM 기반 정밀 설계와 3D 프린팅, 유한요소해석(FEA)에 역량을 갖춘 기계시스템 전공자입니다. 자동화 설비 및 로봇 시스템에 관심이 있으며, 현장 실습을 통해 실무 감각을 키워왔습니다.',
       skills: 'AutoCAD, SolidWorks, CATIA, ANSYS, 3D Printing, CNC, PLC, 유압/공압',
       tools: ['SolidWorks', 'AutoCAD', 'ANSYS', 'MATLAB'],
@@ -80,7 +80,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '소방 설비 설계·점검 및 안전 관리',
     department: '공학부',
     state: {
-      profile: { name: '박진우', role: '소방안전 기술자', tagline: '안전한 환경을 설계하는 소방설비안전 전공자입니다.', location: '서울, 대한민국', email: 'jinwoo@pofo.dev', github: '', website: '', emoji: '🧯', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김소방', role: '소방안전 기술자', tagline: '안전한 환경을 설계하는 소방설비안전 전공자입니다.', location: '서울, 대한민국', email: 'jinwoo@pofo.dev', github: '', website: '', emoji: '🧯', iconImg: '', iconShape: 'circle', links: [] },
       about: '소방 설비 설계, 점검 및 방재 계획 수립에 전문성을 갖춘 안전 분야 전공자입니다. 소방설비기사 자격을 취득하였으며, 현장 실습을 통해 실무 역량을 강화하고 있습니다.',
       skills: '소방설비 설계, 화재 시뮬레이션, 방재 계획, 위험성 평가, 소방법규, AutoCAD, 전기회로',
       tools: ['AutoCAD', 'Revit'],
@@ -97,7 +97,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '전력 시스템·전기 설비 설계 및 제어',
     department: '공학부',
     state: {
-      profile: { name: '최민서', role: '전기 엔지니어', tagline: '전력 시스템과 제어 기술로 미래 에너지를 설계합니다.', location: '서울, 대한민국', email: 'minseo@pofo.dev', github: '', website: '', emoji: '⚡', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김전기', role: '전기 엔지니어', tagline: '전력 시스템과 제어 기술로 미래 에너지를 설계합니다.', location: '서울, 대한민국', email: 'minseo@pofo.dev', github: '', website: '', emoji: '⚡', iconImg: '', iconShape: 'circle', links: [] },
       about: '전력 시스템 설계, 신재생에너지 및 전기 제어 분야에 관심을 가진 전기공학 전공자입니다. 전기기사 자격을 준비하며 실무 회로 설계 및 시뮬레이션 역량을 갖추고 있습니다.',
       skills: '회로 설계, 전력 시스템, PLC, 시퀀스 제어, AutoCAD Electrical, PSCAD, 신재생에너지',
       tools: ['AutoCAD', 'MATLAB', 'LabVIEW'],
@@ -114,7 +114,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '임베디드 시스템·반도체·통신 기술',
     department: '공학부',
     state: {
-      profile: { name: '정예준', role: '전자 엔지니어', tagline: '임베디드와 IoT 기술로 스마트한 세상을 구현합니다.', location: '서울, 대한민국', email: 'yejun@pofo.dev', github: '', website: '', emoji: '🔌', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김전자', role: '전자 엔지니어', tagline: '임베디드와 IoT 기술로 스마트한 세상을 구현합니다.', location: '서울, 대한민국', email: 'yejun@pofo.dev', github: '', website: '', emoji: '🔌', iconImg: '', iconShape: 'circle', links: [] },
       about: '임베디드 시스템, IoT, PCB 설계에 역량을 갖춘 전자공학 전공자입니다. ARM 마이크로컨트롤러 프로그래밍과 아날로그/디지털 회로 설계에 경험이 있습니다.',
       skills: 'C/C++, 임베디드, ARM, PCB 설계, IoT, 통신 프로토콜, FPGA, VHDL',
       tools: ['VS Code', 'Altium Designer', 'Oscilloscope'],
@@ -131,7 +131,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '게임 기획·개발·아트 콘텐츠 제작',
     department: '공학부',
     state: {
-      profile: { name: '윤서현', role: 'Game Developer', tagline: '몰입감 있는 게임 세계를 설계하고 구현하는 개발자입니다.', location: '서울, 대한민국', email: 'seohyun@pofo.dev', github: '', website: '', emoji: '🎮', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김게임', role: '게임 개발자', tagline: '몰입감 있는 게임 세계를 설계하고 구현하는 개발자입니다.', location: '서울, 대한민국', email: 'seohyun@pofo.dev', github: '', website: '', emoji: '🎮', iconImg: '', iconShape: 'circle', links: [] },
       about: 'Unity 엔진 기반 게임 개발과 기획에 역량을 가진 전공자입니다. 게임 메카닉 설계부터 레벨 디자인, UI/UX까지 게임 제작 전반의 파이프라인을 경험했습니다.',
       skills: 'Unity, C#, 게임 기획, 레벨 디자인, 3D 모델링, Blender, Shader, UI/UX',
       tools: ['Unity', 'Blender', 'Photoshop', 'VS Code'],
@@ -148,7 +148,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: 'AI·머신러닝·딥러닝 모델 개발',
     department: '공학부',
     state: {
-      profile: { name: '강지호', role: 'AI Engineer', tagline: '데이터와 알고리즘으로 지능형 솔루션을 만드는 AI 전공자입니다.', location: '서울, 대한민국', email: 'jiho@pofo.dev', github: 'github.com/jiho-ai', website: '', emoji: '🤖', iconImg: '', iconShape: 'circle', links: [{ label: 'GitHub', url: 'github.com/jiho-ai' }] },
+      profile: { name: '김인공', role: 'AI 엔지니어', tagline: '데이터와 알고리즘으로 지능형 솔루션을 만드는 AI 전공자입니다.', location: '서울, 대한민국', email: 'jiho@pofo.dev', github: 'github.com/jiho-ai', website: '', emoji: '🤖', iconImg: '', iconShape: 'circle', links: [{ label: 'GitHub', url: 'github.com/jiho-ai' }] },
       about: '컴퓨터 비전, 자연어 처리 분야에 관심을 가진 인공지능 전공자입니다. TensorFlow/PyTorch 기반 모델 학습 및 배포 파이프라인 구축 경험이 있으며, 데이터 전처리부터 서비스 통합까지 전 과정을 수행합니다.',
       skills: 'Python, TensorFlow, PyTorch, OpenCV, NLP, 데이터 분석, SQL, Docker',
       tools: ['VS Code', 'Jupyter', 'GitHub', 'Google Colab'],
@@ -169,7 +169,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '제품 디자인·CMF·사용자 중심 설계',
     department: '디자인문화학부',
     state: {
-      profile: { name: '한소율', role: 'Product Designer', tagline: '사용자 중심 사고로 일상의 제품을 혁신하는 산업디자이너입니다.', location: '서울, 대한민국', email: 'soyul@pofo.dev', github: '', website: '', emoji: '🏭', iconImg: '', iconShape: 'circle', links: [{ label: 'Behance', url: 'behance.net/soyul' }] },
+      profile: { name: '김산디', role: '제품 디자이너', tagline: '사용자 중심 사고로 일상의 제품을 혁신하는 산업디자이너입니다.', location: '서울, 대한민국', email: 'soyul@pofo.dev', github: '', website: '', emoji: '🏭', iconImg: '', iconShape: 'circle', links: [{ label: 'Behance', url: 'behance.net/soyul' }] },
       about: '사용자 리서치와 인체공학 기반의 제품 디자인에 전문성을 가진 전공자입니다. 3D 모델링부터 목업 제작, CMF 선정까지 제품 개발 전 과정을 경험했습니다.',
       skills: 'Rhino 3D, KeyShot, Sketch, CMF, 3D Printing, 사용자 리서치, 인체공학',
       tools: ['Rhino', 'KeyShot', 'Illustrator', 'Photoshop'],
@@ -186,7 +186,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '그래픽·브랜딩·타이포그래피 디자인',
     department: '디자인문화학부',
     state: {
-      profile: { name: '김이슬', role: 'Graphic Designer', tagline: '시각 언어로 브랜드의 가치를 전달하는 디자이너입니다.', location: '서울, 대한민국', email: 'iseul@pofo.dev', github: '', website: '', emoji: '🎨', iconImg: '', iconShape: 'circle', links: [{ label: 'Behance', url: 'behance.net/iseul' }] },
+      profile: { name: '김시디', role: '그래픽 디자이너', tagline: '시각 언어로 브랜드의 가치를 전달하는 디자이너입니다.', location: '서울, 대한민국', email: 'iseul@pofo.dev', github: '', website: '', emoji: '🎨', iconImg: '', iconShape: 'circle', links: [{ label: 'Behance', url: 'behance.net/iseul' }] },
       about: '브랜딩, 편집 디자인, 타이포그래피에 강점을 가진 시각디자인 전공자입니다. 인쇄물부터 디지털 미디어까지 다양한 매체의 그래픽 작업 경험을 보유하고 있습니다.',
       skills: '브랜딩, 편집 디자인, 타이포그래피, 인포그래픽, UI 디자인, 일러스트레이션',
       tools: ['Illustrator', 'Photoshop', 'InDesign', 'Figma'],
@@ -203,7 +203,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '패션 기획·패턴 설계·컬렉션 제작',
     department: '디자인문화학부',
     state: {
-      profile: { name: '오수아', role: 'Fashion Designer', tagline: '트렌드와 개성을 조화시키는 패션 디자이너입니다.', location: '서울, 대한민국', email: 'sua@pofo.dev', github: '', website: '', emoji: '👗', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김패션', role: '패션 디자이너', tagline: '트렌드와 개성을 조화시키는 패션 디자이너입니다.', location: '서울, 대한민국', email: 'sua@pofo.dev', github: '', website: '', emoji: '👗', iconImg: '', iconShape: 'circle', links: [] },
       about: '패션 트렌드 분석, 패턴 설계, 봉제 기술에 역량을 갖춘 패션디자인 전공자입니다. 자체 미니 컬렉션 기획부터 런웨이 참가까지의 전 과정을 경험했습니다.',
       skills: '패턴 설계, 드레이핑, 봉제, 트렌드 분석, 텍스타일, CLO 3D, 일러스트레이션',
       tools: ['CLO 3D', 'Illustrator', 'Photoshop'],
@@ -220,7 +220,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '공간 기획·인테리어·건축 설계',
     department: '디자인문화학부',
     state: {
-      profile: { name: '장우진', role: 'Interior Designer', tagline: '사람과 공간의 조화를 설계하는 실내건축 전공자입니다.', location: '서울, 대한민국', email: 'woojin@pofo.dev', github: '', website: '', emoji: '🏠', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김건축', role: '실내건축 디자이너', tagline: '사람과 공간의 조화를 설계하는 실내건축 전공자입니다.', location: '서울, 대한민국', email: 'woojin@pofo.dev', github: '', website: '', emoji: '🏠', iconImg: '', iconShape: 'circle', links: [] },
       about: '공간 기획, 실내 설계, 3D 시각화에 전문성을 갖춘 실내건축 전공자입니다. AutoCAD, SketchUp, V-Ray 등 설계 도구 활용 능력과 시공 현장 실습 경험을 보유하고 있습니다.',
       skills: 'AutoCAD, SketchUp, 3ds Max, V-Ray, Revit, 공간 기획, 마감재 선정, 시공 도면',
       tools: ['AutoCAD', 'SketchUp', 'Photoshop', 'Illustrator'],
@@ -237,7 +237,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '광고 기획·카피라이팅·미디어 전략',
     department: '디자인문화학부',
     state: {
-      profile: { name: '임채원', role: 'Ad Planner / Copywriter', tagline: '소비자의 마음을 움직이는 광고 크리에이터입니다.', location: '서울, 대한민국', email: 'chaewon@pofo.dev', github: '', website: '', emoji: '📢', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김광고', role: '광고기획자 / 카피라이터', tagline: '소비자의 마음을 움직이는 광고 크리에이터입니다.', location: '서울, 대한민국', email: 'chaewon@pofo.dev', github: '', website: '', emoji: '📢', iconImg: '', iconShape: 'circle', links: [] },
       about: '광고 기획, 카피라이팅, 미디어 전략 수립에 역량을 가진 광고미디어 전공자입니다. 브랜드 캠페인 기획부터 디지털 퍼포먼스 마케팅까지 폭넓은 실무 경험이 있습니다.',
       skills: '광고 기획, 카피라이팅, 미디어 플래닝, SNS 마케팅, 영상 기획, 프레젠테이션',
       tools: ['Photoshop', 'Premiere Pro', 'Notion', 'Google Analytics'],
@@ -254,7 +254,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '영상 촬영·편집·방송 콘텐츠 제작',
     department: '디자인문화학부',
     state: {
-      profile: { name: '신태호', role: 'Video Producer', tagline: '이야기를 영상으로 완성하는 방송영상 전공자입니다.', location: '서울, 대한민국', email: 'taeho@pofo.dev', github: '', website: '', emoji: '🎬', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김영상', role: '영상 프로듀서', tagline: '이야기를 영상으로 완성하는 방송영상 전공자입니다.', location: '서울, 대한민국', email: 'taeho@pofo.dev', github: '', website: '', emoji: '🎬', iconImg: '', iconShape: 'circle', links: [] },
       about: '다큐멘터리, 단편영화, 유튜브 콘텐츠 등 다양한 영상 제작 경험을 가진 방송영상 전공자입니다. 촬영, 조명, 편집, 색보정까지 영상 제작 전 과정의 역량을 보유하고 있습니다.',
       skills: '촬영, 편집, 색보정, 조명, 사운드, 스토리보드, 유튜브 콘텐츠 기획',
       tools: ['Premiere Pro', 'After Effects', 'DaVinci Resolve', 'Photoshop'],
@@ -271,7 +271,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '웹툰·애니메이션·디지털 일러스트',
     department: '디자인문화학부',
     state: {
-      profile: { name: '고은서', role: 'Webtoon Artist / Animator', tagline: '그림과 이야기로 세계를 창조하는 웹툰·애니메이션 작가입니다.', location: '서울, 대한민국', email: 'eunseo@pofo.dev', github: '', website: '', emoji: '✏️', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김웹툰', role: '웹툰 작가 / 애니메이터', tagline: '그림과 이야기로 세계를 창조하는 웹툰·애니메이션 작가입니다.', location: '서울, 대한민국', email: 'eunseo@pofo.dev', github: '', website: '', emoji: '✏️', iconImg: '', iconShape: 'circle', links: [] },
       about: '웹툰 연재, 2D 애니메이션 제작, 디지털 일러스트에 역량을 가진 전공자입니다. 스토리 구성부터 작화, 채색, 후반 작업까지 1인 제작 파이프라인을 갖추고 있습니다.',
       skills: '웹툰 제작, 2D 애니메이션, 디지털 일러스트, 스토리보드, 캐릭터 디자인, 채색',
       tools: ['Clip Studio Paint', 'Photoshop', 'After Effects', 'Procreate'],
@@ -288,7 +288,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '방송 작가·시나리오·문예 창작',
     department: '디자인문화학부',
     state: {
-      profile: { name: '백서연', role: '방송 작가 / 시나리오 작가', tagline: '언어의 힘으로 이야기를 구축하는 방송문예 전공자입니다.', location: '서울, 대한민국', email: 'seoyeon@pofo.dev', github: '', website: '', emoji: '📝', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김문예', role: '방송 작가 / 시나리오 작가', tagline: '언어의 힘으로 이야기를 구축하는 방송문예 전공자입니다.', location: '서울, 대한민국', email: 'seoyeon@pofo.dev', github: '', website: '', emoji: '📝', iconImg: '', iconShape: 'circle', links: [] },
       about: '방송 대본, 시나리오, 웹소설 등 다양한 장르의 글쓰기에 역량을 가진 방송문예창작 전공자입니다. 구성 작가 실습과 문학 공모전 수상 경험을 통해 실무 감각을 키워왔습니다.',
       skills: '시나리오 작법, 방송 대본, 카피라이팅, 웹소설, 편집, 스토리텔링, 교정·교열',
       tools: ['MS Word', 'Notion', 'Final Draft'],
@@ -305,7 +305,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '연기·MC·엔터테인먼트 퍼포먼스',
     department: '디자인문화학부',
     state: {
-      profile: { name: '류지안', role: '퍼포머 / MC', tagline: '무대 위에서 빛나는 엔터테이너를 꿈꾸는 방송연예 전공자입니다.', location: '서울, 대한민국', email: 'jian@pofo.dev', github: '', website: '', emoji: '🎤', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김연예', role: '퍼포머 / MC', tagline: '무대 위에서 빛나는 엔터테이너를 꿈꾸는 방송연예 전공자입니다.', location: '서울, 대한민국', email: 'jian@pofo.dev', github: '', website: '', emoji: '🎤', iconImg: '', iconShape: 'circle', links: [] },
       about: '연기, MC, 보컬 등 다양한 퍼포먼스 역량을 갖춘 방송연예 전공자입니다. 교내 뮤지컬, 축제 MC, 유튜브 콘텐츠 출연 등 실전 경험을 통해 무대 장악력을 키워왔습니다.',
       skills: '연기, MC·진행, 보컬, 댄스, 프레젠테이션, 유튜브 출연, 자기 브랜딩',
       tools: ['Premiere Pro', 'Canva'],
@@ -326,7 +326,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '영양사·식품 위생·급식 관리',
     department: '건강보건학부',
     state: {
-      profile: { name: '문하영', role: '영양사', tagline: '균형 잡힌 식단과 안전한 식품으로 건강을 설계합니다.', location: '서울, 대한민국', email: 'hayoung@pofo.dev', github: '', website: '', emoji: '🍎', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김영양', role: '영양사', tagline: '균형 잡힌 식단과 안전한 식품으로 건강을 설계합니다.', location: '서울, 대한민국', email: 'hayoung@pofo.dev', github: '', website: '', emoji: '🍎', iconImg: '', iconShape: 'circle', links: [] },
       about: '임상 영양, 단체급식 관리, 식품 위생에 전문성을 가진 식품영양학과 전공자입니다. 영양사 면허를 준비하며 병원 및 학교 급식 현장 실습을 통해 실무 역량을 강화하고 있습니다.',
       skills: '영양 상담, 식단 설계, 급식 관리, 식품 위생, HACCP, 식품 분석, 조리 실습',
       tools: ['MS Excel', 'CAN-Pro', 'Notion'],
@@ -343,7 +343,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '의료 행정·건강보험·병원 경영',
     department: '건강보건학부',
     state: {
-      profile: { name: '양시윤', role: '보건의료행정사', tagline: '효율적인 의료 행정 시스템으로 환자와 의료진을 연결합니다.', location: '서울, 대한민국', email: 'siyoon@pofo.dev', github: '', website: '', emoji: '🏥', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김의행', role: '보건의료행정사', tagline: '효율적인 의료 행정 시스템으로 환자와 의료진을 연결합니다.', location: '서울, 대한민국', email: 'siyoon@pofo.dev', github: '', website: '', emoji: '🏥', iconImg: '', iconShape: 'circle', links: [] },
       about: '병원 원무 행정, 건강보험 청구, 의무기록 관리에 역량을 가진 보건의료행정학과 전공자입니다. 병원 현장실습을 통해 보험 청구 및 EMR 시스템 운용 경험을 쌓았습니다.',
       skills: '의무기록 관리, 건강보험 청구, 원무 행정, 의료 통계, EMR, DRG, 병원 경영',
       tools: ['MS Excel', 'EMR 시스템', 'SPSS'],
@@ -360,7 +360,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '재활 치료·일상생활 훈련·인지 평가',
     department: '건강보건학부',
     state: {
-      profile: { name: '조유나', role: '작업치료사', tagline: '일상의 독립을 돕는 따뜻한 작업치료사를 꿈꿉니다.', location: '서울, 대한민국', email: 'yuna@pofo.dev', github: '', website: '', emoji: '🤲', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김작치', role: '작업치료사', tagline: '일상의 독립을 돕는 따뜻한 작업치료사를 꿈꿉니다.', location: '서울, 대한민국', email: 'yuna@pofo.dev', github: '', website: '', emoji: '🤲', iconImg: '', iconShape: 'circle', links: [] },
       about: '신체·인지 재활, 일상생활 활동(ADL) 훈련, 보조기기 적용에 전문성을 갖춘 작업치료과 전공자입니다. 재활병원 임상실습을 통해 환자 중심의 치료 계획 수립 경험을 보유하고 있습니다.',
       skills: '신경계 작업치료, 인지 재활, ADL 훈련, 보조기기 적용, 감각 통합, 평가 도구',
       tools: ['SPSS', 'MS Office'],
@@ -377,7 +377,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '동물 간호·임상 보조·수의 보건',
     department: '건강보건학부',
     state: {
-      profile: { name: '서지민', role: '동물보건사', tagline: '반려동물의 건강한 삶을 위해 헌신하는 동물보건 전문가입니다.', location: '서울, 대한민국', email: 'jimin@pofo.dev', github: '', website: '', emoji: '🐾', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김동보', role: '동물보건사', tagline: '반려동물의 건강한 삶을 위해 헌신하는 동물보건 전문가입니다.', location: '서울, 대한민국', email: 'jimin@pofo.dev', github: '', website: '', emoji: '🐾', iconImg: '', iconShape: 'circle', links: [] },
       about: '동물 임상 간호, 수술 보조, 검체 분석에 전문성을 갖춘 반려동물보건학과 전공자입니다. 동물병원 현장실습을 통해 보호자 상담과 입원 동물 관리 경험을 쌓았습니다.',
       skills: '동물 간호, 수술 보조, 방사선 촬영, 검체 분석, 약물 관리, 보호자 상담',
       tools: ['현미경', 'X-ray', 'MS Excel'],
@@ -394,7 +394,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '응급 처치·구급 활동·재난 대응',
     department: '건강보건학부',
     state: {
-      profile: { name: '권태민', role: '응급구조사', tagline: '골든타임을 사수하는 응급구조 전문가를 꿈꿉니다.', location: '서울, 대한민국', email: 'taemin@pofo.dev', github: '', website: '', emoji: '🚑', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김응급', role: '응급구조사', tagline: '골든타임을 사수하는 응급구조 전문가를 꿈꿉니다.', location: '서울, 대한민국', email: 'taemin@pofo.dev', github: '', website: '', emoji: '🚑', iconImg: '', iconShape: 'circle', links: [] },
       about: '전문 응급 처치, 심폐소생술, 외상 처치, 재난 대응에 역량을 갖춘 응급구조과 전공자입니다. 소방서 및 응급실 현장실습을 통해 실전 구급 활동 경험을 보유하고 있습니다.',
       skills: 'BLS/ACLS, 외상 처치, 기도 관리, 환자 평가, 구급차 운용, 재난 대응, 트리아지',
       tools: ['응급 장비', 'AED', 'MS Office'],
@@ -411,7 +411,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '구강 관리·치석 제거·예방 치위생',
     department: '건강보건학부',
     state: {
-      profile: { name: '이나현', role: '치과위생사', tagline: '밝은 미소를 지키는 구강 건강 전문가입니다.', location: '서울, 대한민국', email: 'nahyun@pofo.dev', github: '', website: '', emoji: '🦷', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김치위', role: '치과위생사', tagline: '밝은 미소를 지키는 구강 건강 전문가입니다.', location: '서울, 대한민국', email: 'nahyun@pofo.dev', github: '', website: '', emoji: '🦷', iconImg: '', iconShape: 'circle', links: [] },
       about: '스케일링, 치면세마, 불소 도포, 구강보건교육에 전문성을 갖춘 치위생과 전공자입니다. 치과 임상실습을 통해 환자 응대와 진료 보조의 실무 역량을 쌓았습니다.',
       skills: '스케일링, 치면세마, 불소 도포, 인상 채득, 방사선 촬영, 구강보건교육, 감염 관리',
       tools: ['치과 유닛 체어', 'X-ray', 'MS Office'],
@@ -432,7 +432,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '의약품 제조·품질 관리·GMP',
     department: '건강생활학부',
     state: {
-      profile: { name: '황준영', role: '제약 QC 연구원', tagline: '안전한 의약품을 위한 품질 관리 전문가를 꿈꿉니다.', location: '서울, 대한민국', email: 'junyoung@pofo.dev', github: '', website: '', emoji: '💊', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김제약', role: '제약 QC 연구원', tagline: '안전한 의약품을 위한 품질 관리 전문가를 꿈꿉니다.', location: '서울, 대한민국', email: 'junyoung@pofo.dev', github: '', website: '', emoji: '💊', iconImg: '', iconShape: 'circle', links: [] },
       about: '의약품 제조, 품질 관리(QC), GMP 기반 공정 관리에 역량을 갖춘 유한바이오제약 전공자입니다. 제약 회사 실습을 통해 HPLC 분석 및 밸리데이션 경험을 보유하고 있습니다.',
       skills: 'HPLC, GC, 제제 실습, GMP, 밸리데이션, 품질 관리, 약전 분석',
       tools: ['HPLC 장비', 'MS Excel', 'LIMS'],
@@ -449,7 +449,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '화학 분석·바이오 공정·화장품 원료',
     department: '건강생활학부',
     state: {
-      profile: { name: '남수빈', role: '화학분석 연구원', tagline: '정밀한 분석 기술로 산업의 품질을 책임집니다.', location: '서울, 대한민국', email: 'subin@pofo.dev', github: '', website: '', emoji: '🧪', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김화학', role: '화학분석 연구원', tagline: '정밀한 분석 기술로 산업의 품질을 책임집니다.', location: '서울, 대한민국', email: 'subin@pofo.dev', github: '', website: '', emoji: '🧪', iconImg: '', iconShape: 'circle', links: [] },
       about: '화학 분석, 바이오 공정, 화장품 원료 분석에 역량을 가진 유한생명화공 전공자입니다. IR, UV-Vis, GC-MS 등 기기분석 실무 경험을 보유하고 있습니다.',
       skills: 'IR, UV-Vis, GC-MS, 화학 분석, 바이오 공정, 유기합성, 품질 관리',
       tools: ['분석 장비', 'MS Excel', 'ChemDraw'],
@@ -466,7 +466,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '피부 관리·메이크업 아트·뷰티 테라피',
     department: '건강생활학부',
     state: {
-      profile: { name: '차예린', role: '메이크업 아티스트', tagline: '아름다움을 디자인하는 뷰티 전문가입니다.', location: '서울, 대한민국', email: 'yerin@pofo.dev', github: '', website: '', emoji: '💄', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김뷰티', role: '메이크업 아티스트', tagline: '아름다움을 디자인하는 뷰티 전문가입니다.', location: '서울, 대한민국', email: 'yerin@pofo.dev', github: '', website: '', emoji: '💄', iconImg: '', iconShape: 'circle', links: [] },
       about: '피부 관리, 메이크업 아트, 특수 분장에 역량을 가진 피부메이크업 전공자입니다. 웨딩, 화보, 무대 메이크업 경험을 통해 다양한 현장 대응 능력을 키워왔습니다.',
       skills: '스킨케어, 메이크업 아트, 특수 분장, 네일 아트, 왁싱, 피부 분석, 뷰티 컨설팅',
       tools: ['피부 분석기', 'Canva', 'Instagram'],
@@ -483,7 +483,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '화장품 개발·성분 분석·뷰티 마케팅',
     department: '건강생활학부',
     state: {
-      profile: { name: '송민지', role: '화장품 연구원', tagline: '과학적 근거로 안전하고 효과적인 화장품을 개발합니다.', location: '서울, 대한민국', email: 'minji@pofo.dev', github: '', website: '', emoji: '🧴', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김화장', role: '화장품 연구원', tagline: '과학적 근거로 안전하고 효과적인 화장품을 개발합니다.', location: '서울, 대한민국', email: 'minji@pofo.dev', github: '', website: '', emoji: '🧴', iconImg: '', iconShape: 'circle', links: [] },
       about: '화장품 제형 개발, 성분 분석, 품질 관리에 역량을 가진 뷰티화장품 전공자입니다. 스킨케어·색조 제형 실습과 화장품 안전성 평가 경험을 보유하고 있습니다.',
       skills: '제형 개발, 성분 분석, 품질 관리, CGMP, 피부 과학, 화장품 법규, 안전성 평가',
       tools: ['pH meter', '점도계', 'MS Excel'],
@@ -500,7 +500,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '복지 상담·사례 관리·지역 사회 서비스',
     department: '건강생활학부',
     state: {
-      profile: { name: '배윤서', role: '사회복지사', tagline: '따뜻한 시선으로 이웃의 삶을 지원하는 사회복지 전공자입니다.', location: '서울, 대한민국', email: 'yoonseo@pofo.dev', github: '', website: '', emoji: '🤝', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김복지', role: '사회복지사', tagline: '따뜻한 시선으로 이웃의 삶을 지원하는 사회복지 전공자입니다.', location: '서울, 대한민국', email: 'yoonseo@pofo.dev', github: '', website: '', emoji: '🤝', iconImg: '', iconShape: 'circle', links: [] },
       about: '사례 관리, 상담, 지역 사회 복지 프로그램 기획에 역량을 가진 사회복지 전공자입니다. 사회복지사 2급 자격을 취득하였으며 복지관 실습을 통해 실무 경험을 쌓았습니다.',
       skills: '사례 관리, 상담, 프로그램 기획, 자원 연계, 사회 조사, 보고서 작성',
       tools: ['MS Office', 'SPSS', 'Notion'],
@@ -517,7 +517,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '운동 재활·스포츠 트레이닝·체력 측정',
     department: '건강생활학부',
     state: {
-      profile: { name: '우성훈', role: '스포츠 재활 트레이너', tagline: '과학적 운동 프로그램으로 부상을 예방하고 재활을 돕습니다.', location: '서울, 대한민국', email: 'sunghoon@pofo.dev', github: '', website: '', emoji: '🏃', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김스포', role: '스포츠 재활 트레이너', tagline: '과학적 운동 프로그램으로 부상을 예방하고 재활을 돕습니다.', location: '서울, 대한민국', email: 'sunghoon@pofo.dev', github: '', website: '', emoji: '🏃', iconImg: '', iconShape: 'circle', links: [] },
       about: '스포츠 재활, 체력 측정, 운동 처방에 역량을 갖춘 스포츠재활 전공자입니다. 운동선수 트레이닝 보조 및 재활 센터 실습을 통해 실무 경험을 쌓았습니다.',
       skills: '운동 재활, 기능적 움직임 평가(FMS), 테이핑, 체력 측정, 운동 처방, 해부학',
       tools: ['InBody', '체력 측정 장비', 'MS Excel'],
@@ -534,7 +534,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '반려동물 돌봄·훈련·산업 경영',
     department: '건강생활학부',
     state: {
-      profile: { name: '정하린', role: '반려동물 산업 전문가', tagline: '반려동물과 사람의 행복한 공존을 설계합니다.', location: '서울, 대한민국', email: 'harin@pofo.dev', github: '', website: '', emoji: '🐕', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김반려', role: '반려동물 산업 전문가', tagline: '반려동물과 사람의 행복한 공존을 설계합니다.', location: '서울, 대한민국', email: 'harin@pofo.dev', github: '', website: '', emoji: '🐕', iconImg: '', iconShape: 'circle', links: [] },
       about: '반려동물 행동 교정, 그루밍, 펫 비즈니스 기획에 역량을 가진 반려동물산업 전공자입니다. 반려동물 행동 상담사 자격을 준비하며 펫 서비스 현장 경험을 쌓고 있습니다.',
       skills: '반려동물 행동 분석, 그루밍, 훈련, 영양 관리, 펫 비즈니스, 고객 상담',
       tools: ['MS Excel', 'Canva', 'Instagram'],
@@ -551,7 +551,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '한식·양식·제과 조리 및 메뉴 개발',
     department: '건강생활학부',
     state: {
-      profile: { name: '김태영', role: '조리사 / 셰프', tagline: '맛과 비주얼을 모두 잡는 요리 전문가를 꿈꿉니다.', location: '서울, 대한민국', email: 'taeyoung@pofo.dev', github: '', website: '', emoji: '👨‍🍳', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김조리', role: '조리사 / 셰프', tagline: '맛과 비주얼을 모두 잡는 요리 전문가를 꿈꿉니다.', location: '서울, 대한민국', email: 'taeyoung@pofo.dev', github: '', website: '', emoji: '👨‍🍳', iconImg: '', iconShape: 'circle', links: [] },
       about: '한식, 양식, 일식 조리와 메뉴 개발에 역량을 갖춘 호텔조리 전공자입니다. 호텔 주방 실습을 통해 대량 조리 및 위생 관리 실무 경험을 보유하고 있습니다.',
       skills: '한식, 양식, 일식, 제과제빵, 메뉴 개발, 푸드 스타일링, 위생 관리, HACCP',
       tools: ['조리 도구', 'Canva', 'Instagram'],
@@ -568,7 +568,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '제과제빵·바리스타·카페 운영',
     department: '건강생활학부',
     state: {
-      profile: { name: '이서윤', role: '파티시에 / 바리스타', tagline: '달콤한 디저트와 커피로 일상의 행복을 전합니다.', location: '서울, 대한민국', email: 'seoyun@pofo.dev', github: '', website: '', emoji: '🧁', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김카페', role: '파티시에 / 바리스타', tagline: '달콤한 디저트와 커피로 일상의 행복을 전합니다.', location: '서울, 대한민국', email: 'seoyun@pofo.dev', github: '', website: '', emoji: '🧁', iconImg: '', iconShape: 'circle', links: [] },
       about: '제과제빵, 바리스타, 카페 경영에 역량을 갖춘 카페베이커리 전공자입니다. 바리스타 자격증을 취득하였으며, 디저트 메뉴 개발과 카페 창업 기획 경험이 있습니다.',
       skills: '제과제빵, 에스프레소 추출, 라떼 아트, 디저트 개발, 카페 경영, 위생 관리',
       tools: ['에스프레소 머신', 'Canva', 'Instagram'],
@@ -589,7 +589,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '호텔 경영·관광 기획·서비스 매니지먼트',
     department: '비즈니스학부',
     state: {
-      profile: { name: '고민재', role: '호텔리어 / 관광 기획자', tagline: '최상의 호스피탈리티로 감동을 전달하는 관광 전문가입니다.', location: '서울, 대한민국', email: 'minjae@pofo.dev', github: '', website: '', emoji: '🏨', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김호텔', role: '호텔리어 / 관광 기획자', tagline: '최상의 호스피탈리티로 감동을 전달하는 관광 전문가입니다.', location: '서울, 대한민국', email: 'minjae@pofo.dev', github: '', website: '', emoji: '🏨', iconImg: '', iconShape: 'circle', links: [] },
       about: '호텔 프론트 운영, 관광 상품 기획, 서비스 품질 관리에 역량을 가진 호텔관광 전공자입니다. 특급 호텔 실습을 통해 고객 서비스와 객실 운영 실무를 경험했습니다.',
       skills: '호텔 운영, 관광 기획, 서비스 매너, 객실 관리, 예약 시스템, 영어/일어 회화',
       tools: ['Opera PMS', 'MS Excel', 'Notion'],
@@ -606,7 +606,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '일본어·무역·일본 비즈니스 문화',
     department: '비즈니스학부',
     state: {
-      profile: { name: '안소희', role: '일본 비즈니스 전문가', tagline: '일본어와 비즈니스 감각으로 한·일 간 가교 역할을 합니다.', location: '서울, 대한민국', email: 'sohee@pofo.dev', github: '', website: '', emoji: '🇯🇵', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김일본', role: '일본 비즈니스 전문가', tagline: '일본어와 비즈니스 감각으로 한·일 간 가교 역할을 합니다.', location: '서울, 대한민국', email: 'sohee@pofo.dev', github: '', website: '', emoji: '🇯🇵', iconImg: '', iconShape: 'circle', links: [] },
       about: '일본어 능력(JLPT N1), 일본 비즈니스 매너, 무역 실무에 역량을 가진 일본비즈니스 전공자입니다. 일본 기업 인턴십을 통해 현지 비즈니스 문화를 직접 경험했습니다.',
       skills: 'JLPT N1, 비즈니스 일본어, 무역 실무, 통·번역, 일본 비즈니스 매너, 마케팅',
       tools: ['MS Office', 'Google Translate', 'Notion'],
@@ -623,7 +623,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: 'ERP·데이터 분석·디지털 경영',
     department: '비즈니스학부',
     state: {
-      profile: { name: '이준혁', role: '경영정보 분석가', tagline: '데이터 기반 의사결정으로 비즈니스 가치를 창출합니다.', location: '서울, 대한민국', email: 'junhyuk@pofo.dev', github: '', website: '', emoji: '📊', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김경영', role: '경영정보 분석가', tagline: '데이터 기반 의사결정으로 비즈니스 가치를 창출합니다.', location: '서울, 대한민국', email: 'junhyuk@pofo.dev', github: '', website: '', emoji: '📊', iconImg: '', iconShape: 'circle', links: [] },
       about: 'ERP, 데이터 분석, 디지털 마케팅에 역량을 가진 경영정보 전공자입니다. SQL과 Excel 피벗 분석을 통한 경영 의사결정 지원 경험을 보유하고 있습니다.',
       skills: 'ERP, SQL, 데이터 분석, 경영 전략, 디지털 마케팅, 비즈니스 모델링, Excel',
       tools: ['MS Excel', 'SQL', 'Notion', 'Google Analytics'],
@@ -640,7 +640,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '세무·회계·재무 관리',
     department: '비즈니스학부',
     state: {
-      profile: { name: '박소영', role: '세무회계사', tagline: '정확한 세무·회계 처리로 기업의 재무 건전성을 지킵니다.', location: '서울, 대한민국', email: 'soyoung@pofo.dev', github: '', website: '', emoji: '🧮', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김세무', role: '세무회계사', tagline: '정확한 세무·회계 처리로 기업의 재무 건전성을 지킵니다.', location: '서울, 대한민국', email: 'soyoung@pofo.dev', github: '', website: '', emoji: '🧮', iconImg: '', iconShape: 'circle', links: [] },
       about: '세무 신고, 회계 장부 관리, 재무제표 분석에 역량을 가진 세무회계 전공자입니다. 전산세무 1급 자격을 취득하였으며, 세무법인 실습을 통해 법인세·부가세 신고 실무를 경험했습니다.',
       skills: '전산세무, 부가가치세, 법인세, 재무회계, 원가회계, 더존 Smart A, Excel',
       tools: ['더존 Smart A', 'MS Excel', 'MS Office'],
@@ -661,7 +661,7 @@ export const PORTFOLIO_PRESETS: PortfolioPreset[] = [
     desc: '항공 서비스·객실 승무·공항 운영',
     department: '항공서비스학과',
     state: {
-      profile: { name: '윤다은', role: '항공 서비스 전문가', tagline: '하늘 위에서 최고의 서비스를 전하는 항공 서비스 전공자입니다.', location: '서울, 대한민국', email: 'daeun@pofo.dev', github: '', website: '', emoji: '✈️', iconImg: '', iconShape: 'circle', links: [] },
+      profile: { name: '김항공', role: '항공 서비스 전문가', tagline: '하늘 위에서 최고의 서비스를 전하는 항공 서비스 전공자입니다.', location: '서울, 대한민국', email: 'daeun@pofo.dev', github: '', website: '', emoji: '✈️', iconImg: '', iconShape: 'circle', links: [] },
       about: '객실 서비스, 항공 예약 시스템, 비상 대응 절차에 역량을 가진 항공서비스 전공자입니다. 항공사 면접 및 서비스 매너 교육을 이수하였으며, 우수한 영어·일어 커뮤니케이션 능력을 보유하고 있습니다.',
       skills: '기내 서비스, 비상 탈출 절차, 항공 예약(ABACUS), 서비스 매너, 영어 회화, 이미지 메이킹',
       tools: ['ABACUS/Topas', 'MS Office'],

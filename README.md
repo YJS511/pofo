@@ -1,133 +1,122 @@
-# 📓 POFO
+# POFO
 
-### 노션 스타일 포트폴리오 빌더
+### 유한대학교 노션 스타일 포트폴리오 빌더
 
-입력만 하면 **노션 감성의 포트폴리오**가 실시간으로 완성됩니다.
-설치 없이, 회원가입 없이, **단 하나의 HTML 파일**로 동작해요.
+전공을 선택하면 **맞춤형 샘플 데이터와 기술스택**이 자동으로 채워지고,
+입력 도우미를 따라가면 **노션 감성의 포트폴리오**가 완성됩니다.
 
-![HTML](https://img.shields.io/badge/HTML5-E34F26?style=flat-square&logo=html5&logoColor=white)
-![CSS](https://img.shields.io/badge/CSS3-1572B6?style=flat-square&logo=css3&logoColor=white)
-![JavaScript](https://img.shields.io/badge/Vanilla_JS-F7DF1E?style=flat-square&logo=javascript&logoColor=black)
-![No Build](https://img.shields.io/badge/build-none-success?style=flat-square)
-![Single File](https://img.shields.io/badge/single--file-183KB-blue?style=flat-square)
+![React](https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat-square&logo=vite&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_v4-06B6D4?style=flat-square&logo=tailwindcss&logoColor=white)
 ![License](https://img.shields.io/badge/license-Free_to_Use-brightgreen?style=flat-square)
 
 ---
 
-## ✨ 한눈에 보기
+## 주요 기능
 
-> **누구나 자유롭게 사용하세요.** 브라우저에서 열고, 칸을 채우면, 바로 내보낼 수 있는 포트폴리오가 됩니다.
-
-- 🧩 **설치·서버 불필요** — `index.html` 파일 하나면 끝
-- ⚡ **실시간 미리보기** — 입력하는 즉시 결과가 보여요
-- 🎨 **노션 스타일 디자인** — 깔끔한 레이아웃과 파스텔 태그
-- 📤 **다양한 내보내기** — 웹 · PDF · PPT · 노션 마크다운 · JSON
-- 📱 **모바일 지원** — 휴대폰에서도 편집·열람 가능
-- 🔒 **내 데이터는 내 브라우저에** — 서버 전송 없이 로컬 저장
+- **37개 전공 프리셋** — 유한대학교 전 학과 대응, 전공별 기술스택 및 도구 자동 추천
+- **입력 도우미** — 질문에 답하듯 단계별로 포트폴리오 완성
+- **실시간 미리보기** — 입력 즉시 결과 확인 (데스크탑 / 모바일 전환)
+- **6가지 레이아웃** — 와이드, 심플, 사이드바, 탭, 좁은 노션, 와이드 미니멀
+- **6가지 스타일** — 클래식, 아웃라인, 볼드, 터미널, 다크, 세리프
+- **발표 슬라이드** — 포트폴리오를 슬라이드 모드로 프레젠테이션
+- **다양한 내보내기** — HTML, ZIP, Markdown, JSON, PDF, PowerPoint
+- **로컬 저장** — 서버 전송 없이 브라우저 localStorage에 자동 저장
 
 ---
 
-## 🚀 빠른 시작
+## 빠른 시작
 
-### 1. 그냥 열기
-```
-index.html 파일을 더블클릭 → 브라우저에서 바로 실행
-```
-
-### 2. 로컬 서버로 열기 (권장)
 ```bash
-cd pofo
-python3 -m http.server 3000
-# 브라우저에서 http://localhost:3000 접속
+cd pofo/app
+npm install
+npm run dev
 ```
 
-### 3. 같은 WiFi의 휴대폰에서 열기
-```
-PC에서 서버 실행 후, 휴대폰 브라우저에서
-http://<PC의 IP>:3000  접속
+브라우저에서 `http://localhost:5173` 접속
+
+### 빌드
+
+```bash
+npm run build    # dist/ 폴더에 정적 파일 생성
+npm run preview  # 빌드 결과 로컬 확인
 ```
 
 ---
 
-## 🧭 사용법
+## 사용 흐름
 
 | 단계 | 내용 |
 |:---|:---|
-| 1️⃣ | **기본 정보** — 이름, 직무, 아이콘(이모지·사진) |
-| 2️⃣ | **연락처 & 링크** — 이메일, GitHub, 웹사이트 |
-| 3️⃣ | **소개** — 한 줄 자기소개 (노션 콜아웃으로 표시) |
-| 4️⃣ | **기술 스택** — 쉼표로 입력하면 색상 태그로 변환 |
-| 5️⃣ | **서비스 & 툴** — 사용 도구를 클릭해서 선택 |
-| 6️⃣ | **경력 · 프로젝트 · 학력** — 자유롭게 추가/정렬 |
-| ➕ | **커스텀 섹션** — 자격증·수상·대외활동 등 직접 추가 |
-| 🎉 | **완성 & 내보내기** — 원하는 형식으로 저장 |
-
-> 💡 **입력 도우미(✨)** 를 켜면 질문에 답하듯 단계별로 채울 수 있어요.
+| 1 | **전공 선택** — 학부별 탭에서 전공을 고르면 샘플 데이터 자동 세팅 |
+| 2 | **입력 도우미** — 이름, 직무, 소개, 기술, 도구, 링크, 경력, 프로젝트, 학력, 커스텀 섹션 |
+| 3 | **디자인 커스터마이징** — 레이아웃, 스타일, 커버, 포인트 컬러, 섹션 순서 |
+| 4 | **내보내기** — 원하는 형식으로 저장하거나 클립보드에 복사 |
 
 ---
 
-## 🎨 디자인 커스터마이징
-
-상단 **스타일** 탭에서 자유롭게 꾸밀 수 있습니다.
-
-- **레이아웃** 3종 — 노션 기본 · 사이드바 · 미니멀
-- **디자인 스타일** 4종 — 클래식 · 라인 · 볼드 · 모노
-- **디자인 프리셋** 10종 — 한 번에 분위기 적용
-- **커버** — 그라데이션 · 단색 · 이미지 · 없음
-- **포인트 컬러** — 자동(커버 기준) 또는 직접 지정
-- **섹션 순서** — 항목 전체 순서를 ↑↓ 로 자유 배치
-
----
-
-## 📤 내보내기 형식
+## 내보내기 형식
 
 | 형식 | 용도 |
 |:---|:---|
-| 🌐 **단독 HTML** | 배포·임베드 가능한 완성 웹사이트 |
-| 📄 **PDF** | 인쇄형 포트폴리오 문서 |
-| 📽️ **PowerPoint (.pptx)** | 편집 가능한 발표용 슬라이드 |
-| 📝 **노션 마크다운 (.md)** | 노션에 바로 붙여넣기 |
-| 🗂️ **JSON** | 구조화된 백업 / 다른 기기로 이전 |
-
-> 🔄 **기기 간 이전**: `JSON 내보내기` → 다른 기기에서 `JSON 불러오기`
-
----
-
-## 🌍 배포하기 (다른 사람과 공유)
-
-단일 HTML이라 정적 호스팅 한 번이면 누구나 접속할 수 있어요.
-
-- **Netlify Drop** — `app.netlify.com/drop` 에 `index.html` 드래그 → 즉시 공개 URL
-- **GitHub Pages** — 저장소 업로드 후 Settings → Pages 활성화
-- **Vercel / Cloudflare Pages** — 폴더 연결만 하면 자동 배포
-
-> 데이터는 방문자 각자의 브라우저에 저장되므로, 여러 사람이 동시에 써도 서로 간섭하지 않습니다.
+| HTML (.html) | 테마가 완벽 보존된 단독 웹페이지 |
+| 배포용 ZIP (.zip) | Netlify Drop 등에 드래그하여 즉시 웹사이트 배포 |
+| Markdown (.md) | GitHub README, 노션, 블로그에 붙여넣기 |
+| JSON (.json) | 구조화된 백업 / 다른 기기로 이전 |
+| PDF | 인쇄형 포트폴리오 문서 |
+| PowerPoint (.pptx) | 편집 가능한 발표용 슬라이드 |
 
 ---
 
-## 🛠️ 기술 스택
+## 배포
 
-- **Vanilla JavaScript** — 프레임워크 없이 순수 JS
-- **단일 파일 구조** — 인라인 CSS + JS, 외부 의존성 최소화
-- **localStorage** — 입력 내용 자동 저장
-- **반응형 디자인** — 데스크탑 2단 / 모바일 탭 전환
-- 웹폰트: Pretendard · JetBrains Mono · Nanum Myeongjo (CDN)
+`netlify.toml`이 설정되어 있어 GitHub 연동 후 Netlify에서 자동 배포됩니다.
+
+```toml
+[build]
+  base = "app"
+  command = "npm install && npm run build"
+  publish = "dist"
+```
+
+수동 배포: **내보내기 > 배포용 ZIP** 다운로드 후 [Netlify Drop](https://app.netlify.com/drop)에 드래그
+
+---
+
+## 프로젝트 구조
 
 ```
 pofo/
-└── index.html   ← 앱 전체가 이 파일 하나에
+├── app/
+│   ├── src/app/
+│   │   ├── components/       # React 컴포넌트
+│   │   ├── hooks/            # usePortfolioState 등 커스텀 훅
+│   │   ├── utils/            # export, slides 유틸리티
+│   │   ├── constants.ts      # 템플릿, 스타일 프리셋, 가이드 스텝
+│   │   ├── portfolioPresets.ts  # 37개 전공별 프리셋 데이터
+│   │   ├── departmentData.ts # 전공별 기술스택 및 도구 카테고리
+│   │   └── types.ts          # TypeScript 타입 정의
+│   ├── package.json
+│   └── vite.config.ts
+├── netlify.toml
+└── README.md
 ```
 
 ---
 
-## 👤 제작자
+## 기술 스택
 
-**용지순**
-유한대학교 컴퓨터공학과
-`202307025` · `202607917`
+- **React 19** + **TypeScript**
+- **Vite** — 빌드 및 개발 서버
+- **Tailwind CSS v4** — 유틸리티 기반 스타일링
+- **localStorage** — 입력 내용 자동 저장 (`pofo.state`, `pofo.presetId`)
+- 웹폰트: Pretendard, JetBrains Mono, Nanum Myeongjo (CDN)
 
 ---
 
-### 🆓 모든 사람이 자유롭게 사용하세요
+## 제작자
 
-made with 📓 by **용지순**
+**용지순**
+유한대학교 컴퓨터소프트웨어전공
+`202307025` · `202607917`

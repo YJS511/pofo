@@ -72,7 +72,7 @@ export function AccordionEditor() {
                 type="text"
                 value={state.profile.role}
                 onChange={(e) => updateProfile({ role: e.target.value })}
-                placeholder="직무 (예: Frontend Engineer)"
+                placeholder="직무 (예: 프론트엔드 개발자)"
                 className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600"
               />
             </div>
@@ -105,7 +105,7 @@ export function AccordionEditor() {
                 type="text"
                 value={state.profile.location}
                 onChange={(e) => updateProfile({ location: e.target.value })}
-                placeholder="위치 (예: Seoul, Korea)"
+                placeholder="위치 (예: 서울, 대한민국)"
                 className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600"
               />
             </div>

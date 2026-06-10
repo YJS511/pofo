@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { ChevronUp, ChevronDown, Trash2, Plus } from 'lucide-react';
 
 interface Field {
@@ -8,6 +8,48 @@ interface Field {
   type?: 'text' | 'textarea' | 'month' | 'select';
   options?: string[];
   fullWidth?: boolean;
+}
+
+function parseDatePart(s: string): { y: string; m: string; d: string } {
+  const c = s.trim().replace(/-/g, '.');
+  const p = c.split('.');
+  return { y: p[0] || '', m: p[1] || '', d: p[2] || '' };
+}
+
+function fmtDate(y: string, m: string, d: string): string {
+  if (!y) return '';
+  let s = y;
+  if (m) s += `.${m.padStart(2, '0')}`;
+  if (m && d) s += `.${d.padStart(2, '0')}`;
+  return s;
+}
+
+const NOW_YEAR = new Date().getFullYear();
+const YEARS = Array.from({ length: NOW_YEAR - 2009 }, (_, i) => String(NOW_YEAR + 2 - i));
+const MONTHS = Array.from({ length: 12 }, (_, i) => String(i + 1).padStart(2, '0'));
+const DAYS = Array.from({ length: 31 }, (_, i) => String(i + 1).padStart(2, '0'));
+
+const selCls = "px-2 py-1.5 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400";
+
+function DateSelect({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const { y, m, d } = useMemo(() => parseDatePart(value), [value]);
+  const set = (ny: string, nm: string, nd: string) => onChange(fmtDate(ny, nm, nd));
+  return (
+    <div className="flex items-center gap-1.5">
+      <select value={y} onChange={e => set(e.target.value, m, d)} className={selCls + " w-[80px]"}>
+        <option value="">년</option>
+        {YEARS.map(v => <option key={v} value={v}>{v}</option>)}
+      </select>
+      <select value={m} onChange={e => set(y, e.target.value, d)} className={selCls + " w-[62px]"}>
+        <option value="">월</option>
+        {MONTHS.map(v => <option key={v} value={v}>{v}</option>)}
+      </select>
+      <select value={d} onChange={e => set(y, m, e.target.value)} className={selCls + " w-[62px]"}>
+        <option value="">일</option>
+        {DAYS.map(v => <option key={v} value={v}>{v}</option>)}
+      </select>
+    </div>
+  );
 }
 
 interface RepeaterFormProps<T> {
@@ -73,31 +115,24 @@ export function RepeaterForm<T extends Record<string, any>>({
     }
 
     if (field.type === 'month') {
+      const sep = value.includes(' ~ ') ? ' ~ ' : value.includes(' – ') ? ' – ' : ' ~ ';
+      const parts = value.split(sep);
+      const startVal = parts[0] || '';
+      const endVal = parts[1] || '';
+      const build = (s: string, e: string) => {
+        if (!s && !e) return '';
+        if (s && !e) return s;
+        return `${s} ~ ${e}`;
+      };
       return (
         <div className="space-y-2">
           <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400">
             {field.label || '기간'}
           </label>
-          <div className="flex items-center gap-2">
-            <input
-              type="month"
-              value={value.split(' – ')[0] || ''}
-              onChange={(e) => {
-                const end = value.split(' – ')[1] || '';
-                updateItem(index, field.key, end ? `${e.target.value} – ${end}` : e.target.value);
-              }}
-              className="flex-1 px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400"
-            />
-            <span className="text-gray-400">–</span>
-            <input
-              type="month"
-              value={value.split(' – ')[1] || ''}
-              onChange={(e) => {
-                const start = value.split(' – ')[0] || '';
-                updateItem(index, field.key, `${start} – ${e.target.value}`);
-              }}
-              className="flex-1 px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400"
-            />
+          <div className="flex items-center gap-2 flex-wrap">
+            <DateSelect value={startVal} onChange={s => updateItem(index, field.key, build(s, endVal))} />
+            <span className="text-gray-400 text-sm">~</span>
+            <DateSelect value={endVal} onChange={e => updateItem(index, field.key, build(startVal, e))} />
           </div>
         </div>
       );

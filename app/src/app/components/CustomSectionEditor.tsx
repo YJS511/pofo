@@ -13,7 +13,7 @@ const QUICK_PRESETS = [
   { emoji: '🏅', title: '자격증' },
   { emoji: '🏆', title: '수상 경력' },
   { emoji: '🌟', title: '대외활동' },
-  { emoji: '🎓', title: '교육 · 부트캠프' },
+  { emoji: '🎓', title: '교육원 · 학원' },
 ];
 
 export function CustomSectionEditor({ sections, onChange }: CustomSectionEditorProps) {

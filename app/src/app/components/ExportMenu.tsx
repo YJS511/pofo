@@ -56,8 +56,6 @@ export function ExportMenu({ isOpen, onClose }: ExportMenuProps) {
     if (ok) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } else {
-      flash('복사에 실패했어요');
     }
   };
  

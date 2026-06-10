@@ -585,17 +585,17 @@ export function NotionPreview() {
       {/* 하단 컨트롤 바 */}
       <div className="absolute bottom-4 left-4 right-4 z-50 flex items-center justify-between pointer-events-none">
         {/* 초기화 / 새로 만들기 */}
-        <div className="flex items-center gap-1.5 pointer-events-auto">
+        <div className="flex items-center gap-1 p-1 bg-white/80 dark:bg-[#1a1a1a]/80 backdrop-blur-md border border-gray-200 dark:border-gray-800 rounded-xl shadow-lg pointer-events-auto">
           <button
             onClick={() => {
               if (confirm('현재 내용을 모두 지우고 빈 상태로 초기화할까요?\n디자인(테마·커버·폰트 등)은 유지됩니다.')) {
                 resetContentOnly();
               }
             }}
-            className="w-8 h-8 rounded-xl bg-white/80 dark:bg-[#1a1a1a]/80 backdrop-blur-md border border-gray-200 dark:border-gray-800 shadow-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all flex items-center justify-center"
+            className="flex items-center justify-center w-8 h-8 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition-all"
             title="내용 초기화 (디자인 유지)"
           >
-            <RotateCcw className="w-3.5 h-3.5" />
+            <RotateCcw className="w-4 h-4" />
           </button>
           <button
             onClick={() => {
@@ -606,10 +606,10 @@ export function NotionPreview() {
                 setShowOnboarding(true);
               }
             }}
-            className="w-8 h-8 rounded-xl bg-white/80 dark:bg-[#1a1a1a]/80 backdrop-blur-md border border-gray-200 dark:border-gray-800 shadow-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all flex items-center justify-center"
+            className="flex items-center justify-center w-8 h-8 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition-all"
             title="전공 선택부터 새로 시작"
           >
-            <FilePlus2 className="w-3.5 h-3.5" />
+            <FilePlus2 className="w-4 h-4" />
           </button>
         </div>
 

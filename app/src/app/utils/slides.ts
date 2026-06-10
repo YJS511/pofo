@@ -75,9 +75,15 @@ export function buildSlidesHTML(st: PortfolioState): string {
       ${p.tagline ? `<div class="sl-tag">“${esc(p.tagline)}”</div>` : '<div style="margin-top:auto"></div>'}
     </div>`);
 
-  // 2. About + Skills
-  slides.push(`<div class="sl-kicker">소개</div>
-    ${st.about ? `<div class="sl-callout"><span class="e">💡</span><span>${esc(st.about)}</span></div>` : ''}
+  // 2. About
+  if (st.about) {
+    slides.push(`<div class="sl-kicker">소개</div>
+      <div class="sl-h"><span>💡</span>소개</div>
+      <div class="sl-callout"><span>${esc(st.about)}</span></div>`);
+  }
+
+  // 3. Skills
+  slides.push(`<div class="sl-kicker">기술 스택</div>
     <div class="sl-h"><span>🛠️</span>기술 스택</div>
     <div class="sl-tags">${tags.length ? tags.map(t => chip(t, true)).join('') : '<span style="color:var(--text-faint)">—</span>'}</div>`);
 

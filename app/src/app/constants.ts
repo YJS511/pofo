@@ -32,31 +32,45 @@ export interface StylePreset {
 export const TEMPLATE_PRESETS: TemplatePreset[] = [
   {
     id: 'website_hub',
-    name: '개인 웹사이트 허브',
+    name: '와이드 포트폴리오',
     emoji: '🌐',
-    desc: '가장 널리 쓰이는 가로가 넓은 와이드 노션 본문',
+    desc: '넓은 본문에 커버 배너가 있는 기본 노션 스타일',
     theme: { layout: 'notion', wide: true, cover: 'sunset', noCover: false }
+  },
+  {
+    id: 'compact_cv',
+    name: '심플 이력서',
+    emoji: '📄',
+    desc: '커버 없이 본문부터 바로 시작하는 깔끔한 1단 서식',
+    theme: { layout: 'minimal', wide: false, cover: 'graphite', noCover: true }
   },
   {
     id: 'aside_dashboard',
     name: '사이드바 대시보드',
     emoji: '🗂️',
-    desc: '좌측 프로필 패널과 우측 상세 이력 구성',
+    desc: '왼쪽 프로필 패널 + 오른쪽 상세 이력 2단 구성',
     theme: { layout: 'sidebar', wide: true, cover: 'ocean', noCover: false }
   },
   {
-    id: 'compact_cv',
-    name: '컴팩트 미니멀 CV',
-    emoji: '📄',
-    desc: '배경 없이 본문이 상단부터 바로 시작되는 깔끔한 1단 서식',
-    theme: { layout: 'minimal', wide: false, cover: 'graphite', noCover: true }
+    id: 'tabbed_cv',
+    name: '탭 네비게이션',
+    emoji: '📁',
+    desc: '기술·경력·학력을 탭으로 분리한 한 화면 구성',
+    theme: { layout: 'tab', wide: true, cover: 'forest', noCover: false }
   },
   {
-    id: 'tabbed_cv',
-    name: '네비게이션 탭',
-    emoji: '📁',
-    desc: '기술/경력/학력을 한 화면씩 탭으로 분리한 깔끔한 화면',
-    theme: { layout: 'tab', wide: true, cover: 'forest', noCover: false }
+    id: 'narrow_notion',
+    name: '좁은 노션 페이지',
+    emoji: '📝',
+    desc: '커버 배너와 좁은 본문 폭의 집중형 레이아웃',
+    theme: { layout: 'notion', wide: false, cover: 'midnight', noCover: false }
+  },
+  {
+    id: 'minimal_wide',
+    name: '와이드 미니멀',
+    emoji: '🖼️',
+    desc: '커버 없이 넓은 본문으로 콘텐츠에 집중하는 구성',
+    theme: { layout: 'minimal', wide: true, cover: 'graphite', noCover: true }
   }
 ];
 
@@ -66,29 +80,43 @@ export const STYLE_PRESETS: StylePreset[] = [
     id: 'notion_classic',
     name: '클래식 노션',
     emoji: '📄',
-    desc: '노션 고유의 정갈하고 자연스러운 폰트와 그레이 톤 태그',
+    desc: '노션 기본 스타일 — 정갈한 산세리프와 그레이 톤 태그',
     theme: { style: 'classic', font: 'sans', accent: '#4a4a4a', mode: 'light' }
   },
   {
     id: 'modern_line',
     name: '모던 아웃라인',
     emoji: '➖',
-    desc: '깔끔한 외곽 아웃라인 태그와 대문자 헤더 스타일',
+    desc: '외곽선 태그와 대문자 섹션 헤더',
     theme: { style: 'line', font: 'sans', accent: '#d9730d', mode: 'light' }
   },
   {
     id: 'bold_highlight',
     name: '볼드 하이라이트',
     emoji: '💥',
-    desc: '강렬하게 채워진 강조색 언더 바 헤더',
+    desc: '강조색 언더바 헤더와 채워진 태그',
     theme: { style: 'bold', font: 'sans', accent: '#0b6e99', mode: 'light' }
   },
   {
     id: 'terminal_mono',
     name: '개발자 터미널',
     emoji: '🖥️',
-    desc: '코딩 터미널을 연상케 하는 모노스페이스 기반 스타일',
+    desc: '모노스페이스 폰트 기반 코딩 터미널 감성',
     theme: { style: 'mono', font: 'mono', accent: '#0f7b6c', mode: 'light' }
+  },
+  {
+    id: 'dark_classic',
+    name: '다크 클래식',
+    emoji: '🌙',
+    desc: '어두운 배경에 깔끔한 산세리프 — 눈이 편한 다크 모드',
+    theme: { style: 'classic', font: 'sans', accent: '#6c8ebf', mode: 'dark' }
+  },
+  {
+    id: 'serif_elegant',
+    name: '세리프 엘레강스',
+    emoji: '✒️',
+    desc: '세리프 폰트로 격조 있는 인쇄물 느낌',
+    theme: { style: 'classic', font: 'serif', accent: '#7c5c3e', mode: 'light' }
   }
 ];
 
@@ -148,7 +176,7 @@ export const LINK_FIELDS = [
 ];
 
 export interface GuideStep {
-  type: 'intro' | 'icon' | 'text' | 'textarea' | 'skills' | 'section' | 'done';
+  type: 'intro' | 'icon' | 'text' | 'textarea' | 'skills' | 'tools' | 'links' | 'custom' | 'section' | 'done';
   kicker?: string;
   q?: string;
   hint?: string;
@@ -163,23 +191,26 @@ export const GUIDE_STEPS: GuideStep[] = [
   { type: 'intro' },
   { type: 'icon', kicker: '아이콘', q: '페이지 아이콘을 골라주세요', hint: '이모지를 고르거나 로고·사진을 업로드할 수 있어요.' },
   { type: 'text', path: 'profile.name', kicker: '이름', q: '이름이 무엇인가요?', ph: '홍길동' },
-  { type: 'text', path: 'profile.role', kicker: '직무', q: '어떤 일을 하시나요?', hint: '직무나 타이틀을 적어주세요.', ph: 'Frontend Engineer' },
+  { type: 'text', path: 'profile.role', kicker: '직무', q: '어떤 일을 하시나요?', hint: '직무나 타이틀을 적어주세요.', ph: '프론트엔드 개발자' },
   { type: 'text', path: 'profile.tagline', kicker: '태그라인', q: '한 줄로 자신을 소개한다면?', hint: '제목 아래 작게 표시됩니다.', ph: '사용자 경험에 진심인 개발자' },
-  { type: 'text', path: 'profile.location', kicker: '위치', q: '어디에서 일하시나요?', ph: 'Seoul, Korea' },
+  { type: 'text', path: 'profile.location', kicker: '위치', q: '어디에서 일하시나요?', ph: '서울, 대한민국' },
   { type: 'text', path: 'profile.email', kicker: '이메일', q: '이메일 주소를 알려주세요', ph: 'me@example.com' },
   { type: 'text', path: 'profile.github', kicker: 'GitHub', q: 'GitHub 주소가 있나요?', ph: 'github.com/username' },
   { type: 'text', path: 'profile.website', kicker: '웹사이트', q: '웹사이트나 블로그는?', ph: 'mysite.dev' },
   { type: 'textarea', path: 'about', kicker: '소개', q: '자기소개를 적어주세요', hint: '노션 콜아웃 블록으로 표시돼요. 줄바꿈도 반영됩니다.', ph: '안녕하세요! 저는 ...' },
   { type: 'skills', path: 'skills', kicker: '기술 스택', q: '어떤 기술을 다루나요?', hint: '쉼표(,)로 구분하면 색상 태그로 자동 변환돼요.', ph: 'React, TypeScript, Node.js' },
+  { type: 'tools', kicker: '서비스 · 도구', q: '사용하는 서비스 · 도구를 골라주세요', hint: '카테고리별로 클릭하여 선택하세요. 전공에 맞는 도구가 표시됩니다.' },
+  { type: 'links', kicker: '링크', q: '추가 링크가 있나요?', hint: 'LinkedIn, Behance, 블로그 등 자유롭게 추가하세요.' },
   { type: 'section', key: 'experience', kicker: '경력', q: '경력을 추가해볼까요?', hint: '회사·직무·기간·성과를 자유롭게 추가하세요.', label: '경력' },
   { type: 'section', key: 'projects', kicker: '프로젝트', q: '대표 프로젝트가 있나요?', hint: '사용 기술과 링크도 함께 정리해보세요.', label: '프로젝트' },
   { type: 'section', key: 'education', kicker: '학력', q: '학력을 추가해주세요', hint: '학교와 전공, 기간을 적어주세요.', label: '학력' },
+  { type: 'custom', kicker: '커스텀 섹션', q: '추가 섹션이 필요한가요?', hint: '자격증, 수상 경력, 대외활동 등을 자유롭게 추가하세요.' },
   { type: 'done' }
 ];
 
 export const EXP_FIELDS = [
   { key: 'company', placeholder: '회사명', fullWidth: false },
-  { key: 'role', placeholder: '직무 (예: Frontend Engineer)', fullWidth: false },
+  { key: 'role', placeholder: '직무 (예: 프론트엔드 개발자)', fullWidth: false },
   { key: 'level', placeholder: '직급 (예: 책임 / Senior)', fullWidth: false, options: JOB_LEVELS },
   { key: 'type', placeholder: '고용형태', fullWidth: false, type: 'select' as const, options: EMP_TYPES },
   { key: 'period', type: 'month' as const, label: '기간', fullWidth: true },
@@ -198,7 +229,7 @@ export const PROJ_FIELDS = [
 ];
 
 export const EDU_FIELDS = [
-  { key: 'school', placeholder: '학교명', fullWidth: false },
+  { key: 'school', placeholder: '학교 / 교육원 / 학원', fullWidth: false },
   { key: 'degree', placeholder: '전공 / 학위', fullWidth: false },
   { key: 'period', type: 'month' as const, label: '기간', fullWidth: true }
 ];
