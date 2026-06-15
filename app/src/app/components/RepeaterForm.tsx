@@ -58,6 +58,7 @@ interface RepeaterFormProps<T> {
   label: string;
   onChange: (items: T[]) => void;
   emptyItem: T;
+  renderExtra?: (item: T, index: number) => React.ReactNode;
 }
 
 export function RepeaterForm<T extends Record<string, any>>({
@@ -65,7 +66,8 @@ export function RepeaterForm<T extends Record<string, any>>({
   fields,
   label,
   onChange,
-  emptyItem
+  emptyItem,
+  renderExtra
 }: RepeaterFormProps<T>) {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(
     items.length > 0 ? 0 : null
@@ -175,9 +177,9 @@ export function RepeaterForm<T extends Record<string, any>>({
           className="border border-gray-200 dark:border-gray-800 rounded-xl overflow-hidden transition-all"
         >
           {/* Header */}
-          <button
+          <div
             onClick={() => setExpandedIndex(expandedIndex === index ? null : index)}
-            className="w-full flex items-center gap-3 px-4 py-3 bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            className="w-full flex items-center gap-3 px-4 py-3 bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer"
           >
             <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
               {label} {index + 1}
@@ -212,7 +214,7 @@ export function RepeaterForm<T extends Record<string, any>>({
             >
               <Trash2 className="w-4 h-4" />
             </button>
-          </button>
+          </div>
 
           {/* Content */}
           {expandedIndex === index && (
@@ -222,6 +224,7 @@ export function RepeaterForm<T extends Record<string, any>>({
                   {renderField(field, item, index)}
                 </div>
               ))}
+              {renderExtra?.(item, index)}
             </div>
           )}
         </div>

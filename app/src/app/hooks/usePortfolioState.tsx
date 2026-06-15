@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useRef, useCallback, ReactNode } from 'react';
 import { PortfolioState } from '../types';
 import { parseShareHash } from '../utils/export';
 
@@ -10,6 +10,10 @@ interface PortfolioContextType {
   replaceState: (next: PortfolioState) => void;
   resetState: () => void;
   resetContentOnly: () => void;
+  undo: () => void;
+  redo: () => void;
+  canUndo: boolean;
+  canRedo: boolean;
   currentStep: number;
   setCurrentStep: (step: number) => void;
   showGuide: boolean;
@@ -44,6 +48,7 @@ const createEmptyState = (): PortfolioState => ({
   experience: [],
   projects: [],
   education: [],
+  certifications: [],
   custom: [],
   theme: {
     mode: 'light',
@@ -58,7 +63,7 @@ const createEmptyState = (): PortfolioState => ({
     style: 'classic',
     noCover: false
   },
-  sectionOrder: ['skills', 'tools', 'experience', 'projects', 'education'],
+  sectionOrder: ['skills', 'tools', 'experience', 'projects', 'education', 'certifications'],
   github: { user: '', repos: [] }
 });
 
@@ -126,6 +131,7 @@ export function validateAndNormalizeState(input: any): PortfolioState {
         link: String(p?.link || ''),
         repo: String(p?.repo || ''),
         demo: String(p?.demo || ''),
+        image: String(p?.image || ''),
         stars: typeof p?.stars === 'number' ? p.stars : undefined,
       }))
     : [];
@@ -135,6 +141,14 @@ export function validateAndNormalizeState(input: any): PortfolioState {
         school: String(edu?.school || ''),
         degree: String(edu?.degree || ''),
         period: String(edu?.period || ''),
+      }))
+    : [];
+
+  const certifications = Array.isArray(input.certifications)
+    ? input.certifications.map((c: any) => ({
+        name: String(c?.name || ''),
+        status: ['acquired', 'preparing', 'planned'].includes(c?.status) ? c.status : 'planned',
+        date: String(c?.date || ''),
       }))
     : [];
 
@@ -158,6 +172,9 @@ export function validateAndNormalizeState(input: any): PortfolioState {
   let sectionOrder = base.sectionOrder;
   if (Array.isArray(input.sectionOrder) && input.sectionOrder.length > 0) {
     sectionOrder = input.sectionOrder.map(String);
+    for (const key of base.sectionOrder) {
+      if (!sectionOrder.includes(key)) sectionOrder.push(key);
+    }
   }
 
   // 6. github 검증
@@ -180,6 +197,7 @@ export function validateAndNormalizeState(input: any): PortfolioState {
     experience,
     projects,
     education,
+    certifications,
     custom,
     theme,
     sectionOrder,
@@ -197,6 +215,62 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
       return createEmptyState();
     }
   });
+
+  const MAX_HISTORY = 50;
+  const historyRef = useRef<PortfolioState[]>([]);
+  const futureRef = useRef<PortfolioState[]>([]);
+  const isUndoRedoRef = useRef(false);
+
+  const pushHistory = useCallback((prev: PortfolioState) => {
+    if (isUndoRedoRef.current) return;
+    historyRef.current = [...historyRef.current.slice(-MAX_HISTORY + 1), prev];
+    futureRef.current = [];
+  }, []);
+
+  const [canUndo, setCanUndo] = useState(false);
+  const [canRedo, setCanRedo] = useState(false);
+
+  const syncUndoRedo = useCallback(() => {
+    setCanUndo(historyRef.current.length > 0);
+    setCanRedo(futureRef.current.length > 0);
+  }, []);
+
+  const undo = useCallback(() => {
+    if (historyRef.current.length === 0) return;
+    const prev = historyRef.current[historyRef.current.length - 1];
+    historyRef.current = historyRef.current.slice(0, -1);
+    isUndoRedoRef.current = true;
+    setState(current => {
+      futureRef.current = [...futureRef.current, current];
+      return prev;
+    });
+    isUndoRedoRef.current = false;
+    syncUndoRedo();
+  }, [syncUndoRedo]);
+
+  const redo = useCallback(() => {
+    if (futureRef.current.length === 0) return;
+    const next = futureRef.current[futureRef.current.length - 1];
+    futureRef.current = futureRef.current.slice(0, -1);
+    isUndoRedoRef.current = true;
+    setState(current => {
+      historyRef.current = [...historyRef.current, current];
+      return next;
+    });
+    isUndoRedoRef.current = false;
+    syncUndoRedo();
+  }, [syncUndoRedo]);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      const mod = e.metaKey || e.ctrlKey;
+      if (mod && e.key === 'z' && !e.shiftKey) { e.preventDefault(); undo(); }
+      if (mod && e.key === 'z' && e.shiftKey) { e.preventDefault(); redo(); }
+      if (mod && e.key === 'y') { e.preventDefault(); redo(); }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [undo, redo]);
 
   const [currentStep, setCurrentStep] = useState(0);
   const [showGuide, setShowGuide] = useState(false);
@@ -230,31 +304,27 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
   }, [state]);
 
   const updateState = (updates: Partial<PortfolioState>) => {
-    setState(prev => ({ ...prev, ...updates }));
+    setState(prev => { pushHistory(prev); syncUndoRedo(); return { ...prev, ...updates }; });
   };
 
   const updateProfile = (updates: Partial<PortfolioState['profile']>) => {
-    setState(prev => ({
-      ...prev,
-      profile: { ...prev.profile, ...updates }
-    }));
+    setState(prev => { pushHistory(prev); syncUndoRedo(); return { ...prev, profile: { ...prev.profile, ...updates } }; });
   };
 
   const updateTheme = (updates: Partial<PortfolioState['theme']>) => {
-    setState(prev => ({
-      ...prev,
-      theme: { ...prev.theme, ...updates }
-    }));
+    setState(prev => { pushHistory(prev); syncUndoRedo(); return { ...prev, theme: { ...prev.theme, ...updates } }; });
   };
 
   const replaceState = (next: PortfolioState) => {
-    setState(validateAndNormalizeState(next));
+    setState(prev => { pushHistory(prev); syncUndoRedo(); return validateAndNormalizeState(next); });
   };
 
-  const resetState = () => setState(createEmptyState());
+  const resetState = () => {
+    setState(prev => { pushHistory(prev); syncUndoRedo(); return createEmptyState(); });
+  };
 
   const resetContentOnly = () => {
-    setState(prev => ({ ...createEmptyState(), theme: prev.theme }));
+    setState(prev => { pushHistory(prev); syncUndoRedo(); return { ...createEmptyState(), theme: prev.theme }; });
   };
 
   // 공유 링크(#p=) 파싱
@@ -281,6 +351,10 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
       replaceState,
       resetState,
       resetContentOnly,
+      undo,
+      redo,
+      canUndo,
+      canRedo,
       currentStep,
       setCurrentStep,
       showGuide,

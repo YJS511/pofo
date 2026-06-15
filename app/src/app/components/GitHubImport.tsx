@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Loader2, Github, Star, AlertCircle } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Loader2, Github as GithubIcon, Star, AlertCircle, User } from 'lucide-react';
 import { usePortfolio } from '../hooks/usePortfolioState';
 
 interface GitHubRepo {
@@ -10,17 +10,44 @@ interface GitHubRepo {
   language: string;
   created_at: string;
   updated_at: string;
+  fork: boolean;
+  topics?: string[];
+}
+
+interface GitHubUser {
+  login: string;
+  name: string;
+  bio: string;
+  avatar_url: string;
+  public_repos: number;
+  followers: number;
+}
+
+function extractGitHubUsername(input: string): string {
+  const trimmed = input.trim();
+  const match = trimmed.match(/github\.com\/([^\/\s]+)/);
+  if (match) return match[1];
+  return trimmed;
 }
 
 export function GitHubImport() {
-  const { state, updateState } = usePortfolio();
+  const { state, updateState, updateProfile } = usePortfolio();
   const [username, setUsername] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [repos, setRepos] = useState<GitHubRepo[]>([]);
+  const [ghUser, setGhUser] = useState<GitHubUser | null>(null);
+
+  useEffect(() => {
+    if (!username && state.profile.github) {
+      const extracted = extractGitHubUsername(state.profile.github);
+      if (extracted && extracted !== username) setUsername(extracted);
+    }
+  }, []);
 
   const fetchRepos = async () => {
-    if (!username.trim()) {
+    const user = extractGitHubUsername(username);
+    if (!user) {
       setError('GitHub 사용자명을 입력해주세요');
       return;
     }
@@ -28,19 +55,41 @@ export function GitHubImport() {
     setLoading(true);
     setError('');
     setRepos([]);
+    setGhUser(null);
 
     try {
-      const response = await fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=30`);
+      const [userRes, repoRes] = await Promise.all([
+        fetch(`https://api.github.com/users/${user}`),
+        fetch(`https://api.github.com/users/${user}/repos?sort=updated&per_page=30`)
+      ]);
 
-      if (!response.ok) {
-        if (response.status === 404) {
-          throw new Error('사용자를 찾을 수 없습니다');
-        }
+      if (!userRes.ok || !repoRes.ok) {
+        if (userRes.status === 404) throw new Error('사용자를 찾을 수 없습니다');
         throw new Error('저장소를 불러오는데 실패했습니다');
       }
 
-      const data: GitHubRepo[] = await response.json();
-      setRepos(data);
+      const userData: GitHubUser = await userRes.json();
+      const repoData: GitHubRepo[] = await repoRes.json();
+
+      setGhUser(userData);
+      setRepos(repoData.filter(r => !r.fork));
+
+      updateState({
+        github: {
+          user: userData.login,
+          repos: repoData.filter(r => !r.fork).map(r => ({
+            name: r.name,
+            html_url: r.html_url,
+            description: r.description || '',
+            stargazers_count: r.stargazers_count,
+            language: r.language,
+          }))
+        }
+      });
+
+      if (!state.profile.github) {
+        updateProfile({ github: `github.com/${userData.login}` });
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : '알 수 없는 오류가 발생했습니다');
     } finally {
@@ -58,6 +107,7 @@ export function GitHubImport() {
       result: '',
       repo: repo.html_url,
       demo: '',
+      image: '',
       stars: repo.stargazers_count
     };
 
@@ -72,6 +122,12 @@ export function GitHubImport() {
     });
   };
 
+  const applyProfile = () => {
+    if (!ghUser) return;
+    if (ghUser.bio && !state.about) updateState({ about: ghUser.bio });
+    if (ghUser.name && !state.profile.name) updateProfile({ name: ghUser.name });
+  };
+
   const handleImportAll = () => {
     const newProjects = repos
       .filter(repo => !state.projects.some(p => p.repo === repo.html_url))
@@ -84,6 +140,7 @@ export function GitHubImport() {
         result: '',
         repo: repo.html_url,
         demo: '',
+        image: '',
         stars: repo.stargazers_count
       }));
 
@@ -101,7 +158,7 @@ export function GitHubImport() {
     <div className="mb-5 p-3.5 border border-gray-200 dark:border-gray-800 rounded-xl bg-gray-50/50 dark:bg-gray-900/30 space-y-3">
       <div className="flex items-center justify-between">
         <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">
-          🐙 GitHub에서 프로젝트 가져오기
+          <GithubIcon className="w-3.5 h-3.5 inline" /> GitHub에서 프로젝트 가져오기
         </span>
       </div>
 
@@ -136,11 +193,31 @@ export function GitHubImport() {
         </div>
       )}
 
+      {ghUser && (
+        <div className="flex items-center gap-3 p-2.5 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950">
+          <img src={ghUser.avatar_url} alt={ghUser.login} className="w-9 h-9 rounded-full" />
+          <div className="flex-1 min-w-0">
+            <div className="text-xs font-semibold text-gray-900 dark:text-white truncate">{ghUser.name || ghUser.login}</div>
+            <div className="text-[10px] text-gray-500 dark:text-gray-400 truncate">
+              {ghUser.public_repos} repos · {ghUser.followers} followers
+            </div>
+          </div>
+          {(ghUser.bio && !state.about) || (ghUser.name && !state.profile.name) ? (
+            <button
+              onClick={applyProfile}
+              className="text-[10px] font-semibold px-2 py-1 rounded-md bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 flex-shrink-0"
+            >
+              프로필 반영
+            </button>
+          ) : null}
+        </div>
+      )}
+
       {repos.length > 0 && (
         <>
           <div className="flex items-center justify-between">
             <p className="text-[11px] text-gray-500 dark:text-gray-400">
-              {repos.length}개의 저장소
+              {repos.length}개의 저장소 (fork 제외)
             </p>
             <button
               onClick={handleImportAll}

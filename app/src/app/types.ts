@@ -49,6 +49,7 @@ export interface Project {
   result: string;
   repo: string;
   demo: string;
+  image: string;
   stars?: number;
 }
 
@@ -72,6 +73,12 @@ export interface CustomItem {
   desc: string;
 }
 
+export interface Certification {
+  name: string;
+  status: 'acquired' | 'preparing' | 'planned';
+  date: string;
+}
+
 export interface PortfolioState {
   profile: Profile;
   about: string;
@@ -80,6 +87,7 @@ export interface PortfolioState {
   experience: Experience[];
   projects: Project[];
   education: Education[];
+  certifications: Certification[];
   custom: CustomSection[];
   theme: Theme;
   sectionOrder: string[];

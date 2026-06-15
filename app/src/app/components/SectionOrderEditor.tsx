@@ -7,18 +7,16 @@ interface SectionOrderEditorProps {
 }
 
 export function SectionOrderEditor({ state, onChange }: SectionOrderEditorProps) {
-  // 섹션 레이블 맵핑
   const sectionLabels: Record<string, string> = {
-    skills: '🛠️ 기술 스택',
-    tools: '🧰 서비스 · 도구',
-    experience: '💼 경력',
-    projects: '🚀 프로젝트',
-    education: '🎓 교육',
+    skills: '기술 스택',
+    tools: '서비스 · 도구',
+    experience: '경력',
+    projects: '프로젝트',
+    education: '교육',
   };
 
-  // 커스텀 섹션 추가
   (state.custom || []).forEach((cs) => {
-    sectionLabels[`cs:${cs.id}`] = `${cs.emoji || '📌'} ${cs.title || '커스텀 섹션'}`;
+    sectionLabels[`cs:${cs.id}`] = cs.title || '커스텀 섹션';
   });
 
   // 현재 순서 (없으면 기본 순서)

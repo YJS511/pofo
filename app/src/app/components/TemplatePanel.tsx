@@ -1,32 +1,41 @@
 import { usePortfolio } from '../hooks/usePortfolioState';
-import { Layout, Palette } from 'lucide-react';
+import { Layout, Palette, Globe, FileText, PanelLeft, FolderOpen, Type, Minus, Bold, Terminal, Moon, PenLine } from 'lucide-react';
 import { TEMPLATE_PRESETS, STYLE_PRESETS } from '../constants';
+
+const ICON_MAP: Record<string, React.ComponentType<{ className?: string }>> = {
+  Globe, FileText, PanelLeft, FolderOpen,
+  Type, Minus, Bold, Terminal, Moon, PenLine,
+};
 
 export function TemplatePanel() {
   const { state, updateTheme } = usePortfolio();
+  const isWide = state.theme.wide !== false;
 
-  const PresetButton = ({ pr, onClick, isActive }: { pr: any; onClick: () => void; isActive?: boolean }) => (
-    <button
-      onClick={onClick}
-      className={`flex items-center gap-3.5 p-3 rounded-xl border text-left transition-all ${
-        isActive
-          ? 'border-gray-800 dark:border-white bg-gray-50 dark:bg-gray-900 shadow-sm'
-          : 'border-gray-200 dark:border-gray-800 hover:border-gray-400 dark:hover:border-gray-600 bg-white dark:bg-gray-900/40'
-      }`}
-    >
-      <span className="w-9 h-9 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-lg flex-shrink-0">
-        {pr.emoji}
-      </span>
-      <span className="min-w-0 flex-1">
-        <span className="block text-xs font-bold text-gray-900 dark:text-white truncate">
-          {pr.name}
+  const PresetButton = ({ pr, onClick, isActive }: { pr: any; onClick: () => void; isActive?: boolean }) => {
+    const Icon = ICON_MAP[pr.icon];
+    return (
+      <button
+        onClick={onClick}
+        className={`flex items-center gap-3.5 p-3 rounded-xl border text-left transition-all ${
+          isActive
+            ? 'border-gray-800 dark:border-white bg-gray-50 dark:bg-gray-900 shadow-sm'
+            : 'border-gray-200 dark:border-gray-800 hover:border-gray-400 dark:hover:border-gray-600 bg-white dark:bg-gray-900/40'
+        }`}
+      >
+        <span className="w-9 h-9 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center flex-shrink-0 text-gray-600 dark:text-gray-300">
+          {Icon ? <Icon className="w-5 h-5" /> : null}
         </span>
-        <span className="block text-[11px] text-gray-500 dark:text-gray-400 leading-normal mt-0.5">
-          {pr.desc}
+        <span className="min-w-0 flex-1">
+          <span className="block text-xs font-bold text-gray-900 dark:text-white truncate">
+            {pr.name}
+          </span>
+          <span className="block text-[11px] text-gray-500 dark:text-gray-400 leading-normal mt-0.5">
+            {pr.desc}
+          </span>
         </span>
-      </span>
-    </button>
-  );
+      </button>
+    );
+  };
 
   return (
     <div className="flex-1 overflow-y-auto px-4 py-6 space-y-6 hide-scrollbar bg-white dark:bg-gray-950">
@@ -39,9 +48,35 @@ export function TemplatePanel() {
         </div>
         <div className="grid grid-cols-1 gap-2.5">
           {TEMPLATE_PRESETS.map((pr) => {
-            const isActive = state.theme.layout === pr.theme.layout && !!state.theme.noCover === !!pr.theme.noCover;
+            const isActive = state.theme.layout === pr.theme.layout;
             return <PresetButton key={pr.id} pr={pr} onClick={() => updateTheme(pr.theme)} isActive={isActive} />;
           })}
+        </div>
+
+        {/* 본문 너비 토글 */}
+        <div className="mt-3 flex items-center justify-between p-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900/40">
+          <div>
+            <span className="block text-xs font-bold text-gray-900 dark:text-white">본문 너비</span>
+            <span className="block text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">
+              {isWide ? '넓은 본문' : '좁은 본문'}
+            </span>
+          </div>
+          <button
+            onClick={() => updateTheme({ wide: !isWide })}
+            className={`relative w-10 h-6 rounded-full transition-colors ${
+              isWide
+                ? 'bg-gray-800 dark:bg-white'
+                : 'bg-gray-300 dark:bg-gray-700'
+            }`}
+          >
+            <span
+              className={`absolute top-1 left-1 w-4 h-4 rounded-full transition-transform ${
+                isWide
+                  ? 'translate-x-4 bg-white dark:bg-gray-900'
+                  : 'translate-x-0 bg-white dark:bg-gray-400'
+              }`}
+            />
+          </button>
         </div>
       </section>
 

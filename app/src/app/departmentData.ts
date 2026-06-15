@@ -12,104 +12,117 @@ interface DeptData {
 
 const SW_DEV: DeptData = {
   skills: [
-    'React', 'Next.js', 'Vue.js', 'TypeScript', 'JavaScript', 'HTML/CSS', 'Tailwind CSS',
-    'Node.js', 'Express', 'Spring Boot', 'Python', 'Django', 'Java', 'Kotlin', 'Go',
-    'Flutter', 'React Native', 'Swift', 'PostgreSQL', 'MySQL', 'MongoDB', 'Redis',
-    'Docker', 'Kubernetes', 'AWS', 'GCP', 'Git', 'CI/CD', 'REST API', 'GraphQL',
+    'C', 'Java', 'Python', 'JavaScript', 'HTML/CSS', 'JSP', 'C#',
+    'SQL', 'Oracle', 'MySQL', 'Linux', 'Git',
+    'React', 'Spring Boot', 'Node.js', 'TypeScript',
+    'Java Framework', 'REST API', 'Docker', 'AWS',
+    '데이터구조', '운영체제', '소프트웨어공학', '컴퓨터네트워크',
   ],
   toolCats: [
-    { name: '개발', items: ['VS Code', 'IntelliJ', 'WebStorm', 'Xcode', 'Android Studio', 'Vim'] },
-    { name: '협업', items: ['Slack', 'Discord', 'Notion', 'Jira', 'Linear', 'Confluence'] },
-    { name: '버전관리', items: ['GitHub', 'GitLab', 'Bitbucket', 'Sourcetree'] },
-    { name: '배포', items: ['Vercel', 'Netlify', 'AWS', 'GCP', 'Azure', 'Docker', 'Kubernetes'] },
-    { name: '디자인', items: ['Figma', 'Sketch', 'Adobe XD'] },
+    { name: '개발', items: ['VS Code', 'IntelliJ', 'Eclipse', 'Visual Studio', 'Vim'] },
+    { name: '협업', items: ['Slack', 'Discord', 'Notion', 'Jira', 'GitHub'] },
+    { name: 'DB', items: ['MySQL Workbench', 'DBeaver', 'Oracle SQL Developer', 'pgAdmin'] },
+    { name: '배포', items: ['Vercel', 'Netlify', 'AWS', 'Docker', 'Linux 서버'] },
+    { name: '디자인', items: ['Figma', 'Adobe XD'] },
   ],
 };
 
 const ENGINEERING: DeptData = {
   skills: [
-    'AutoCAD', 'SolidWorks', 'CATIA', 'Inventor', 'MATLAB', 'PLC', 'Arduino',
-    'LabVIEW', '3D 프린팅', 'CNC 가공', '유한요소해석(FEA)', 'PCB 설계',
-    'C', 'C++', 'Python', '회로 설계', '제어 시스템', '센서 기술',
-    'IoT', 'Embedded System', 'STM32', 'Raspberry Pi',
+    'AutoCAD', '2D-CAD', '3D-CAD', 'SolidWorks', 'CAM', 'CNC 가공',
+    'PLC제어', '센서와모터', '유한요소해석(FEA)', '3D 프린팅',
+    '열역학', '유체역학', '재료역학', '기계설계',
+    '공조냉동시스템', '생산자동화', '전산유동해석',
+    'C', 'Python', 'MATLAB',
   ],
   toolCats: [
-    { name: 'CAD/CAM', items: ['AutoCAD', 'SolidWorks', 'CATIA', 'Inventor', 'Fusion 360', 'Rhino'] },
-    { name: '시뮬레이션', items: ['MATLAB', 'Simulink', 'ANSYS', 'COMSOL', 'LTspice'] },
-    { name: '제어/임베디드', items: ['Arduino IDE', 'STM32CubeIDE', 'LabVIEW', 'Keil'] },
-    { name: '문서/협업', items: ['Notion', 'MS Office', 'Google Workspace', 'Slack'] },
+    { name: 'CAD/CAM', items: ['AutoCAD', 'SolidWorks', 'CATIA', 'Inventor', 'Fusion 360'] },
+    { name: '시뮬레이션', items: ['MATLAB', 'ANSYS', 'COMSOL', 'Simulink'] },
+    { name: '제어/가공', items: ['PLC', 'CNC', 'Arduino', 'LabVIEW'] },
+    { name: '문서/협업', items: ['Notion', 'MS Office', 'Google Workspace'] },
   ],
 };
 
 const DESIGN: DeptData = {
   skills: [
-    'Photoshop', 'Illustrator', 'InDesign', 'Figma', 'Sketch', 'After Effects',
-    'Premiere Pro', 'Blender', 'Cinema 4D', 'Rhino', 'KeyShot', 'SketchUp',
-    'V-Ray', 'Procreate', 'Clip Studio Paint', 'XD',
-    '타이포그래피', '편집 디자인', 'UI/UX', '브랜딩', '모션 그래픽',
+    'Photoshop', 'Illustrator', 'InDesign', 'Figma',
+    '3D모델링', 'Rhino', 'KeyShot', 'SketchUp', 'Blender',
+    '생성형AI디자인', 'AI인터렉티브웹디자인', '3D프린팅',
+    '패키지디자인', '제품디자인', '전시공간디자인',
+    '타이포그래피', '편집디자인', 'UI/UX', '브랜딩', '웹디자인',
+    '컴퓨터그래픽', '모션그래픽', '컬러트렌드',
   ],
   toolCats: [
     { name: '그래픽', items: ['Photoshop', 'Illustrator', 'InDesign', 'Canva', 'Procreate'] },
-    { name: 'UI/UX', items: ['Figma', 'Sketch', 'Adobe XD', 'Framer', 'InVision'] },
-    { name: '3D/모션', items: ['Blender', 'Cinema 4D', 'After Effects', 'Rhino', 'KeyShot'] },
-    { name: '영상', items: ['Premiere Pro', 'DaVinci Resolve', 'Final Cut Pro'] },
+    { name: 'UI/UX', items: ['Figma', 'Sketch', 'Adobe XD', 'Framer'] },
+    { name: '3D/렌더링', items: ['Blender', 'Rhino', 'KeyShot', 'Cinema 4D', 'SketchUp'] },
+    { name: 'AI도구', items: ['Midjourney', 'DALL-E', 'Adobe Firefly', 'Stable Diffusion'] },
     { name: '포트폴리오', items: ['Behance', 'Dribbble', 'Notion', 'Adobe Portfolio'] },
   ],
 };
 
 const FASHION: DeptData = {
   skills: [
-    '패턴 CAD', 'CLO 3D', '봉제', '드레이핑', '텍스타일 디자인',
-    'Photoshop', 'Illustrator', '패션 일러스트레이션', 'Marvelous Designer',
-    '소재 분석', '컬러리스트', '트렌드 분석', 'VMD', '스타일링',
+    '패턴CAD', '플랫패턴디자인', '의복구성', '드레이핑', '테일러링',
+    '패션일러스트레이션', '패션그래픽디자인', '디지털텍스타일디자인',
+    '패션빅데이터분석', 'AI패션디자인', '패션도식화CAD',
+    '패션마케팅', '패션상품기획', '온라인쇼핑몰전략',
+    'Photoshop', 'Illustrator', 'CLO 3D',
   ],
   toolCats: [
     { name: '패턴/3D', items: ['CLO 3D', 'Marvelous Designer', '패턴 CAD', 'Optitex'] },
     { name: '그래픽', items: ['Photoshop', 'Illustrator', 'Procreate', 'Canva'] },
+    { name: 'AI도구', items: ['AI패션디자인도구', 'AI영상제작', '빅데이터분석'] },
     { name: '포트폴리오', items: ['Behance', 'Instagram', 'Notion', 'Adobe Portfolio'] },
   ],
 };
 
 const INTERIOR: DeptData = {
   skills: [
-    'AutoCAD', 'SketchUp', 'V-Ray', 'Rhino', '3ds Max', 'Revit',
-    'Photoshop', 'Illustrator', '실내 설계', '마감재 선정', '조명 설계',
-    '공간 기획', '인테리어 스타일링', '가구 디자인', 'BIM',
+    'AutoCAD', 'SketchUp', 'CG렌더링', '3D컴퓨터모델링', 'V-Ray',
+    'Photoshop', 'Illustrator', 'AI공간디자인',
+    '실내건축계획', '주거공간설계', '상업공간설계', '전시공간설계',
+    '실시설계도면', '기본설계도면', '재료마감실무',
+    '실내조명설계', '실내시공실무', '실내건축적산', '실내구조와법규',
   ],
   toolCats: [
     { name: '설계', items: ['AutoCAD', 'SketchUp', 'Revit', 'Rhino', '3ds Max'] },
     { name: '렌더링', items: ['V-Ray', 'Enscape', 'Lumion', 'Twinmotion'] },
-    { name: '그래픽', items: ['Photoshop', 'Illustrator', 'InDesign', 'Canva'] },
+    { name: '그래픽', items: ['Photoshop', 'Illustrator', 'InDesign'] },
     { name: '포트폴리오', items: ['Behance', 'Notion', 'Adobe Portfolio'] },
   ],
 };
 
 const MEDIA_BROADCAST: DeptData = {
   skills: [
-    'Premiere Pro', 'After Effects', 'DaVinci Resolve', 'Final Cut Pro',
-    'Photoshop', 'Audition', '촬영', '조명', '음향', '편집',
-    '스토리보드', '시나리오 작성', '콘텐츠 기획', 'YouTube', 'SNS 운영',
+    'Premiere Pro', 'After Effects', 'DaVinci Resolve',
+    '영상촬영', '영상조명', '영상편집', '영상그래픽',
+    '시네마토그래피', '영상컬러그레이딩', '사운드편집',
+    '1인크리에이터', '콘텐츠기획개발', '방송연출',
+    'AI영상콘텐츠제작', '스튜디오방송제작',
+    'Photoshop', 'YouTube', 'SNS 운영',
   ],
   toolCats: [
     { name: '영상', items: ['Premiere Pro', 'DaVinci Resolve', 'Final Cut Pro', 'After Effects'] },
     { name: '음향', items: ['Audition', 'Logic Pro', 'GarageBand'] },
     { name: '그래픽', items: ['Photoshop', 'Illustrator', 'Canva'] },
-    { name: '기획/협업', items: ['Notion', 'Google Workspace', 'Trello', 'Slack'] },
+    { name: '기획/협업', items: ['Notion', 'Google Workspace', 'Trello'] },
     { name: '배포', items: ['YouTube Studio', 'Vimeo', 'Instagram', 'TikTok'] },
   ],
 };
 
 const AD_MEDIA: DeptData = {
   skills: [
-    '광고 기획', '카피라이팅', 'SNS 마케팅', '미디어 전략', '브랜딩',
-    'Photoshop', 'Illustrator', 'Premiere Pro', 'Canva',
-    'Google Analytics', '퍼포먼스 마케팅', 'SEO', '콘텐츠 마케팅',
-    'Meta Ads', 'Google Ads', '데이터 분석',
+    '광고기획', '디지털광고캠페인', '브랜드커뮤니케이션', '크리에이티브전략',
+    '소셜미디어마케팅', '애드테크', '퍼포먼스분석', '소비자조사',
+    '영상콘텐츠편집', '영상콘텐츠촬영', '아트워크', 'UX/UI디자인',
+    'PR전략', 'BTL전략', '콘텐츠제작', '디지털크리에이터',
+    'Photoshop', 'Illustrator', 'Premiere Pro',
   ],
   toolCats: [
     { name: '디자인', items: ['Photoshop', 'Illustrator', 'Canva', 'Figma'] },
     { name: '영상', items: ['Premiere Pro', 'After Effects', 'CapCut'] },
-    { name: '마케팅', items: ['Google Analytics', 'Meta Business', 'Google Ads', 'Mailchimp'] },
+    { name: '마케팅', items: ['Google Analytics', 'Meta Business', 'Google Ads'] },
     { name: 'SNS', items: ['Instagram', 'YouTube Studio', 'TikTok', 'Notion'] },
   ],
 };
@@ -117,25 +130,28 @@ const AD_MEDIA: DeptData = {
 const ANIMATION_WEBTOON: DeptData = {
   skills: [
     'Clip Studio Paint', 'Photoshop', 'Procreate', 'After Effects',
-    'Blender', 'Maya', 'Toon Boom', '스토리보드', '캐릭터 디자인',
-    '배경 일러스트', '컬러링', '연출', '웹툰 연재', '만화 콘티',
+    'Blender', '3D모델링', '3D애니메이션', '디지털드로잉',
+    '캐릭터디자인', '배경아트', '웹툰연출', '스토리보드', '시나리오',
+    '생성AI모델링', 'AI크리에이션', 'AI레이아웃디자인',
+    '디지털색채표현', '일러스트레이션', '영상콘텐츠편집',
   ],
   toolCats: [
     { name: '드로잉', items: ['Clip Studio Paint', 'Photoshop', 'Procreate', 'SAI'] },
     { name: '애니메이션', items: ['After Effects', 'Toon Boom', 'Blender', 'Maya'] },
-    { name: '3D', items: ['Blender', 'ZBrush', 'Cinema 4D'] },
+    { name: '3D/AI', items: ['Blender', 'ZBrush', 'Midjourney', 'Stable Diffusion'] },
     { name: '플랫폼', items: ['네이버 웹툰', '카카오페이지', 'Behance', 'Pixiv'] },
   ],
 };
 
 const WRITING_PERFORM: DeptData = {
   skills: [
-    '시나리오 작성', '방송 대본', '소설 창작', '에세이', '카피라이팅',
-    'Final Draft', '촬영 협업', '편집 감수', '스토리텔링', '연출',
-    '연기', 'MC', '보컬', '무대 퍼포먼스', '오디션 준비',
+    '방송극작법', '시나리오기초', '드라마작법', '웹콘텐츠글쓰기',
+    'AI콘텐츠창작', '스토리텔링', '예능구성대본', '다큐멘터리대본',
+    '연기실기', '카메라연기', '뮤지컬연기', '무대연출',
+    '보컬트레이닝', '오디션워크숍', 'MC실습', '1인미디어제작',
   ],
   toolCats: [
-    { name: '집필', items: ['Final Draft', 'MS Word', 'Scrivener', 'Google Docs'] },
+    { name: '집필', items: ['Final Draft', 'MS Word', 'Google Docs', 'HWP'] },
     { name: '영상', items: ['Premiere Pro', 'DaVinci Resolve', 'Final Cut Pro'] },
     { name: '기획', items: ['Notion', 'Trello', 'Google Workspace'] },
   ],
@@ -143,22 +159,27 @@ const WRITING_PERFORM: DeptData = {
 
 const HEALTH_MEDICAL: DeptData = {
   skills: [
-    '환자 평가', '건강 교육', '임상 실습', '의무기록', '감염 관리',
-    '보건 통계', '의료 법규', '재활 치료', '응급 처치', '구강 관리',
-    'EMR', 'PACS', '심전도', '활력징후 측정', 'BLS/ACLS',
+    '보건의료정보관리', '의무기록분류', '건강보험청구', '질병분류(KCD)',
+    '의료통계학', '병원경영', '보건의료법규', '원무관리',
+    '인체생리학', '해부학', '임상의학용어', '전자의무기록(EMR)',
+    '응급처치학', '재활의학', '작업치료학', '작업수행분석',
+    '감각통합치료', '인지재활', '일상생활활동훈련',
+    '심리학개론', '활력징후측정', 'BLS',
   ],
   toolCats: [
     { name: '의료 시스템', items: ['EMR', 'PACS', 'OCS', 'Hospital ERP'] },
-    { name: '문서/분석', items: ['MS Office', 'Excel', 'SPSS', 'Google Workspace'] },
-    { name: '협업', items: ['Notion', 'Slack', 'Google Calendar'] },
+    { name: '문서/분석', items: ['MS Office', 'Excel', 'SPSS', 'HWP'] },
+    { name: '협업', items: ['Notion', 'Google Workspace', 'Google Calendar'] },
   ],
 };
 
 const FOOD_NUTRITION: DeptData = {
   skills: [
-    '영양 평가', '식단 설계', '급식 관리', '식품 위생', 'HACCP',
-    '식품 분석', '조리 실습', '영양 상담', '식품 가공', '품질 관리',
-    'CAN-Pro', 'Excel', '보건 통계', '식이요법',
+    '영양판정', '식사요법', '임상영양학', '생애주기영양학', '영양상담',
+    '단체급식관리', '급식경영학', 'HACCP실무', '식품위생학',
+    '조리원리', '한국조리실습', '서양조리실습', '제과제빵실습',
+    '식품학', '식품화학', '식품미생물학', '식품가공저장학',
+    '생화학', '인체생리학', '공중보건학', 'CAN-Pro',
   ],
   toolCats: [
     { name: '영양 분석', items: ['CAN-Pro', 'Diet Analysis Plus', 'NutriBase'] },
@@ -169,9 +190,12 @@ const FOOD_NUTRITION: DeptData = {
 
 const BIO_PHARMA: DeptData = {
   skills: [
-    '의약품 제조', 'GMP', '품질 관리(QC)', '품질 보증(QA)', 'HPLC',
-    '제제학', '약전 분석', '무균 조작', '밸리데이션', 'SOP 작성',
-    'Excel', '통계 분석', '실험실 안전',
+    '의약품제조공학', 'GMP실무', '품질관리(QC)', '품질보증(QA)',
+    '제제학', '생물의약품학', '약전분석', '기기분석(HPLC/GC)',
+    '무균조작기술', '밸리데이션', 'SOP작성',
+    '약리학', '생화학', '미생물학', '면역학',
+    '바이오의약품공정', '세포배양기술', '원료의약품합성',
+    '의약품인허가', '임상시험관리',
   ],
   toolCats: [
     { name: '분석 장비', items: ['HPLC', 'GC', 'UV-Vis', 'IR', '용출 시험기'] },
@@ -182,9 +206,12 @@ const BIO_PHARMA: DeptData = {
 
 const BIO_CHEM: DeptData = {
   skills: [
-    '화학 분석', '기기 분석', '바이오 공정', '화장품 원료', 'GLP',
-    'HPLC', 'GC', '분광 분석', '미생물 실험', '세포 배양',
-    'Python', 'Excel', '통계 분석', '논문 작성',
+    '일반화학', '유기화학', '분석화학', '기기분석(HPLC/GC-MS)',
+    '생화학', '미생물학', '분자생물학', '세포배양기술',
+    '화장품제조실습', '화장품원료학', '기능성화장품학',
+    'GLP실무', 'GMP실무', '바이오공정',
+    '환경분석', '수질분석', '식품분석',
+    'PCR', 'Python', '통계분석',
   ],
   toolCats: [
     { name: '분석', items: ['HPLC', 'GC-MS', 'UV-Vis', 'NMR', 'IR'] },
@@ -195,9 +222,12 @@ const BIO_CHEM: DeptData = {
 
 const BEAUTY: DeptData = {
   skills: [
-    '피부 분석', '메이크업 아트', '네일 아트', '특수 분장', '뷰티 컨설팅',
-    '화장품 성분 분석', '피부 관리', '왁싱', '두피 관리', '아로마테라피',
-    'Photoshop', 'Canva', 'SNS 마케팅', '뷰티 트렌드',
+    '피부미용실습', '피부분석', '얼굴관리', '바디관리', '왁싱',
+    '메이크업기초', '뷰티메이크업', '웨딩메이크업', '특수분장',
+    '네일아트', '네일케어', '젤네일', '아트네일',
+    '피부과학', '화장품학', '화장품성분분석',
+    '두피모발관리', '아로마테라피', '뷰티컨설팅',
+    'SNS뷰티콘텐츠', '뷰티창업실무',
   ],
   toolCats: [
     { name: '피부 분석', items: ['더모스코프', '피부 측정기', 'UV 카메라'] },
@@ -208,9 +238,12 @@ const BEAUTY: DeptData = {
 
 const SOCIAL_WELFARE: DeptData = {
   skills: [
-    '사례 관리', '상담 기법', '복지 정책', '프로그램 기획', '지역 사회 조사',
-    '자원 봉사 관리', '사회 복지 법규', '가족 상담', '아동 복지', '노인 복지',
-    'Excel', 'SPSS', '보고서 작성', '프레젠테이션',
+    '사회복지개론', '사회복지실천론', '사회복지실천기술론',
+    '사례관리론', '지역사회복지론', '사회복지정책론', '사회복지법제론',
+    '사회복지조사론', '사회복지행정론', '프로그램개발과평가',
+    '인간행동과사회환경', '상담이론과실제', '가족복지론',
+    '아동복지론', '노인복지론', '장애인복지론',
+    '정신건강사회복지론', '사회복지현장실습',
   ],
   toolCats: [
     { name: '사례 관리', items: ['행복e음', '사회보장정보원', 'CRM'] },
@@ -222,9 +255,12 @@ const SOCIAL_WELFARE: DeptData = {
 
 const SPORTS_REHAB: DeptData = {
   skills: [
-    '운동 재활', '스포츠 테이핑', '체력 측정', '운동 처방', '근골격 평가',
-    '물리 치료', '재활 트레이닝', '기능적 움직임 평가(FMS)', 'CPR/BLS',
-    'InBody', '심폐 기능 평가', '스포츠 마사지',
+    '기능해부학', '운동생리학', '운동역학', '스포츠의학',
+    '운동재활트레이닝', '근골격재활', '스포츠테이핑', '스포츠마사지',
+    '체력측정평가', '운동처방론', '운동부하검사',
+    '기능적움직임평가(FMS)', '교정운동', '수중재활운동',
+    '트레이닝방법론', '스포츠심리학', '건강체력관리',
+    'CPR/BLS', '응급처치', 'InBody분석',
   ],
   toolCats: [
     { name: '측정', items: ['InBody', '악력계', '배근력계', 'FMS Kit'] },
@@ -235,9 +271,12 @@ const SPORTS_REHAB: DeptData = {
 
 const PET: DeptData = {
   skills: [
-    '반려동물 행동 분석', '동물 간호', '그루밍', '훈련', '영양 관리',
-    '동물 보건', '수의 보조', '임상 병리', '마취 모니터링', '방사선 촬영',
-    '동물 복지 법규', '펫 산업 경영', 'SNS 마케팅',
+    '동물해부생리학', '동물질병학', '동물임상병리', '동물영상진단(X-ray/초음파)',
+    '동물간호학', '동물마취모니터링', '동물수술보조',
+    '반려동물행동학', '반려동물훈련학', '반려견미용(그루밍)',
+    '동물영양학', '사료학', '동물복지및법규',
+    '펫산업경영', '펫비즈니스창업', 'SNS마케팅',
+    '동물매개치료', '야생동물관리',
   ],
   toolCats: [
     { name: '의료', items: ['동물용 EMR', 'X-ray', '초음파', '혈액 분석기'] },
@@ -248,9 +287,12 @@ const PET: DeptData = {
 
 const CULINARY: DeptData = {
   skills: [
-    '한식 조리', '양식 조리', '일식 조리', '제과제빵', '바리스타',
-    '메뉴 개발', '원가 관리', 'HACCP', '식품 위생', '플레이팅',
-    '푸드 스타일링', '매장 운영', '카페 창업',
+    '호텔한식조리', '호텔양식조리', '호텔일식조리', '호텔중식조리',
+    '고급한식실습', '고급양식실습', '퓨전조리', '메뉴개발',
+    '제과실습', '제빵실습', '디저트실습', '카페음료실습',
+    '바리스타실무', '커피로스팅', '라떼아트',
+    '식품위생학', 'HACCP', '원가관리', '외식경영론',
+    '푸드스타일링', '카페창업실무', '매장운영관리',
   ],
   toolCats: [
     { name: '조리', items: ['오븐', '에스프레소 머신', '진공 포장기', '급속 냉동기'] },
@@ -262,12 +304,15 @@ const CULINARY: DeptData = {
 
 const BUSINESS: DeptData = {
   skills: [
-    '경영 전략', '재무 분석', '마케팅', '회계', '세무',
-    'ERP', 'SAP', 'Excel', 'Power BI', '데이터 분석',
-    '프레젠테이션', '비즈니스 일본어', '무역 실무', '호텔 경영',
+    '경영학원론', '회계원리', '재무회계', '원가회계', '세무회계',
+    '전산회계', '전산세무', 'ERP회계', 'ERP인사', 'ERP물류',
+    '비즈니스일본어', '일본어회화', '무역실무', '유통관리',
+    '경영정보시스템', '마케팅원론', '디지털마케팅',
+    '재무관리', '인적자원관리', '창업실무',
+    'Excel데이터분석', '비즈니스프레젠테이션',
   ],
   toolCats: [
-    { name: 'ERP/회계', items: ['SAP', 'ERP', '더존', '세무사랑', 'QuickBooks'] },
+    { name: 'ERP/회계', items: ['SAP', '더존 iCUBE', '세무사랑', 'KcLep'] },
     { name: '분석', items: ['Excel', 'Power BI', 'Tableau', 'Google Analytics'] },
     { name: '문서', items: ['MS Office', 'HWP', 'Google Workspace'] },
     { name: '협업', items: ['Notion', 'Slack', 'Zoom', 'Trello'] },
@@ -276,13 +321,16 @@ const BUSINESS: DeptData = {
 
 const HOTEL_TOURISM: DeptData = {
   skills: [
-    '호텔 경영', '관광 기획', '서비스 매니지먼트', '객실 관리', 'F&B 관리',
-    '여행 상품 개발', '컨벤션 기획', '고객 관리(CRM)', '관광 마케팅',
-    'Excel', '외국어(영어/일본어/중국어)', '프레젠테이션',
+    '호텔경영론', '관광학개론', '관광마케팅', '관광법규',
+    '호텔객실관리', '호텔F&B관리', '서비스매니지먼트',
+    '여행사경영', '여행상품개발', '국외여행인솔',
+    '컨벤션기획', '이벤트플래닝', 'MICE산업론',
+    '관광영어', '관광일본어', '관광중국어',
+    'CRM(고객관리)', '항공예약(GDS)', 'OTA운영',
   ],
   toolCats: [
     { name: 'PMS', items: ['Opera PMS', 'Fidelio', '호텔 ERP'] },
-    { name: '예약', items: ['GDS', 'OTA', '항공 예약 시스템'] },
+    { name: '예약', items: ['Amadeus', 'TOPAS', 'OTA', '항공 예약 시스템'] },
     { name: '문서', items: ['MS Office', 'Google Workspace', 'Canva'] },
     { name: '협업', items: ['Notion', 'Slack', 'Zoom'] },
   ],
@@ -290,9 +338,12 @@ const HOTEL_TOURISM: DeptData = {
 
 const AIRLINE: DeptData = {
   skills: [
-    '항공 서비스', '객실 승무', '공항 운영', '항공 예약(GDS)', '서비스 매너',
-    '기내 안전', '응급 처치', '이미지 메이킹', '외국어(영어/일본어/중국어)',
-    'CRM', '고객 응대', '비행 안전 규정',
+    '항공서비스론', '객실승무실무', '객실서비스영어',
+    '공항운영론', '공항지상서비스', '항공예약(GDS/CRS)',
+    '기내안전관리', '항공보안', '항공응급처치',
+    '이미지메이킹', '서비스매너', '서비스커뮤니케이션',
+    '항공영어', '항공일본어', '항공중국어',
+    '관광학개론', '호텔서비스실무', 'CRM고객관리',
   ],
   toolCats: [
     { name: '예약', items: ['Amadeus', 'TOPAS', 'Sabre', 'Galileo'] },
@@ -303,12 +354,14 @@ const AIRLINE: DeptData = {
 
 const FIRE_SAFETY: DeptData = {
   skills: [
-    '소방 설비 설계', '소방 점검', '방재 계획', '소방 법규', 'AutoCAD',
-    '화재 시뮬레이션', '스프링클러 시스템', '경보 설비', '피난 설계',
-    '소방 안전 관리', '위험물 관리', '소방 시공',
+    '소방설비설계', '소방점검실무', '소방관계법규', '2D-CAD', 'BIM',
+    '소방경보시스템', '제연설비', '소방설비배관', '소방약제',
+    '화재학', '위험물질론', '건축소방학', '건축계획과방재',
+    '공기조화설비', '위생설비', '소방정보통신설비',
+    '소방안전관리', '위험물시설론', '응급처치론',
   ],
   toolCats: [
-    { name: '설계', items: ['AutoCAD', 'Revit', 'PYROSIM', 'Pathfinder'] },
+    { name: '설계', items: ['AutoCAD', 'Revit', 'BIM', 'PYROSIM', 'Pathfinder'] },
     { name: '문서', items: ['MS Office', 'Excel', 'HWP'] },
     { name: '관리', items: ['소방시설 관리 시스템', 'Google Workspace'] },
   ],
@@ -316,9 +369,11 @@ const FIRE_SAFETY: DeptData = {
 
 const GAME: DeptData = {
   skills: [
-    'Unity', 'Unreal Engine', 'C#', 'C++', 'Blueprint',
-    '게임 기획', '레벨 디자인', '게임 UI', 'Photoshop', 'Blender',
-    'Spine', 'Aseprite', '게임 수학', '물리 엔진', 'Git',
+    'C', 'C#', 'Unity', 'Unreal Engine', 'JavaScript', 'HTML5',
+    '게임엔진프로그래밍', '게임기획', '레벨디자인', 'UI/UX디자인',
+    '3D모델링', '3D캐릭터모델링', '3D애니메이션', '게임아트',
+    '게임서버프로그래밍', '모바일게임개발', 'AI자동화',
+    'Photoshop', 'Blender', 'Git',
   ],
   toolCats: [
     { name: '엔진', items: ['Unity', 'Unreal Engine', 'Godot', 'RPG Maker'] },
@@ -330,9 +385,11 @@ const GAME: DeptData = {
 
 const AI: DeptData = {
   skills: [
-    'Python', 'TensorFlow', 'PyTorch', 'scikit-learn', 'Pandas', 'NumPy',
-    'OpenCV', 'NLP', 'Computer Vision', 'LLM', 'LangChain', 'HuggingFace',
-    'SQL', 'Docker', 'Linux', 'Git', 'Jupyter', 'MLOps',
+    'Python', 'C', 'JavaScript', 'HTML5', 'Java', 'Linux',
+    '딥러닝', '자연어처리(NLP)', '컴퓨터비전', 'AI모델링',
+    '데이터분석', '데이터구축', '이미지프로세싱',
+    'TensorFlow', 'PyTorch', 'Pandas', 'NumPy', 'OpenCV',
+    'SQL', 'AI클라우드', 'Git', 'Jupyter',
   ],
   toolCats: [
     { name: 'ML/DL', items: ['Jupyter Notebook', 'Google Colab', 'Kaggle', 'Weights & Biases'] },
@@ -344,9 +401,10 @@ const AI: DeptData = {
 
 const FREE_MAJOR: DeptData = {
   skills: [
-    '기획', '데이터 분석', '프레젠테이션', '커뮤니케이션', '리서치',
-    'Python', 'Excel', 'Photoshop', 'Figma', '마케팅',
-    '보고서 작성', '문제 해결', '프로젝트 관리',
+    '진로탐색', '자기주도학습', '융합적사고', '창의적문제해결',
+    '기획력', '데이터분석', '프레젠테이션', '커뮤니케이션',
+    '리서치', 'Python', 'Excel', '마케팅기초',
+    '보고서작성', '프로젝트관리', '디자인씽킹',
   ],
   toolCats: [
     { name: '기획/분석', items: ['Notion', 'Google Workspace', 'Excel', 'Python'] },

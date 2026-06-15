@@ -15,7 +15,7 @@ export type { PortfolioPreset } from './portfolioPresets';
 export interface TemplatePreset {
   id: string;
   name: string;
-  emoji: string;
+  icon: string;
   desc: string;
   theme: Partial<Theme>;
 }
@@ -23,7 +23,7 @@ export interface TemplatePreset {
 export interface StylePreset {
   id: string;
   name: string;
-  emoji: string;
+  icon: string;
   desc: string;
   theme: Partial<Theme>;
 }
@@ -31,46 +31,32 @@ export interface StylePreset {
 // 2. 템플릿 (레이아웃 & 커버 배너 구성 프리셋)
 export const TEMPLATE_PRESETS: TemplatePreset[] = [
   {
-    id: 'website_hub',
-    name: '와이드 포트폴리오',
-    emoji: '🌐',
-    desc: '넓은 본문에 커버 배너가 있는 기본 노션 스타일',
-    theme: { layout: 'notion', wide: true, cover: 'sunset', noCover: false }
+    id: 'notion_page',
+    name: '노션 페이지',
+    icon: 'Globe',
+    desc: '커버 배너가 있는 기본 노션 스타일',
+    theme: { layout: 'notion', cover: 'sunset', noCover: false }
   },
   {
-    id: 'compact_cv',
-    name: '심플 이력서',
-    emoji: '📄',
-    desc: '커버 없이 본문부터 바로 시작하는 깔끔한 1단 서식',
-    theme: { layout: 'minimal', wide: false, cover: 'graphite', noCover: true }
+    id: 'minimal_cv',
+    name: '미니멀 이력서',
+    icon: 'FileText',
+    desc: '커버 없이 본문부터 바로 시작하는 깔끔한 서식',
+    theme: { layout: 'minimal', cover: 'graphite', noCover: true }
   },
   {
     id: 'aside_dashboard',
     name: '사이드바 대시보드',
-    emoji: '🗂️',
+    icon: 'PanelLeft',
     desc: '왼쪽 프로필 패널 + 오른쪽 상세 이력 2단 구성',
-    theme: { layout: 'sidebar', wide: true, cover: 'ocean', noCover: false }
+    theme: { layout: 'sidebar', cover: 'ocean', noCover: false }
   },
   {
     id: 'tabbed_cv',
     name: '탭 네비게이션',
-    emoji: '📁',
+    icon: 'FolderOpen',
     desc: '기술·경력·학력을 탭으로 분리한 한 화면 구성',
-    theme: { layout: 'tab', wide: true, cover: 'forest', noCover: false }
-  },
-  {
-    id: 'narrow_notion',
-    name: '좁은 노션 페이지',
-    emoji: '📝',
-    desc: '커버 배너와 좁은 본문 폭의 집중형 레이아웃',
-    theme: { layout: 'notion', wide: false, cover: 'midnight', noCover: false }
-  },
-  {
-    id: 'minimal_wide',
-    name: '와이드 미니멀',
-    emoji: '🖼️',
-    desc: '커버 없이 넓은 본문으로 콘텐츠에 집중하는 구성',
-    theme: { layout: 'minimal', wide: true, cover: 'graphite', noCover: true }
+    theme: { layout: 'tab', cover: 'forest', noCover: false }
   }
 ];
 
@@ -79,42 +65,42 @@ export const STYLE_PRESETS: StylePreset[] = [
   {
     id: 'notion_classic',
     name: '클래식 노션',
-    emoji: '📄',
+    icon: 'Type',
     desc: '노션 기본 스타일 — 정갈한 산세리프와 그레이 톤 태그',
     theme: { style: 'classic', font: 'sans', accent: '#4a4a4a', mode: 'light' }
   },
   {
     id: 'modern_line',
     name: '모던 아웃라인',
-    emoji: '➖',
+    icon: 'Minus',
     desc: '외곽선 태그와 대문자 섹션 헤더',
     theme: { style: 'line', font: 'sans', accent: '#d9730d', mode: 'light' }
   },
   {
     id: 'bold_highlight',
     name: '볼드 하이라이트',
-    emoji: '💥',
+    icon: 'Bold',
     desc: '강조색 언더바 헤더와 채워진 태그',
     theme: { style: 'bold', font: 'sans', accent: '#0b6e99', mode: 'light' }
   },
   {
     id: 'terminal_mono',
     name: '개발자 터미널',
-    emoji: '🖥️',
+    icon: 'Terminal',
     desc: '모노스페이스 폰트 기반 코딩 터미널 감성',
     theme: { style: 'mono', font: 'mono', accent: '#0f7b6c', mode: 'light' }
   },
   {
     id: 'dark_classic',
     name: '다크 클래식',
-    emoji: '🌙',
+    icon: 'Moon',
     desc: '어두운 배경에 깔끔한 산세리프 — 눈이 편한 다크 모드',
     theme: { style: 'classic', font: 'sans', accent: '#6c8ebf', mode: 'dark' }
   },
   {
     id: 'serif_elegant',
     name: '세리프 엘레강스',
-    emoji: '✒️',
+    icon: 'PenLine',
     desc: '세리프 폰트로 격조 있는 인쇄물 느낌',
     theme: { style: 'classic', font: 'serif', accent: '#7c5c3e', mode: 'light' }
   }
@@ -134,6 +120,34 @@ export function makeGradient(hex: string): string {
   const dark = toHex(mix(r, 0, 0.3), mix(g, 0, 0.3), mix(b, 0, 0.3));
   return `linear-gradient(135deg, ${light} 0%, ${hex} 52%, ${dark} 100%)`;
 }
+
+export const TAG_LIGHT = [
+  { bg: '#EEE0DA', fg: '#5C4636' },
+  { bg: '#FADEC9', fg: '#774B2A' },
+  { bg: '#FDECC8', fg: '#7A5A18' },
+  { bg: '#DBEDDB', fg: '#2C5A3E' },
+  { bg: '#D3E5EF', fg: '#28486C' },
+  { bg: '#E8DEEE', fg: '#492F64' },
+  { bg: '#F5E0E9', fg: '#69314C' },
+  { bg: '#FFE2DD', fg: '#6E3630' }
+];
+
+export const TAG_DARK = [
+  { bg: '#603B2C', fg: '#E6CBBA' },
+  { bg: '#854C1D', fg: '#F7D7B8' },
+  { bg: '#89632A', fg: '#F4E0B0' },
+  { bg: '#2B593F', fg: '#BFE2C9' },
+  { bg: '#28456C', fg: '#BBD4ED' },
+  { bg: '#492F64', fg: '#D7C4E8' },
+  { bg: '#69314C', fg: '#EEC4DA' },
+  { bg: '#6E3630', fg: '#F2C5BD' }
+];
+
+export const FONT_STACKS: Record<string, string> = {
+  sans: '"Pretendard Variable","Pretendard",ui-sans-serif,-apple-system,"Segoe UI",system-ui,"Apple SD Gothic Neo","Malgun Gothic",sans-serif',
+  serif: '"Nanum Myeongjo","Lyon Text","Iowan Old Style",Georgia,ui-serif,serif',
+  mono: '"JetBrains Mono","SFMono-Regular",ui-monospace,Menlo,Consolas,monospace'
+};
 
 export const ACCENT_SWATCHES = [
   '#4a4a4a', '#e03e3e', '#d9730d', '#cb912f',
@@ -156,15 +170,15 @@ export const TOOL_CATS = [
 ];
 
 export const STEPS = [
-  { id: 'profile', emoji: '👤', nav: '기본 정보', title: '기본 정보' },
-  { id: 'contact', emoji: '📧', nav: '연락처 · 링크', title: '연락처 및 링크' },
-  { id: 'about', emoji: '💡', nav: '소개', title: '자기소개' },
-  { id: 'skills', emoji: '🛠️', nav: '기술 스택', title: '기술 스택' },
-  { id: 'tools', emoji: '🧰', nav: '서비스 · 도구', title: '서비스 및 도구' },
-  { id: 'experience', emoji: '💼', nav: '경력', title: '경력' },
-  { id: 'projects', emoji: '🚀', nav: '프로젝트', title: '프로젝트' },
-  { id: 'education', emoji: '🎓', nav: '교육', title: '학력' },
-  { id: 'custom', emoji: '✨', nav: '커스텀 섹션', title: '커스텀 섹션' }
+  { id: 'profile', icon: 'User', nav: '기본 정보', title: '기본 정보' },
+  { id: 'contact', icon: 'Mail', nav: '연락처 · 링크', title: '연락처 및 링크' },
+  { id: 'about', icon: 'Lightbulb', nav: '소개', title: '자기소개' },
+  { id: 'skills', icon: 'Wrench', nav: '기술 스택', title: '기술 스택' },
+  { id: 'tools', icon: 'Box', nav: '서비스 · 도구', title: '서비스 및 도구' },
+  { id: 'experience', icon: 'Briefcase', nav: '경력', title: '경력' },
+  { id: 'projects', icon: 'Rocket', nav: '프로젝트', title: '프로젝트' },
+  { id: 'education', icon: 'GraduationCap', nav: '교육', title: '학력' },
+  { id: 'custom', icon: 'Sparkles', nav: '커스텀 섹션', title: '커스텀 섹션' }
 ];
 
 export const EMP_TYPES = ['정규직','계약직','인턴','프리랜서','파견','아르바이트','창업'];
@@ -176,7 +190,7 @@ export const LINK_FIELDS = [
 ];
 
 export interface GuideStep {
-  type: 'intro' | 'icon' | 'text' | 'textarea' | 'skills' | 'tools' | 'links' | 'custom' | 'section' | 'done';
+  type: 'intro' | 'icon' | 'text' | 'textarea' | 'skills' | 'tools' | 'links' | 'custom' | 'section' | 'curriculum' | 'certifications' | 'done';
   kicker?: string;
   q?: string;
   hint?: string;
@@ -200,6 +214,8 @@ export const GUIDE_STEPS: GuideStep[] = [
   { type: 'textarea', path: 'about', kicker: '소개', q: '자기소개를 적어주세요', hint: '노션 콜아웃 블록으로 표시돼요. 줄바꿈도 반영됩니다.', ph: '안녕하세요! 저는 ...' },
   { type: 'skills', path: 'skills', kicker: '기술 스택', q: '어떤 기술을 다루나요?', hint: '쉼표(,)로 구분하면 색상 태그로 자동 변환돼요.', ph: 'React, TypeScript, Node.js' },
   { type: 'tools', kicker: '서비스 · 도구', q: '사용하는 서비스 · 도구를 골라주세요', hint: '카테고리별로 클릭하여 선택하세요. 전공에 맞는 도구가 표시됩니다.' },
+  { type: 'curriculum', kicker: '교육과정', q: '이수한 과목을 선택해주세요', hint: '전공 교육과정에서 수강한 과목을 체크하면 포트폴리오에 반영돼요.' },
+  { type: 'certifications', kicker: '자격증', q: '자격증을 추가해주세요', hint: '전공 추천 자격증이 표시됩니다. 취득·준비 중·예정 상태를 선택하세요.' },
   { type: 'links', kicker: '링크', q: '추가 링크가 있나요?', hint: 'LinkedIn, Behance, 블로그 등 자유롭게 추가하세요.' },
   { type: 'section', key: 'experience', kicker: '경력', q: '경력을 추가해볼까요?', hint: '회사·직무·기간·성과를 자유롭게 추가하세요.', label: '경력' },
   { type: 'section', key: 'projects', kicker: '프로젝트', q: '대표 프로젝트가 있나요?', hint: '사용 기술과 링크도 함께 정리해보세요.', label: '프로젝트' },

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { ChevronDown, Check } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { ChevronDown, Check, X, ImagePlus, User, Mail, Lightbulb, Wrench, Box, Briefcase, Rocket, GraduationCap, Sparkles } from 'lucide-react';
 import { usePortfolio } from '../hooks/usePortfolioState';
 import { STEPS, TOOL_CATS, EXP_FIELDS, PROJ_FIELDS, EDU_FIELDS, LINK_FIELDS } from '../constants';
 import { getDeptData } from '../departmentData';
@@ -9,6 +9,128 @@ import { CustomSectionEditor } from './CustomSectionEditor';
 import { SkillSuggestions } from './SkillSuggestions';
 import { GitHubImport } from './GitHubImport';
 import { Experience, Project, Education, Link, CustomSection } from '../types';
+import type { DeptToolCat } from '../departmentData';
+
+function ProjectImageUpload({ image, onChange }: { image: string; onChange: (v: string) => void }) {
+  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (file.size > 2 * 1024 * 1024) { alert('2MB 이하의 이미지만 업로드할 수 있습니다.'); return; }
+    const reader = new FileReader();
+    reader.onload = (ev) => onChange(ev.target?.result as string);
+    reader.readAsDataURL(file);
+  };
+
+  if (image) {
+    return (
+      <div className="relative rounded-lg overflow-hidden border border-gray-200 dark:border-gray-800">
+        <img src={image} alt="프로젝트 스크린샷" className="w-full h-32 object-cover" />
+        <button
+          onClick={() => onChange('')}
+          className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-black/80"
+        >
+          <X className="w-3.5 h-3.5" />
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <label className="flex items-center gap-2 px-3 py-2 rounded-lg border border-dashed border-gray-300 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-900 cursor-pointer transition-colors text-sm">
+      <ImagePlus className="w-4 h-4" />
+      스크린샷 추가 (2MB 이하)
+      <input type="file" accept="image/*" onChange={handleFile} className="hidden" />
+    </label>
+  );
+}
+
+const stepIconMap: Record<string, React.ReactNode> = {
+  User: <User className="w-4 h-4 inline" />,
+  Mail: <Mail className="w-4 h-4 inline" />,
+  Lightbulb: <Lightbulb className="w-4 h-4 inline" />,
+  Wrench: <Wrench className="w-4 h-4 inline" />,
+  Box: <Box className="w-4 h-4 inline" />,
+  Briefcase: <Briefcase className="w-4 h-4 inline" />,
+  Rocket: <Rocket className="w-4 h-4 inline" />,
+  GraduationCap: <GraduationCap className="w-4 h-4 inline" />,
+  Sparkles: <Sparkles className="w-4 h-4 inline" />,
+};
+
+function ToolEditor({ tools, onChange, cats }: { tools: string[]; onChange: (t: string[]) => void; cats: DeptToolCat[] }) {
+  const [input, setInput] = useState('');
+
+  const add = (name: string) => {
+    const t = name.trim();
+    if (t && !tools.includes(t)) onChange([...tools, t]);
+  };
+  const remove = (name: string) => onChange(tools.filter(t => t !== name));
+  const toggle = (name: string) => tools.includes(name) ? remove(name) : add(name);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const v = e.target.value;
+    if (v.includes(',')) {
+      v.split(',').forEach(s => add(s));
+      setInput('');
+    } else {
+      setInput(v);
+    }
+  };
+
+  const handleKey = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (input.trim()) { add(input); setInput(''); }
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <input
+        type="text"
+        value={input}
+        onChange={handleChange}
+        onKeyDown={handleKey}
+        placeholder="도구명 입력 (쉼표 또는 Enter로 추가)"
+        className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600 text-sm"
+      />
+
+      {tools.length > 0 && (
+        <div className="flex flex-wrap gap-1.5">
+          {tools.map(t => (
+            <span key={t} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-gray-800 dark:bg-white text-white dark:text-gray-900 text-xs font-medium">
+              {t}
+              <button onClick={() => remove(t)} className="hover:opacity-70"><X className="w-3 h-3" /></button>
+            </span>
+          ))}
+        </div>
+      )}
+
+      {cats.map(cat => (
+        <div key={cat.name}>
+          <h4 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">{cat.name}</h4>
+          <div className="flex flex-wrap gap-2">
+            {cat.items.map(tool => {
+              const sel = tools.includes(tool);
+              return (
+                <button
+                  key={tool}
+                  onClick={() => toggle(tool)}
+                  className={`px-3 py-1.5 rounded-lg text-sm font-medium border-2 transition-all ${
+                    sel
+                      ? 'border-gray-800 dark:border-white bg-gray-800 dark:bg-white text-white dark:text-gray-900'
+                      : 'border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:border-gray-400 dark:hover:border-gray-600'
+                  }`}
+                >
+                  {tool}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export function AccordionEditor() {
   const { state, updateProfile, updateState, selectedPresetId } = usePortfolio();
@@ -39,6 +161,10 @@ export function AccordionEditor() {
         return false;
     }
   };
+
+  const completedCount = STEPS.filter(s => isStepComplete(s.id)).length;
+  const totalCount = STEPS.length;
+  const pct = Math.round((completedCount / totalCount) * 100);
 
   const toggleStep = (index: number) => {
     const newOpenSteps = new Set(openSteps);
@@ -194,40 +320,7 @@ export function AccordionEditor() {
         );
 
       case 'tools':
-        return (
-          <div className="space-y-4">
-            {deptToolCats.map((category) => (
-              <div key={category.name}>
-                <h4 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
-                  {category.name}
-                </h4>
-                <div className="flex flex-wrap gap-2">
-                  {category.items.map((tool) => {
-                    const isSelected = state.tools.includes(tool);
-                    return (
-                      <button
-                        key={tool}
-                        onClick={() => {
-                          const tools = isSelected
-                            ? state.tools.filter((t) => t !== tool)
-                            : [...state.tools, tool];
-                          updateState({ tools });
-                        }}
-                        className={`px-3 py-1.5 rounded-lg text-sm font-medium border-2 transition-all ${
-                          isSelected
-                            ? 'border-gray-800 dark:border-white bg-gray-800 dark:bg-white text-white dark:text-gray-900'
-                            : 'border-gray-200 dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:border-gray-400 dark:hover:border-gray-600'
-                        }`}
-                      >
-                        {tool}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </div>
-        );
+        return <ToolEditor tools={state.tools} onChange={(tools) => updateState({ tools })} cats={deptToolCats} />;
 
       case 'experience':
         return (
@@ -266,8 +359,19 @@ export function AccordionEditor() {
                 desc: '',
                 result: '',
                 repo: '',
-                demo: ''
+                demo: '',
+                image: ''
               }}
+              renderExtra={(item, idx) => (
+                <ProjectImageUpload
+                  image={item.image}
+                  onChange={(image) => {
+                    const updated = [...state.projects];
+                    updated[idx] = { ...updated[idx], image };
+                    updateState({ projects: updated });
+                  }}
+                />
+              )}
             />
           </div>
         );
@@ -306,6 +410,20 @@ export function AccordionEditor() {
 
   return (
     <div className="flex-1 overflow-y-auto px-4 py-4 scroll-pt-2 hide-scrollbar">
+      {/* Completeness dashboard */}
+      <div className="mb-4 p-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">포트폴리오 완성도</span>
+          <span className={`text-xs font-bold ${pct === 100 ? 'text-green-600 dark:text-green-400' : 'text-gray-900 dark:text-white'}`}>{pct}%</span>
+        </div>
+        <div className="h-2 rounded-full bg-gray-200 dark:bg-gray-800 overflow-hidden">
+          <div
+            className={`h-full rounded-full transition-all duration-500 ${pct === 100 ? 'bg-green-500' : 'bg-gray-800 dark:bg-white'}`}
+            style={{ width: `${pct}%` }}
+          />
+        </div>
+      </div>
+
       <div className="space-y-2">
         {STEPS.map((step, index) => {
           const isOpen = openSteps.has(index);
@@ -342,7 +460,7 @@ export function AccordionEditor() {
                       : 'text-gray-600 dark:text-gray-400'
                   }`}
                 >
-                  {step.emoji} {step.nav}
+                  {stepIconMap[step.icon]} {step.nav}
                 </span>
                 <ChevronDown
                   className={`w-4 h-4 text-gray-400 transition-transform ${

@@ -3,11 +3,12 @@ import { X, ChevronRight, ChevronLeft, ArrowRight, Notebook } from 'lucide-react
 import { usePortfolio } from '../hooks/usePortfolioState';
 import { GUIDE_STEPS, GuideStep, EXP_FIELDS, PROJ_FIELDS, EDU_FIELDS, LINK_FIELDS } from '../constants';
 import { getDeptData } from '../departmentData';
+import { getCurriculum } from '../curriculumData';
 import { IconControl } from './IconControl';
 import { SkillSuggestions } from './SkillSuggestions';
 import { RepeaterForm } from './RepeaterForm';
 import { CustomSectionEditor } from './CustomSectionEditor';
-import { Experience, Project, Education, Link, CustomSection } from '../types';
+import { Experience, Project, Education, Link, CustomSection, Certification } from '../types';
 
 interface GuideOverlayProps {
   onClose: () => void;
@@ -22,6 +23,7 @@ export function GuideOverlay({ onClose }: GuideOverlayProps) {
   const { state, updateProfile, updateState, selectedPresetId } = usePortfolio();
   const deptToolCats = getDeptData(selectedPresetId).toolCats;
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [completedCourses, setCompletedCourses] = useState<Set<string>>(new Set());
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
 
   const currentStep = GUIDE_STEPS[currentIndex];
@@ -126,7 +128,7 @@ export function GuideOverlay({ onClose }: GuideOverlayProps) {
   const renderStepContent = () => {
     if (currentStep.type === 'intro') {
       return (
-        <div className="guide-card" style={{ textAlign: 'center' }}>
+        <div className="guide-card text-center">
           <div className="text-6xl mb-5">✨</div>
           <div className="text-[32px] font-extrabold leading-tight mb-3 tracking-tight">
             몇 가지 질문에 답하면<br />포트폴리오가 완성돼요
@@ -150,7 +152,7 @@ export function GuideOverlay({ onClose }: GuideOverlayProps) {
 
     if (currentStep.type === 'done') {
       return (
-        <div className="guide-card" style={{ textAlign: 'center' }}>
+        <div className="guide-card text-center">
           <div className="text-[64px] mb-5">🎉</div>
           <div className="text-[32px] font-extrabold leading-tight mb-3 tracking-tight">
             입력을 마쳤어요!
@@ -268,8 +270,43 @@ export function GuideOverlay({ onClose }: GuideOverlayProps) {
     }
 
     if (currentStep.type === 'tools') {
+      const addTool = (name: string) => {
+        const t = name.trim();
+        if (t && !state.tools.includes(t)) updateState({ tools: [...state.tools, t] });
+      };
       inputArea = (
         <div className="space-y-5 mt-2">
+          <input
+            type="text"
+            placeholder="도구명 입력 (쉼표 또는 Enter로 추가)"
+            className="w-full bg-transparent border-none border-b-2 border-gray-300 dark:border-gray-700 px-0.5 py-2 text-lg font-medium text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:outline-none focus:border-gray-800 dark:focus:border-white transition-colors"
+            onChange={(e) => {
+              const v = e.target.value;
+              if (v.includes(',')) {
+                v.split(',').forEach(s => addTool(s));
+                e.target.value = '';
+              }
+            }}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                const el = e.target as HTMLInputElement;
+                if (el.value.trim()) { addTool(el.value); el.value = ''; }
+              }
+            }}
+          />
+
+          {state.tools.length > 0 && (
+            <div className="flex flex-wrap gap-1.5">
+              {state.tools.map(t => (
+                <span key={t} className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-gray-800 dark:bg-white text-white dark:text-gray-900 text-xs font-medium">
+                  {t}
+                  <button onClick={() => updateState({ tools: state.tools.filter(x => x !== t) })} className="hover:opacity-70"><X className="w-3 h-3" /></button>
+                </span>
+              ))}
+            </div>
+          )}
+
           {deptToolCats.map((category) => (
             <div key={category.name}>
               <h4 className="text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2.5">
@@ -300,6 +337,203 @@ export function GuideOverlay({ onClose }: GuideOverlayProps) {
               </div>
             </div>
           ))}
+        </div>
+      );
+    }
+
+    if (currentStep.type === 'curriculum') {
+      const curriculum = getCurriculum(selectedPresetId);
+      const currentSkillSet = new Set(
+        (guideVal('skills') || state.skills).split(',').map(s => s.trim().toLowerCase()).filter(Boolean)
+      );
+
+      const toggleCourse = (name: string) => {
+        setCompletedCourses(prev => {
+          const next = new Set(prev);
+          if (next.has(name)) next.delete(name);
+          else next.add(name);
+          const existing = (guideVal('skills') || state.skills).split(',').map(s => s.trim()).filter(Boolean);
+          const merged = [...new Set([...existing, ...Array.from(next)])];
+          guideSet('skills', merged.join(', '));
+          return next;
+        });
+      };
+
+      if (curriculum) {
+        const grouped = new Map<number, typeof curriculum.courses>();
+        curriculum.courses.forEach(sem => {
+          const existing = grouped.get(sem.year) || [];
+          existing.push(sem);
+          grouped.set(sem.year, existing);
+        });
+        inputArea = (
+          <div className="space-y-6 mt-4 max-h-[50vh] overflow-y-auto pr-2">
+            {Array.from(grouped.entries()).map(([year, semesters]) => (
+              <div key={year}>
+                <h4 className="text-sm font-bold text-gray-800 dark:text-gray-200 mb-3">
+                  {year}학년
+                </h4>
+                <div className="space-y-3">
+                  {semesters.map(sem => (
+                    <div key={`${sem.year}-${sem.semester}`}>
+                      <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-1.5 block">
+                        {sem.semester}학기
+                      </span>
+                      <div className="flex flex-wrap gap-2">
+                        {sem.courses.map(course => {
+                          const isInSkills = currentSkillSet.has(course.name.toLowerCase());
+                          const isChecked = completedCourses.has(course.name) || isInSkills;
+                          return (
+                            <button
+                              key={course.name}
+                              onClick={() => !isInSkills && toggleCourse(course.name)}
+                              className={`px-3 py-1.5 rounded-lg text-sm font-medium border-2 transition-all ${
+                                isChecked
+                                  ? 'border-gray-800 dark:border-white bg-gray-800 dark:bg-white text-white dark:text-gray-900'
+                                  : 'border-gray-200 dark:border-gray-800 text-gray-600 dark:text-gray-400 hover:border-gray-400 dark:hover:border-gray-600'
+                              }`}
+                            >
+                              {course.name}
+                              <span className="ml-1 text-xs opacity-60">{course.credits}학점</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        );
+      } else {
+        inputArea = (
+          <div className="text-sm text-gray-500 dark:text-gray-400 mt-4">
+            선택된 전공의 교육과정 데이터가 없습니다. 건너뛰기를 눌러주세요.
+          </div>
+        );
+      }
+    }
+
+    if (currentStep.type === 'certifications') {
+      const curriculum = getCurriculum(selectedPresetId);
+      const recommended = curriculum?.certifications || [];
+      const STATUS_LABELS: Record<string, string> = {
+        acquired: '취득',
+        preparing: '준비 중',
+        planned: '예정',
+      };
+      const STATUS_ORDER: Certification['status'][] = ['acquired', 'preparing', 'planned'];
+
+      const addCert = (name: string, status: Certification['status']) => {
+        const exists = state.certifications.find(c => c.name === name);
+        if (exists) {
+          updateState({
+            certifications: state.certifications.map(c =>
+              c.name === name ? { ...c, status } : c
+            )
+          });
+        } else {
+          updateState({
+            certifications: [...state.certifications, { name, status, date: '' }]
+          });
+        }
+      };
+
+      const removeCert = (name: string) => {
+        updateState({
+          certifications: state.certifications.filter(c => c.name !== name)
+        });
+      };
+
+      const getCertStatus = (name: string): Certification['status'] | null => {
+        return state.certifications.find(c => c.name === name)?.status || null;
+      };
+
+      inputArea = (
+        <div className="space-y-6 mt-4">
+          {recommended.length > 0 && (
+            <div>
+              <span className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">
+                전공 추천 자격증
+              </span>
+              <div className="space-y-2">
+                {recommended.map(certName => {
+                  const status = getCertStatus(certName);
+                  return (
+                    <div key={certName} className="flex items-center gap-2 flex-wrap">
+                      <span className={`text-sm font-medium min-w-[140px] ${status ? 'text-gray-900 dark:text-white' : 'text-gray-600 dark:text-gray-400'}`}>
+                        {certName}
+                      </span>
+                      <div className="flex gap-1">
+                        {STATUS_ORDER.map(s => (
+                          <button
+                            key={s}
+                            onClick={() => status === s ? removeCert(certName) : addCert(certName, s)}
+                            className={`px-2.5 py-1 rounded-md text-xs font-medium transition-all ${
+                              status === s
+                                ? s === 'acquired'
+                                  ? 'bg-green-600 text-white'
+                                  : s === 'preparing'
+                                    ? 'bg-blue-600 text-white'
+                                    : 'bg-gray-600 text-white'
+                                : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
+                            }`}
+                          >
+                            {STATUS_LABELS[s]}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          <div>
+            <span className="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">
+              직접 추가
+            </span>
+            <input
+              type="text"
+              placeholder="자격증명 입력 후 Enter"
+              className="w-full bg-transparent border-b-2 border-gray-300 dark:border-gray-700 px-0.5 py-2 text-lg font-medium text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-600 focus:outline-none focus:border-gray-800 dark:focus:border-white transition-colors"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  const el = e.target as HTMLInputElement;
+                  const name = el.value.trim();
+                  if (name && !state.certifications.find(c => c.name === name)) {
+                    addCert(name, 'acquired');
+                    el.value = '';
+                  }
+                }
+              }}
+            />
+          </div>
+
+          {state.certifications.length > 0 && (
+            <div className="flex flex-wrap gap-1.5">
+              {state.certifications.map(cert => (
+                <span
+                  key={cert.name}
+                  className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium ${
+                    cert.status === 'acquired'
+                      ? 'bg-green-100 dark:bg-green-950 text-green-800 dark:text-green-200'
+                      : cert.status === 'preparing'
+                        ? 'bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-blue-200'
+                        : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'
+                  }`}
+                >
+                  {cert.name}
+                  <button onClick={() => removeCert(cert.name)} className="hover:opacity-70">
+                    <X className="w-3 h-3" />
+                  </button>
+                </span>
+              ))}
+            </div>
+          )}
         </div>
       );
     }

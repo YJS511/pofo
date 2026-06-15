@@ -1,4 +1,5 @@
 import { PortfolioProvider, usePortfolio } from './hooks/usePortfolioState';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { Topbar } from './components/Topbar';
 import { Editor } from './components/Editor';
 import { Preview } from './components/Preview';
@@ -25,8 +26,10 @@ function AppContent() {
 
 export default function App() {
   return (
-    <PortfolioProvider>
-      <AppContent />
-    </PortfolioProvider>
+    <ErrorBoundary>
+      <PortfolioProvider>
+        <AppContent />
+      </PortfolioProvider>
+    </ErrorBoundary>
   );
 }
