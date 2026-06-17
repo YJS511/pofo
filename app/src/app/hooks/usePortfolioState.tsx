@@ -24,6 +24,9 @@ interface PortfolioContextType {
   setSelectedPresetId: (id: string) => void;
   showOnboarding: boolean;
   setShowOnboarding: (show: boolean) => void;
+  saveError: boolean;
+  shareError: boolean;
+  dismissShareError: () => void;
 }
 
 const PortfolioContext = createContext<PortfolioContextType | undefined>(undefined);
@@ -223,7 +226,8 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
 
   const pushHistory = useCallback((prev: PortfolioState) => {
     if (isUndoRedoRef.current) return;
-    historyRef.current = [...historyRef.current.slice(-MAX_HISTORY + 1), prev];
+    const snapshot = JSON.parse(JSON.stringify(prev));
+    historyRef.current = [...historyRef.current.slice(-MAX_HISTORY + 1), snapshot];
     futureRef.current = [];
   }, []);
 
@@ -290,6 +294,8 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
     } catch { return true; }
   });
 
+  const [saveError, setSaveError] = useState(false);
+
   const setSelectedPresetId = (id: string) => {
     setSelectedPresetIdRaw(id);
     try { localStorage.setItem('pofo.presetId', id); } catch {}
@@ -298,8 +304,9 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       localStorage.setItem('pofo.state', JSON.stringify(state));
-    } catch (e) {
-      console.error('Failed to save state:', e);
+      if (saveError) setSaveError(false);
+    } catch {
+      setSaveError(true);
     }
   }, [state]);
 
@@ -327,11 +334,22 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
     setState(prev => { pushHistory(prev); syncUndoRedo(); return { ...createEmptyState(), theme: prev.theme }; });
   };
 
+  const [shareError, setShareError] = useState(false);
+
   // 공유 링크(#p=) 파싱
   useEffect(() => {
+    const h = location.hash || '';
+    const hasShareParam = /[#&]p=/.test(h);
     parseShareHash().then((shared) => {
       if (shared) {
         replaceState(shared);
+        try {
+          history.replaceState(null, '', location.pathname + location.search);
+        } catch {
+          /* noop */
+        }
+      } else if (hasShareParam) {
+        setShareError(true);
         try {
           history.replaceState(null, '', location.pathname + location.search);
         } catch {
@@ -364,7 +382,10 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
       selectedPresetId,
       setSelectedPresetId,
       showOnboarding,
-      setShowOnboarding
+      setShowOnboarding,
+      saveError,
+      shareError,
+      dismissShareError: () => setShareError(false)
     }}>
       {children}
     </PortfolioContext.Provider>

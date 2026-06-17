@@ -16,7 +16,9 @@ const SEC_LABEL: Record<string, string> = {
   tools: '서비스 · 도구',
   experience: '경력',
   projects: '프로젝트',
-  education: '교육'
+  education: '교육',
+  certifications: '자격증',
+  github: 'GitHub'
 };
 
 function escapeHtml(s: string): string {
@@ -38,7 +40,7 @@ var SEC_LABEL = ${JSON.stringify(SEC_LABEL)};
 
   const helpers = consts + '\n' + STANDALONE_HELPERS;
   const data = JSON.stringify(state);
-  const title = `${state.profile.name || 'Portfolio'} — Portfolio`;
+  const title = `${state.profile.name || '포트폴리오'} — 포트폴리오`;
 
   const coverBgForBuild = (st: PortfolioState) => {
     if (st.theme && st.theme.solidColor) return st.theme.solidColor;
@@ -190,7 +192,7 @@ export async function exportPPTX(state: PortfolioState): Promise<void> {
 
   const s1 = baseSlide();
   s1.addShape(pptx.ShapeType.rect, { x: 0, y: 0, w: 13.333, h: 0.25, fill: { color: accent } });
-  s1.addText(`${p.emoji || ''} ${p.name || 'Your Name'}`.trim(), {
+  s1.addText(`${p.emoji || ''} ${p.name || '이름'}`.trim(), {
     x: 0.8, y: 2.4, w: 11.7, h: 1.2, fontSize: 44, bold: true, color: fg
   });
   s1.addText(p.role || '', { x: 0.8, y: 3.6, w: 11.7, h: 0.7, fontSize: 22, color: accent });
@@ -227,13 +229,13 @@ export async function exportPPTX(state: PortfolioState): Promise<void> {
     s.addText(contacts.join('\n'), { x: 0.8, y: 1.4, w: 11.7, h: 4, fontSize: 16, color: fg, lineSpacingMultiple: 1.6 });
   }
 
-  const fname = (p.name || 'portfolio').replace(/\s+/g, '-').toLowerCase();
+  const fname = (p.name || '포트폴리오').replace(/\s+/g, '-').toLowerCase();
   await pptx.writeFile({ fileName: `${fname}.pptx` });
 }
 
 export function exportPDF(state: PortfolioState) {
   const originalTitle = document.title;
-  document.title = `${state.profile.name || 'Portfolio'} — Portfolio`;
+  document.title = `${state.profile.name || '포트폴리오'} — 포트폴리오`;
   document.body.classList.add('printing');
   window.print();
   setTimeout(() => {

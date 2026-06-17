@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { usePortfolio } from '../hooks/usePortfolioState';
 import { GRADIENTS, makeGradient, TAG_LIGHT, TAG_DARK, FONT_STACKS } from '../constants';
-import { Github, ExternalLink, Wrench, Box, Briefcase, Rocket, GraduationCap, ScrollText, Lightbulb, Pin } from 'lucide-react';
+import { Github, ExternalLink, Wrench, Box, Briefcase, Rocket, GraduationCap, ScrollText, Lightbulb, Pin, PenLine } from 'lucide-react';
 import { PreviewControlBar } from './PreviewControlBar';
 
 
@@ -516,6 +516,19 @@ export function NotionPreview() {
     </div>
   );
 
+  const isEmpty = !state.profile.name?.trim() && secKeys.length === 0 && !state.about?.trim();
+
+  const emptyGuide = isEmpty ? (
+    <div className="flex flex-col items-center justify-center py-16 px-6 text-center opacity-60">
+      <PenLine className="w-10 h-10 mb-4" />
+      <p className="text-lg font-semibold mb-2">포트폴리오를 작성해 보세요</p>
+      <p className="text-sm leading-relaxed">
+        왼쪽 편집기에서 이름, 직무, 기술 스택 등을<br />
+        입력하면 여기에 실시간으로 반영됩니다.
+      </p>
+    </div>
+  ) : null;
+
   // Layout selection
   const renderLayoutContent = () => {
     if (layout === 'sidebar') {
@@ -530,6 +543,7 @@ export function NotionPreview() {
           </aside>
           <main className="np-sb-main">
             {calloutEl}
+            {emptyGuide}
             {secKeys.filter(k => k !== 'skills').map((k) => (
               <div key={k}>{getRenderedSection(k)}</div>
             ))}
@@ -547,6 +561,7 @@ export function NotionPreview() {
             {propsBlock}
           </div>
           {calloutEl}
+          {emptyGuide}
           {secKeys.map((k) => (
             <div key={k}>{getRenderedSection(k)}</div>
           ))}
@@ -561,6 +576,7 @@ export function NotionPreview() {
           {tagEl}
           {propsBlock}
           {calloutEl}
+          {emptyGuide}
           <div className="np-tabbar">
             {secKeys.map((k) => {
               const label = k.startsWith('cs:')
@@ -570,6 +586,8 @@ export function NotionPreview() {
                 : k === 'experience' ? '경력'
                 : k === 'projects' ? '프로젝트'
                 : k === 'education' ? '교육'
+                : k === 'certifications' ? '자격증'
+                : k === 'github' ? 'GitHub'
                 : '';
               const active = activeTab === k;
               return (
@@ -578,7 +596,7 @@ export function NotionPreview() {
                   className={`np-tab ${active ? 'on' : ''}`}
                   onClick={() => setActiveTab(k)}
                   data-btn-tab-id={k}
-                  {...{ onclick: `showTab('${k}')` } as any}
+                  {...({ onclick: `showTab('${k}')` } as React.HTMLAttributes<HTMLButtonElement>)}
                 >
                   {label}
                 </button>
@@ -610,6 +628,7 @@ export function NotionPreview() {
         {tagEl}
         {propsBlock}
         {calloutEl}
+        {emptyGuide}
         {secKeys.map((k) => (
           <div key={k}>{getRenderedSection(k)}</div>
         ))}
@@ -620,7 +639,7 @@ export function NotionPreview() {
   return (
     <div
       className={`flex-1 flex flex-col min-h-0 relative ${dark ? 'dark' : ''} ${isNarrow ? 'narrow-layout' : ''}`}
-      style={{ fontFamily: FONT_STACKS[font], ['--pofo-accent' as any]: accent }}
+      style={{ fontFamily: FONT_STACKS[font], ['--pofo-accent' as string]: accent }}
     >
       <PreviewControlBar />
 
@@ -649,7 +668,7 @@ export function NotionPreview() {
                   <div
                     data-pofo-page
                     className={`${pageClass} mobile-view`}
-                    style={{ ['--accent' as any]: accent }}
+                    style={{ ['--accent' as string]: accent }}
                   >
                     {layout === 'minimal' ? null : coverEl}
                     {renderLayoutContent()}
@@ -665,7 +684,7 @@ export function NotionPreview() {
           <div
             data-pofo-page
             className={pageClass}
-            style={{ ['--accent' as any]: accent }}
+            style={{ ['--accent' as string]: accent }}
           >
             {layout === 'minimal' ? null : coverEl}
             {renderLayoutContent()}

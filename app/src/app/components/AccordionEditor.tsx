@@ -137,16 +137,17 @@ export function AccordionEditor() {
   const deptToolCats = getDeptData(selectedPresetId).toolCats;
   const [openSteps, setOpenSteps] = useState<Set<number>>(new Set([0]));
 
+  const t = (s: string) => s?.trim().length > 0;
   const isStepComplete = (stepId: string): boolean => {
     switch (stepId) {
       case 'profile':
-        return !!(state.profile.name && state.profile.role);
+        return t(state.profile.name) && t(state.profile.role);
       case 'contact':
-        return !!(state.profile.email || state.profile.location);
+        return t(state.profile.email) || t(state.profile.location);
       case 'about':
-        return !!state.about;
+        return t(state.about);
       case 'skills':
-        return !!state.skills;
+        return t(state.skills);
       case 'tools':
         return state.tools.length > 0;
       case 'experience':

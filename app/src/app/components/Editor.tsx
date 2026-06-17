@@ -3,12 +3,13 @@ import { AccordionEditor } from './AccordionEditor';
 import { TemplatePanel } from './TemplatePanel';
 import { StylePanel } from './StylePanel';
 
-export function Editor() {
+export function Editor({ mobile }: { mobile?: boolean }) {
   const [activeTab, setActiveTab] = useState<'portfolio' | 'template' | 'style'>('portfolio');
 
   return (
-    <div className="w-[440px] flex flex-col bg-white dark:bg-gray-950 border-r border-gray-200 dark:border-gray-800">
-      {/* Tabs */}
+    <div className={`flex flex-col bg-white dark:bg-gray-950 border-r border-gray-200 dark:border-gray-800 ${
+      mobile ? 'w-full h-full' : 'w-[440px]'
+    }`}>
       <div className="flex gap-1 p-2 border-b border-gray-200 dark:border-gray-800 flex-shrink-0">
         <button
           onClick={() => setActiveTab('portfolio')}
@@ -42,7 +43,6 @@ export function Editor() {
         </button>
       </div>
 
-      {/* Content */}
       {activeTab === 'portfolio' && <AccordionEditor />}
       {activeTab === 'template' && <TemplatePanel />}
       {activeTab === 'style' && <StylePanel />}

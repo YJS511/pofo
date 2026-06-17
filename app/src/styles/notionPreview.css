@@ -204,14 +204,6 @@
 
 /* ===== MOBILE PREVIEW SIMULATOR OVERRIDE ===== */
 .mobile-view {
-  --text: #37352f !important;
-  --text-light: rgba(55, 53, 47, 0.65) !important;
-  --text-faint: rgba(55, 53, 47, 0.42) !important;
-  --divider: rgba(55, 53, 47, 0.09) !important;
-  --callout-bg: #fbf3db !important;
-  --input-bg: rgba(55, 53, 47, 0.055) !important;
-  --active-bg: rgba(74, 74, 74, 0.12) !important;
-  background: #ffffff !important;
   color: var(--text) !important;
 }
 .mobile-view .np-body { padding-left: 20px !important; padding-right: 20px !important; }

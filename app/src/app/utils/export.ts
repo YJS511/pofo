@@ -35,6 +35,7 @@ export function toMarkdown(state: PortfolioState): string {
     md += `## 🚀 프로젝트\n\n`;
     state.projects.forEach(proj => {
       md += `### ${proj.name || '프로젝트'}${proj.period ? ` (${proj.period})` : ''}\n`;
+      if (proj.image) md += `![${proj.name || '프로젝트'}](${proj.image})\n\n`;
       if (proj.role) md += `**담당 역할:** ${proj.role}\n\n`;
       md += `${proj.desc || '_프로젝트 설명_'}\n\n`;
       if (proj.result) md += `**성과:** ${proj.result}\n\n`;
