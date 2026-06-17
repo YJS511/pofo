@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Notebook, X } from 'lucide-react';
+import { X } from 'lucide-react';
 import { usePortfolio } from '../hooks/usePortfolioState';
 import { PORTFOLIO_PRESETS } from '../constants';
 import type { PortfolioPreset } from '../portfolioPresets';
@@ -71,7 +71,9 @@ export function DepartmentPicker() {
       <div className="flex items-center gap-4 px-7 py-5">
         <div className="flex items-center gap-2.5 font-bold text-[15px] text-gray-900 dark:text-white">
           <span className="w-6 h-6 rounded-md bg-gray-900 dark:bg-white text-white dark:text-gray-900 grid place-items-center">
-            <Notebook className="w-3.5 h-3.5" />
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path d="M6 4h7a6 6 0 0 1 0 12H9V22H6V4Z" />
+            </svg>
           </span>
           POFO
         </div>
