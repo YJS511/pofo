@@ -27,6 +27,8 @@ interface PortfolioContextType {
   saveError: boolean;
   shareError: boolean;
   dismissShareError: () => void;
+  showManual: boolean;
+  setShowManual: (show: boolean) => void;
 }
 
 const PortfolioContext = createContext<PortfolioContextType | undefined>(undefined);
@@ -278,6 +280,7 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
 
   const [currentStep, setCurrentStep] = useState(0);
   const [showGuide, setShowGuide] = useState(false);
+  const [showManual, setShowManual] = useState(false);
   const [viewMode, setViewMode] = useState<'desktop' | 'mobile'>('desktop');
   const [selectedPresetId, setSelectedPresetIdRaw] = useState(() => {
     try { return localStorage.getItem('pofo.presetId') || ''; } catch { return ''; }
@@ -385,7 +388,9 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
       setShowOnboarding,
       saveError,
       shareError,
-      dismissShareError: () => setShareError(false)
+      dismissShareError: () => setShareError(false),
+      showManual,
+      setShowManual
     }}>
       {children}
     </PortfolioContext.Provider>

@@ -6,10 +6,11 @@ import { Editor } from './components/Editor';
 import { Preview } from './components/Preview';
 import { GuideOverlay } from './components/GuideOverlay';
 import { DepartmentPicker } from './components/DepartmentPicker';
+import { ManualOverlay } from './components/ManualOverlay';
 import { PenLine, Eye, AlertTriangle, X } from 'lucide-react';
 
 function AppContent() {
-  const { showGuide, setShowGuide, showOnboarding, saveError, shareError, dismissShareError } = usePortfolio();
+  const { showGuide, setShowGuide, showOnboarding, saveError, shareError, dismissShareError, showManual, setShowManual } = usePortfolio();
   const [mobileView, setMobileView] = useState<'editor' | 'preview'>('editor');
 
   return (
@@ -72,6 +73,7 @@ function AppContent() {
       )}
       {showOnboarding && <DepartmentPicker />}
       {showGuide && !showOnboarding && <GuideOverlay onClose={() => setShowGuide(false)} />}
+      {showManual && <ManualOverlay onClose={() => setShowManual(false)} />}
     </>
   );
 }

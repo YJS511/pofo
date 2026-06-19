@@ -1,8 +1,8 @@
-import { Monitor, Smartphone, RotateCcw, FilePlus2, Undo2, Redo2 } from 'lucide-react';
+import { Monitor, Smartphone, RotateCcw, Undo2, Redo2 } from 'lucide-react';
 import { usePortfolio } from '../hooks/usePortfolioState';
 
 export function PreviewControlBar() {
-  const { viewMode, setViewMode, resetState, resetContentOnly, setShowOnboarding, setSelectedPresetId, undo, redo, canUndo, canRedo } = usePortfolio();
+  const { viewMode, setViewMode, resetContentOnly, undo, redo, canUndo, canRedo } = usePortfolio();
 
   return (
     <div className="absolute bottom-4 left-4 right-4 z-50 flex items-center justify-between pointer-events-none">
@@ -34,20 +34,6 @@ export function PreviewControlBar() {
           title="내용 초기화 (디자인 유지)"
         >
           <RotateCcw className="w-4 h-4" />
-        </button>
-        <button
-          onClick={() => {
-            if (confirm('새로운 포트폴리오를 만들까요?\n현재 작성 중인 내용은 모두 사라집니다.')) {
-              resetState();
-              setSelectedPresetId('');
-              try { localStorage.removeItem('pofo.presetId'); } catch {}
-              setShowOnboarding(true);
-            }
-          }}
-          className="flex items-center justify-center w-8 h-8 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800/60 transition-all"
-          title="전공 선택부터 새로 시작"
-        >
-          <FilePlus2 className="w-4 h-4" />
         </button>
       </div>
 

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { X, ChevronRight, ChevronLeft, ArrowRight } from 'lucide-react';
+import { X, ChevronRight, ChevronLeft, ArrowRight, BookOpen } from 'lucide-react';
 import { usePortfolio } from '../hooks/usePortfolioState';
 import { GUIDE_STEPS, GuideStep, EXP_FIELDS, PROJ_FIELDS, EDU_FIELDS, LINK_FIELDS } from '../constants';
 import { getDeptData } from '../departmentData';
@@ -20,7 +20,7 @@ const TEXT_PATHS = [
 ];
 
 export function GuideOverlay({ onClose }: GuideOverlayProps) {
-  const { state, updateProfile, updateState, selectedPresetId } = usePortfolio();
+  const { state, updateProfile, updateState, selectedPresetId, setShowManual } = usePortfolio();
   const deptToolCats = getDeptData(selectedPresetId).toolCats;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [completedCourses, setCompletedCourses] = useState<Set<string>>(new Set());
@@ -733,6 +733,14 @@ export function GuideOverlay({ onClose }: GuideOverlayProps) {
         <span className="text-xs text-gray-500 dark:text-gray-400 tabular-nums min-w-[54px] text-right">
           {Math.min(currentIndex + 1, GUIDE_STEPS.length)} / {GUIDE_STEPS.length}
         </span>
+        <button
+          onClick={() => setShowManual(true)}
+          className="h-8 px-3 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex items-center gap-1.5"
+          title="사용 설명서"
+        >
+          <BookOpen className="w-4 h-4" />
+          설명서
+        </button>
         <button
           onClick={handleClose}
           className="w-9 h-9 rounded-lg flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"

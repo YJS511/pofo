@@ -1,11 +1,11 @@
 import { useMemo, useState } from 'react';
-import { X } from 'lucide-react';
+import { X, BookOpen } from 'lucide-react';
 import { usePortfolio } from '../hooks/usePortfolioState';
 import { PORTFOLIO_PRESETS } from '../constants';
 import type { PortfolioPreset } from '../portfolioPresets';
 
 export function DepartmentPicker() {
-  const { replaceState, setSelectedPresetId, setShowOnboarding, setShowGuide, state } = usePortfolio();
+  const { replaceState, setSelectedPresetId, setShowOnboarding, setShowGuide, setShowManual, state } = usePortfolio();
 
   const groups = useMemo(() => {
     const order: string[] = [];
@@ -78,6 +78,14 @@ export function DepartmentPicker() {
           POFO
         </div>
         <div className="flex-1" />
+        <button
+          onClick={() => setShowManual(true)}
+          className="h-8 px-3 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex items-center gap-1.5 mr-1"
+          title="사용 설명서"
+        >
+          <BookOpen className="w-4 h-4" />
+          설명서
+        </button>
         <button
           onClick={handleSkip}
           className="w-9 h-9 rounded-lg flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
