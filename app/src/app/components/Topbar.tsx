@@ -1,26 +1,16 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState } from 'react';
 import { usePortfolio } from '../hooks/usePortfolioState';
 import { ExportMenu } from './ExportMenu';
-import { Sparkles, Share2, Presentation, BookOpen, GraduationCap, MoreHorizontal } from 'lucide-react';
+import { Sparkles, Share2, Presentation, BookOpen, GraduationCap } from 'lucide-react';
 import { openSlides } from '../utils/slides';
 
 export function Topbar() {
   const { state, setShowGuide, setShowManual, resetState, setSelectedPresetId, setShowOnboarding } = usePortfolio();
   const [showExportMenu, setShowExportMenu] = useState(false);
-  const [showMore, setShowMore] = useState(false);
-  const moreRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!showMore) return;
-    const handler = (e: MouseEvent) => {
-      if (moreRef.current && !moreRef.current.contains(e.target as Node)) setShowMore(false);
-    };
-    const raf = requestAnimationFrame(() => document.addEventListener('mousedown', handler));
-    return () => { cancelAnimationFrame(raf); document.removeEventListener('mousedown', handler); };
-  }, [showMore]);
+  const topbarButtonClass = 'h-10 min-w-10 px-2 sm:px-3 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-[color,background-color,transform] duration-150 active:scale-[0.96] flex items-center justify-center gap-1.5 flex-shrink-0';
 
   const startFromDepartment = () => {
-    setShowMore(false);
+    setShowExportMenu(false);
     if (!confirm('학과 선택부터 새 포트폴리오를 만들까요?\n현재 작성 중인 내용은 모두 사라집니다.')) return;
 
     resetState();
@@ -36,8 +26,8 @@ export function Topbar() {
 
   return (
     <>
-      <div className="h-13 flex items-center gap-3 px-4 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950">
-        <div className="flex items-center gap-2 font-bold text-base">
+      <div className="h-13 flex items-center gap-2 sm:gap-3 px-2 sm:px-4 border-b border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-950">
+        <div className="flex items-center gap-2 font-bold text-base flex-shrink-0">
           <div className="w-7 h-7 rounded-lg grid place-items-center bg-gray-900 dark:bg-white text-white dark:text-gray-900">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
               <path d="M6 4h7a6 6 0 0 1 0 12H9V22H6V4Z" />
@@ -48,60 +38,60 @@ export function Topbar() {
 
         <div className="flex-1" />
 
-        {/* 더보기 메뉴 */}
-        <div className="relative" ref={moreRef}>
+        <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
           <button
-            onClick={() => setShowMore(!showMore)}
-            className="h-8 w-8 rounded-lg flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-            title="더보기"
+            type="button"
+            onClick={startFromDepartment}
+            className={topbarButtonClass}
+            title="학과 선택부터 새로 만들기"
+            aria-label="학과 선택부터 새로 만들기"
           >
-            <MoreHorizontal className="w-5 h-5" />
+            <GraduationCap className="w-4 h-4" />
+            <span className="hidden sm:inline whitespace-nowrap">새로 만들기</span>
           </button>
 
-          {showMore && (
-            <div className="absolute right-0 top-full mt-1.5 w-48 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-xl shadow-lg py-1 z-50">
-              <button
-                onClick={startFromDepartment}
-                className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-              >
-                <GraduationCap className="w-4 h-4 text-gray-400 dark:text-gray-500" />
-                학과 선택부터 새로 만들기
-              </button>
-              <button
-                onClick={() => { setShowMore(false); setShowGuide(true); }}
-                className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-              >
-                <Sparkles className="w-4 h-4 text-gray-400 dark:text-gray-500" />
-                자동 입력
-              </button>
-              <div className="mx-3 my-1 border-t border-gray-100 dark:border-gray-800" />
-              <button
-                onClick={() => { setShowMore(false); setShowManual(true); }}
-                className="w-full flex items-center gap-2.5 px-3.5 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-              >
-                <BookOpen className="w-4 h-4 text-gray-400 dark:text-gray-500" />
-                사용 설명서
-              </button>
-            </div>
-          )}
+          <button
+            type="button"
+            onClick={() => { setShowExportMenu(false); setShowGuide(true); }}
+            className={topbarButtonClass}
+            title="자동 입력"
+            aria-label="자동 입력"
+          >
+            <Sparkles className="w-4 h-4" />
+            <span className="hidden sm:inline whitespace-nowrap">자동 입력</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => { setShowExportMenu(false); setShowManual(true); }}
+            className={topbarButtonClass}
+            title="설명서"
+            aria-label="설명서"
+          >
+            <BookOpen className="w-4 h-4" />
+            <span className="hidden sm:inline whitespace-nowrap">설명서</span>
+          </button>
         </div>
 
         <button
+          type="button"
           onClick={() => openSlides(state)}
-          className="h-8 px-3 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors flex items-center gap-1.5"
+          className={topbarButtonClass}
           title="발표 모드"
+          aria-label="발표 모드"
         >
           <Presentation className="w-4 h-4" />
-          발표
+          <span className="hidden sm:inline whitespace-nowrap">발표</span>
         </button>
 
         <button
+          type="button"
           onClick={() => setShowExportMenu(!showExportMenu)}
           aria-label="공유 메뉴 열기"
-          className="h-8 px-3 rounded-lg text-sm font-medium bg-gray-800 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-750 dark:hover:bg-gray-100 transition-colors flex items-center gap-1.5"
+          className="h-10 min-w-10 px-2 sm:px-3 rounded-lg text-sm font-medium bg-gray-800 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-750 dark:hover:bg-gray-100 transition-[color,background-color,transform] duration-150 active:scale-[0.96] flex items-center justify-center gap-1.5 flex-shrink-0"
         >
           <Share2 className="w-4 h-4" />
-          공유
+          <span className="hidden sm:inline whitespace-nowrap">공유</span>
         </button>
       </div>
 
