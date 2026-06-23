@@ -41,6 +41,17 @@ export function Topbar() {
         <div className="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
           <button
             type="button"
+            onClick={() => { setShowExportMenu(false); setShowManual(true); }}
+            className={topbarButtonClass}
+            title="설명서"
+            aria-label="설명서"
+          >
+            <BookOpen className="w-4 h-4" />
+            <span className="hidden sm:inline whitespace-nowrap">설명서</span>
+          </button>
+
+          <button
+            type="button"
             onClick={startFromDepartment}
             className={topbarButtonClass}
             title="학과 선택부터 새로 만들기"
@@ -59,17 +70,6 @@ export function Topbar() {
           >
             <Sparkles className="w-4 h-4" />
             <span className="hidden sm:inline whitespace-nowrap">자동 입력</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => { setShowExportMenu(false); setShowManual(true); }}
-            className={topbarButtonClass}
-            title="설명서"
-            aria-label="설명서"
-          >
-            <BookOpen className="w-4 h-4" />
-            <span className="hidden sm:inline whitespace-nowrap">설명서</span>
           </button>
         </div>
 
