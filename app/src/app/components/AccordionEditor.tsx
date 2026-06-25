@@ -12,13 +12,19 @@ import { Experience, Project, Education, Link, CustomSection } from '../types';
 import type { DeptToolCat } from '../departmentData';
 
 function ProjectImageUpload({ image, onChange }: { image: string; onChange: (v: string) => void }) {
-  const handleFile = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (file.size > 2 * 1024 * 1024) { alert('2MB 이하의 이미지만 업로드할 수 있습니다.'); return; }
-    const reader = new FileReader();
-    reader.onload = (ev) => onChange(ev.target?.result as string);
-    reader.readAsDataURL(file);
+    if (file.size > 5 * 1024 * 1024) { alert('5MB 이하의 이미지만 업로드할 수 있습니다.'); return; }
+    try {
+      const { compressImage } = await import('../utils/image');
+      const dataUrl = await compressImage(file, 800);
+      onChange(dataUrl);
+    } catch {
+      const reader = new FileReader();
+      reader.onload = (ev) => onChange(ev.target?.result as string);
+      reader.readAsDataURL(file);
+    }
   };
 
   if (image) {

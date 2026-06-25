@@ -252,3 +252,19 @@
   body.printing .np-callout { background: #f8f8f8 !important; border-color: #e0e0e0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   body.printing .np-callout .ct { color: #333 !important; }
 }
+
+@media print {
+  body { margin: 0 !important; }
+  .h-13, [class*="Topbar"], [class*="PreviewControlBar"], [class*="border-r"],
+  [class*="md\\:hidden"] > div:last-child { display: none !important; }
+  [data-pofo-page] {
+    box-shadow: none !important;
+    padding-top: 0 !important;
+    min-height: auto !important;
+  }
+  .np-cover { break-after: avoid; }
+  .np-section { break-inside: avoid; margin-bottom: 12pt; }
+  .np-item { break-inside: avoid; }
+  .np-tag { border: 1px solid #d0d0d0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  a { text-decoration: none; }
+}

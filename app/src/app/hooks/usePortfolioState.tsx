@@ -25,6 +25,7 @@ interface PortfolioContextType {
   showOnboarding: boolean;
   setShowOnboarding: (show: boolean) => void;
   saveError: boolean;
+  saveStatus: 'idle' | 'saving' | 'saved';
   shareError: boolean;
   dismissShareError: () => void;
   showManual: boolean;
@@ -228,7 +229,7 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
 
   const pushHistory = useCallback((prev: PortfolioState) => {
     if (isUndoRedoRef.current) return;
-    const snapshot = JSON.parse(JSON.stringify(prev));
+    const snapshot = structuredClone(prev);
     historyRef.current = [...historyRef.current.slice(-MAX_HISTORY + 1), snapshot];
     futureRef.current = [];
   }, []);
@@ -298,6 +299,10 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
   });
 
   const [saveError, setSaveError] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
+  const saveTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  const savedTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  const firstSaveRef = useRef(true);
 
   const setSelectedPresetId = (id: string) => {
     setSelectedPresetIdRaw(id);
@@ -305,12 +310,26 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    try {
-      localStorage.setItem('pofo.state', JSON.stringify(state));
-      if (saveError) setSaveError(false);
-    } catch {
-      setSaveError(true);
+    // 초기 마운트 시에는 "저장됨" 표시를 띄우지 않음
+    if (firstSaveRef.current) {
+      firstSaveRef.current = false;
+      return;
     }
+    clearTimeout(saveTimerRef.current);
+    setSaveStatus('saving');
+    saveTimerRef.current = setTimeout(() => {
+      try {
+        localStorage.setItem('pofo.state', JSON.stringify(state));
+        if (saveError) setSaveError(false);
+        setSaveStatus('saved');
+        clearTimeout(savedTimerRef.current);
+        savedTimerRef.current = setTimeout(() => setSaveStatus('idle'), 1800);
+      } catch {
+        setSaveError(true);
+        setSaveStatus('idle');
+      }
+    }, 400);
+    return () => clearTimeout(saveTimerRef.current);
   }, [state]);
 
   const updateState = (updates: Partial<PortfolioState>) => {
@@ -387,6 +406,7 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
       showOnboarding,
       setShowOnboarding,
       saveError,
+      saveStatus,
       shareError,
       dismissShareError: () => setShareError(false),
       showManual,

@@ -27,16 +27,19 @@ export function IconControl() {
     }
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const dataUrl = event.target?.result as string;
+    try {
+      const { compressImage } = await import('../utils/image');
+      const dataUrl = await compressImage(file, 256);
       updateProfile({ iconImg: dataUrl, emoji: '' });
-    };
-    reader.readAsDataURL(file);
+    } catch {
+      const reader = new FileReader();
+      reader.onload = (event) => updateProfile({ iconImg: event.target?.result as string, emoji: '' });
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleEmojiSelect = (emoji: string) => {

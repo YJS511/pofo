@@ -126,6 +126,9 @@ export function GitHubImport() {
     if (!ghUser) return;
     if (ghUser.bio && !state.about) updateState({ about: ghUser.bio });
     if (ghUser.name && !state.profile.name) updateProfile({ name: ghUser.name });
+    if (ghUser.avatar_url && !state.profile.iconImg) {
+      updateProfile({ iconImg: ghUser.avatar_url, iconShape: 'circle' });
+    }
   };
 
   const handleImportAll = () => {

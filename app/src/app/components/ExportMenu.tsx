@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import {
-  Copy, Download, Upload, X, Check, ExternalLink, Link2, QrCode
+  Copy, Download, Upload, X, Check, ExternalLink
 } from 'lucide-react';
 import { usePortfolio } from '../hooks/usePortfolioState';
 import {
@@ -12,8 +12,6 @@ import {
   exportPPTX,
   downloadZip,
   toMarkdown,
-  buildShareURL,
-  qrSrc
 } from '../utils/export';
 import { PortfolioState } from '../types';
  
@@ -39,10 +37,6 @@ export function ExportMenu({ isOpen, onClose }: ExportMenuProps) {
   const [msg, setMsg] = useState('');
   const [busy, setBusy] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [shareUrl, setShareUrl] = useState('');
-  const [linkCopied, setLinkCopied] = useState(false);
-  const [showQr, setShowQr] = useState(false);
-
   if (!isOpen) return null;
  
   const fname = (state.profile.name || 'portfolio').replace(/\s+/g, '-').toLowerCase();
@@ -129,96 +123,21 @@ export function ExportMenu({ isOpen, onClose }: ExportMenuProps) {
 
         <div className="p-4 space-y-4">
 
-          {/* 링크 공유 섹션 */}
-          <div className="space-y-2.5">
-            <div className="text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider px-1">
-              링크 공유
-            </div>
-
-            {!shareUrl ? (
-              <button
-                onClick={async () => {
-                  setBusy(true);
-                  try {
-                    const url = await buildShareURL(state);
-                    setShareUrl(url);
-                  } catch { flash('공유 링크 생성에 실패했어요'); }
-                  setBusy(false);
-                }}
-                disabled={busy}
-                className="w-full h-9 px-3 rounded-lg text-xs font-semibold bg-gray-800 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-750 dark:hover:bg-gray-100 disabled:opacity-60 flex items-center justify-center gap-1.5"
-              >
-                <Link2 className="w-3.5 h-3.5" />
-                공유 링크 만들기
-              </button>
-            ) : (
-              <div className="space-y-2">
-                <div className="flex gap-1.5">
-                  <input
-                    readOnly
-                    value={shareUrl}
-                    className="flex-1 h-9 px-2.5 rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-gray-900 text-[11px] text-gray-700 dark:text-gray-300 truncate"
-                    onClick={(e) => (e.target as HTMLInputElement).select()}
-                  />
-                  <button
-                    onClick={async () => {
-                      await copyToClipboard(shareUrl);
-                      setLinkCopied(true);
-                      setTimeout(() => setLinkCopied(false), 2000);
-                    }}
-                    className="flex-shrink-0 h-9 w-9 rounded-lg border border-gray-300 dark:border-gray-700 flex items-center justify-center text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800"
-                  >
-                    {linkCopied ? <Check className="w-3.5 h-3.5 text-green-600" /> : <Copy className="w-3.5 h-3.5" />}
-                  </button>
-                  <button
-                    onClick={() => setShowQr(!showQr)}
-                    className={`flex-shrink-0 h-9 w-9 rounded-lg border flex items-center justify-center transition-colors ${
-                      showQr
-                        ? 'border-gray-800 dark:border-white bg-gray-800 dark:bg-white text-white dark:text-gray-900'
-                        : 'border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
-                    }`}
-                  >
-                    <QrCode className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-                {showQr && (
-                  <div className="flex flex-col items-center gap-2 p-3 bg-white dark:bg-gray-950 rounded-xl border border-gray-200 dark:border-gray-800">
-                    <img src={qrSrc(shareUrl)} alt="QR Code" className="w-40 h-40 rounded-lg" />
-                    <p className="text-[10px] text-gray-400 dark:text-gray-500">이 QR 코드를 스캔하면 포트폴리오를 바로 볼 수 있어요</p>
-                    <a
-                      href={qrSrc(shareUrl)}
-                      download="portfolio-qr.png"
-                      className="text-[11px] font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white underline"
-                    >
-                      QR 코드 다운로드
-                    </a>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-
           {/* 웹 사이트 배포 섹션 */}
           <div className="space-y-2.5">
             <div className="text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider px-1">
               웹 사이트 배포
             </div>
 
-            <div className="p-3 bg-gray-50 dark:bg-gray-800/40 rounded-xl border border-gray-100 dark:border-gray-800/60 space-y-2.5">
-              <p className="text-[11px] text-gray-500 dark:text-gray-400 leading-relaxed">
-                아래 <b>파일 내보내기</b>에서 <b>배포용 ZIP</b>을 다운로드한 뒤, Netlify Drop에 마우스로 끌어다 넣으면 즉시 사이트가 전 세계에 무료 배포됩니다.
-              </p>
-              
-              <a
-                href="https://app.netlify.com/drop"
-                target="_blank"
-                rel="noreferrer"
-                className="w-full h-9 px-3 rounded-lg text-xs font-semibold bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-850 dark:hover:bg-gray-100 transition-colors flex items-center justify-center gap-1.5"
-              >
-                Netlify Drop 바로가기
-                <ExternalLink className="w-3.5 h-3.5" />
-              </a>
-            </div>
+            <a
+              href="https://app.netlify.com/drop"
+              target="_blank"
+              rel="noreferrer"
+              className="w-full h-9 px-3 rounded-lg text-xs font-semibold bg-gray-800 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-750 dark:hover:bg-gray-100 transition-colors flex items-center justify-center gap-1.5"
+            >
+              <ExternalLink className="w-3.5 h-3.5" />
+              Netlify Drop 바로가기
+            </a>
           </div>
 
           {/* 파일 내보내기 섹션 */}

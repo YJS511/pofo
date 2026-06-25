@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { usePortfolio } from '../hooks/usePortfolioState';
 import { ExportMenu } from './ExportMenu';
-import { Sparkles, Share2, Presentation, BookOpen, GraduationCap } from 'lucide-react';
+import { Sparkles, Share2, Presentation, BookOpen, GraduationCap, Check, Cloud } from 'lucide-react';
 import { openSlides } from '../utils/slides';
 
 export function Topbar() {
-  const { state, setShowGuide, setShowManual, resetState, setSelectedPresetId, setShowOnboarding } = usePortfolio();
+  const { state, setShowGuide, setShowManual, resetState, setSelectedPresetId, setShowOnboarding, saveStatus } = usePortfolio();
   const [showExportMenu, setShowExportMenu] = useState(false);
   const topbarButtonClass = 'h-10 min-w-10 px-2 sm:px-3 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-[color,background-color,transform] duration-150 active:scale-[0.96] flex items-center justify-center gap-1.5 flex-shrink-0';
 
@@ -35,6 +35,29 @@ export function Topbar() {
           </div>
           <span className="text-gray-900 dark:text-white">POFO</span>
         </div>
+
+        {saveStatus !== 'idle' && (
+          <div
+            className={`hidden sm:flex items-center gap-1 text-xs font-medium flex-shrink-0 transition-opacity ${
+              saveStatus === 'saved'
+                ? 'text-green-600 dark:text-green-400'
+                : 'text-gray-400 dark:text-gray-500'
+            }`}
+            aria-live="polite"
+          >
+            {saveStatus === 'saved' ? (
+              <>
+                <Check className="w-3.5 h-3.5" />
+                저장됨
+              </>
+            ) : (
+              <>
+                <Cloud className="w-3.5 h-3.5 animate-pulse" />
+                저장 중…
+              </>
+            )}
+          </div>
+        )}
 
         <div className="flex-1" />
 

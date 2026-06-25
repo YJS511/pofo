@@ -46,16 +46,19 @@ export function CoverEditor({ state, updateTheme }: CoverEditorProps) {
     }
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      const dataUrl = event.target?.result as string;
+    try {
+      const { compressImage } = await import('../utils/image');
+      const dataUrl = await compressImage(file, 1280);
       updateTheme({ coverImg: dataUrl, cover: '', solidColor: '' });
-    };
-    reader.readAsDataURL(file);
+    } catch {
+      const reader = new FileReader();
+      reader.onload = (event) => updateTheme({ coverImg: event.target?.result as string, cover: '', solidColor: '' });
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleImageRemove = () => {
