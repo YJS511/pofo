@@ -1,8 +1,10 @@
 import { Monitor, Smartphone, RotateCcw, Undo2, Redo2 } from 'lucide-react';
 import { usePortfolio } from '../hooks/usePortfolioState';
+import { useDialog } from './Dialog';
 
 export function PreviewControlBar() {
   const { viewMode, setViewMode, resetContentOnly, undo, redo, canUndo, canRedo } = usePortfolio();
+  const { confirm } = useDialog();
 
   return (
     <div className="absolute bottom-4 left-4 right-4 z-50 flex items-center justify-between pointer-events-none">
@@ -25,8 +27,8 @@ export function PreviewControlBar() {
         </button>
         <div className="w-px h-5 bg-gray-200 dark:bg-gray-700" />
         <button
-          onClick={() => {
-            if (confirm('현재 내용을 모두 지우고 빈 상태로 초기화할까요?\n디자인(테마·커버·폰트 등)은 유지됩니다.')) {
+          onClick={async () => {
+            if (await confirm({ title: '내용 초기화', message: '현재 내용을 모두 지우고 빈 상태로 초기화할까요?\n디자인(테마·커버·폰트 등)은 유지됩니다.', danger: true, confirmText: '초기화' })) {
               resetContentOnly();
             }
           }}

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import {
-  Copy, Download, Upload, X, Check, ExternalLink
+  Copy, Download, X, Check, ExternalLink
 } from 'lucide-react';
 import { usePortfolio } from '../hooks/usePortfolioState';
 import {
@@ -13,8 +13,7 @@ import {
   downloadZip,
   toMarkdown,
 } from '../utils/export';
-import { PortfolioState } from '../types';
- 
+
 interface ExportMenuProps {
   isOpen: boolean;
   onClose: () => void;
@@ -32,14 +31,16 @@ const FORMATS: { value: Fmt; label: string; hint: string; copy: boolean }[] = [
 ];
  
 export function ExportMenu({ isOpen, onClose }: ExportMenuProps) {
-  const { state, replaceState } = usePortfolio();
+  const { state } = usePortfolio();
   const [fmt, setFmt] = useState<Fmt>('html');
   const [msg, setMsg] = useState('');
   const [busy, setBusy] = useState(false);
   const [copied, setCopied] = useState(false);
   if (!isOpen) return null;
  
-  const fname = (state.profile.name || 'portfolio').replace(/\s+/g, '-').toLowerCase();
+  const namePart = (state.profile.name || 'portfolio').trim();
+  const companyPart = state.target?.company?.trim();
+  const fname = [namePart, companyPart].filter(Boolean).join('-').replace(/\s+/g, '-').toLowerCase();
   const current = FORMATS.find((f) => f.value === fmt)!;
  
   const flash = (m: string) => {
@@ -85,23 +86,6 @@ export function ExportMenu({ isOpen, onClose }: ExportMenuProps) {
     } finally {
       setBusy(false);
     }
-  };
- 
-  const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      try {
-        const next = JSON.parse(ev.target?.result as string) as PortfolioState;
-        replaceState(next);
-        flash('✅ JSON을 불러왔어요');
-      } catch {
-        flash('JSON을 읽지 못했어요');
-      }
-    };
-    reader.readAsText(file);
-    e.target.value = '';
   };
  
 
@@ -178,21 +162,6 @@ export function ExportMenu({ isOpen, onClose }: ExportMenuProps) {
                 다운로드
               </button>
             </div>
-          </div>
-
-
-
-          {/* 데이터 관리 */}
-          <div className="space-y-2.5 pt-3 border-t border-gray-200 dark:border-gray-800">
-            <div className="text-[11px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider px-1">
-              데이터 관리
-            </div>
-
-            <label className="w-full h-9 rounded-lg border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-850 cursor-pointer flex items-center justify-center gap-1.5 text-xs font-semibold text-gray-700 dark:text-gray-300">
-              <Upload className="w-3.5 h-3.5" />
-              JSON 불러오기
-              <input type="file" accept="application/json,.json" onChange={handleImport} className="hidden" />
-            </label>
           </div>
         </div>
 

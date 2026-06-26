@@ -1,28 +1,14 @@
 import { useState } from 'react';
 import { usePortfolio } from '../hooks/usePortfolioState';
 import { ExportMenu } from './ExportMenu';
-import { Sparkles, Share2, Presentation, BookOpen, GraduationCap, Check, Cloud } from 'lucide-react';
+import { Sparkles, Share2, Presentation, BookOpen, Check, Cloud } from 'lucide-react';
 import { openSlides } from '../utils/slides';
+import { PortfolioSwitcher } from './PortfolioSwitcher';
 
 export function Topbar() {
-  const { state, setShowGuide, setShowManual, resetState, setSelectedPresetId, setShowOnboarding, saveStatus } = usePortfolio();
+  const { state, setShowGuide, setShowManual, saveStatus } = usePortfolio();
   const [showExportMenu, setShowExportMenu] = useState(false);
   const topbarButtonClass = 'h-10 min-w-10 px-2 sm:px-3 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-[color,background-color,transform] duration-150 active:scale-[0.96] flex items-center justify-center gap-1.5 flex-shrink-0';
-
-  const startFromDepartment = () => {
-    setShowExportMenu(false);
-    if (!confirm('학과 선택부터 새 포트폴리오를 만들까요?\n현재 작성 중인 내용은 모두 사라집니다.')) return;
-
-    resetState();
-    setSelectedPresetId('');
-    try {
-      localStorage.removeItem('pofo.state');
-      localStorage.removeItem('pofo.presetId');
-    } catch {
-      /* noop */
-    }
-    setShowOnboarding(true);
-  };
 
   return (
     <>
@@ -33,8 +19,11 @@ export function Topbar() {
               <path d="M6 4h7a6 6 0 0 1 0 12H9V22H6V4Z" />
             </svg>
           </div>
-          <span className="text-gray-900 dark:text-white">POFO</span>
+          <span className="text-gray-900 dark:text-white hidden sm:inline">POFO</span>
         </div>
+
+        <div className="w-px h-5 bg-gray-200 dark:bg-gray-800 mx-0.5 sm:mx-1 flex-shrink-0" />
+        <PortfolioSwitcher />
 
         {saveStatus !== 'idle' && (
           <div
@@ -71,17 +60,6 @@ export function Topbar() {
           >
             <BookOpen className="w-4 h-4" />
             <span className="hidden sm:inline whitespace-nowrap">설명서</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={startFromDepartment}
-            className={topbarButtonClass}
-            title="학과 선택부터 새로 만들기"
-            aria-label="학과 선택부터 새로 만들기"
-          >
-            <GraduationCap className="w-4 h-4" />
-            <span className="hidden sm:inline whitespace-nowrap">새로 만들기</span>
           </button>
 
           <button

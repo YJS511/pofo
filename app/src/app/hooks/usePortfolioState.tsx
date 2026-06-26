@@ -1,12 +1,17 @@
 import { createContext, useContext, useState, useEffect, useRef, useCallback, ReactNode } from 'react';
 import { PortfolioState } from '../types';
 import { parseShareHash } from '../utils/export';
+import {
+  DocMeta, genId, loadIndex, saveIndex, getActiveId, setActiveId,
+  loadDocRaw, saveDoc, removeDoc, defaultDocName, makeMeta,
+} from '../utils/docStore';
 
 interface PortfolioContextType {
   state: PortfolioState;
   updateState: (updates: Partial<PortfolioState>) => void;
   updateProfile: (updates: Partial<PortfolioState['profile']>) => void;
   updateTheme: (updates: Partial<PortfolioState['theme']>) => void;
+  updateTarget: (updates: Partial<PortfolioState['target']>) => void;
   replaceState: (next: PortfolioState) => void;
   resetState: () => void;
   resetContentOnly: () => void;
@@ -30,6 +35,16 @@ interface PortfolioContextType {
   dismissShareError: () => void;
   showManual: boolean;
   setShowManual: (show: boolean) => void;
+  // 다중 포트폴리오
+  docs: DocMeta[];
+  activeId: string;
+  createDoc: (opts?: { onboard?: boolean }) => void;
+  switchDoc: (id: string) => void;
+  renameDoc: (id: string, name: string) => void;
+  duplicateDoc: (id: string) => void;
+  deleteDoc: (id: string) => void;
+  duplicateForCompany: (company: string) => void;
+  importDoc: (raw: any) => void;
 }
 
 const PortfolioContext = createContext<PortfolioContextType | undefined>(undefined);
@@ -48,6 +63,7 @@ const createEmptyState = (): PortfolioState => ({
     iconShape: 'rounded',
     links: []
   },
+  target: { company: '', position: '', motivation: '' },
   about: '',
   skills: '',
   tools: [],
@@ -70,6 +86,7 @@ const createEmptyState = (): PortfolioState => ({
     noCover: false
   },
   sectionOrder: ['skills', 'tools', 'experience', 'projects', 'education', 'certifications'],
+  hidden: [],
   github: { user: '', repos: [] }
 });
 
@@ -107,6 +124,13 @@ export function validateAndNormalizeState(input: any): PortfolioState {
       }
     });
   }
+
+  // 2-1. target(지원 회사) 검증
+  const target = {
+    company: String(input.target?.company || ''),
+    position: String(input.target?.position || ''),
+    motivation: String(input.target?.motivation || ''),
+  };
 
   // 3. 단순 문자열 필드 보정
   const about = typeof input.about === 'string' ? input.about : String(input.about || '');
@@ -183,6 +207,11 @@ export function validateAndNormalizeState(input: any): PortfolioState {
     }
   }
 
+  // 5-1. hidden(비활성 섹션 목록 — 미리보기·슬라이드 공통) 검증
+  const hidden = Array.isArray(input.hidden)
+    ? input.hidden.map(String)
+    : (Array.isArray(input.slideHide) ? input.slideHide.map(String) : []);
+
   // 6. github 검증
   const github = {
     user: String(input.github?.user || ''),
@@ -197,6 +226,7 @@ export function validateAndNormalizeState(input: any): PortfolioState {
 
   return {
     profile,
+    target,
     about,
     skills,
     tools,
@@ -207,20 +237,53 @@ export function validateAndNormalizeState(input: any): PortfolioState {
     custom,
     theme,
     sectionOrder,
+    hidden,
     github,
   };
 }
 
-export function PortfolioProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<PortfolioState>(() => {
-    if (typeof window === 'undefined') return createEmptyState();
+// 다중 문서 부트스트랩 (최초 1회) — 기존 단일 pofo.state 자동 마이그레이션
+function bootstrapDocs(): { index: DocMeta[]; activeId: string; state: PortfolioState } {
+  if (typeof window === 'undefined') {
+    return { index: [], activeId: '', state: createEmptyState() };
+  }
+  let index = loadIndex();
+  let activeId = getActiveId();
+
+  if (index.length === 0) {
+    // 기존 단일 포트폴리오를 첫 문서로 이전
+    let st = createEmptyState();
     try {
-      const saved = localStorage.getItem('pofo.state');
-      return saved ? validateAndNormalizeState(JSON.parse(saved)) : createEmptyState();
-    } catch {
-      return createEmptyState();
-    }
-  });
+      const old = localStorage.getItem('pofo.state');
+      if (old) st = validateAndNormalizeState(JSON.parse(old));
+    } catch { /* keep empty */ }
+    const id = genId();
+    saveDoc(id, st);
+    index = [makeMeta(id, defaultDocName(st), st)];
+    saveIndex(index);
+    activeId = id;
+    setActiveId(id);
+    try { localStorage.removeItem('pofo.state'); } catch { /* noop */ }
+    return { index, activeId, state: st };
+  }
+
+  if (!activeId || !index.find((d) => d.id === activeId)) {
+    activeId = index[0].id;
+    setActiveId(activeId);
+  }
+  const raw = loadDocRaw(activeId);
+  const state = raw ? validateAndNormalizeState(raw) : createEmptyState();
+  return { index, activeId, state };
+}
+
+export function PortfolioProvider({ children }: { children: ReactNode }) {
+  const bootRef = useRef<ReturnType<typeof bootstrapDocs> | null>(null);
+  if (bootRef.current === null) bootRef.current = bootstrapDocs();
+  const boot = bootRef.current;
+
+  const [docs, setDocs] = useState<DocMeta[]>(boot.index);
+  const [activeId, setActiveIdState] = useState<string>(boot.activeId);
+  const [state, setState] = useState<PortfolioState>(boot.state);
 
   const MAX_HISTORY = 50;
   const historyRef = useRef<PortfolioState[]>([]);
@@ -287,15 +350,8 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
     try { return localStorage.getItem('pofo.presetId') || ''; } catch { return ''; }
   });
   const [showOnboarding, setShowOnboarding] = useState(() => {
-    try {
-      if (localStorage.getItem('pofo.presetId')) return false;
-      const saved = localStorage.getItem('pofo.state');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        if (parsed?.profile?.name) return false;
-      }
-      return true;
-    } catch { return true; }
+    try { if (localStorage.getItem('pofo.presetId')) return false; } catch { /* noop */ }
+    return !boot.state.profile?.name?.trim();
   });
 
   const [saveError, setSaveError] = useState(false);
@@ -319,7 +375,17 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
     setSaveStatus('saving');
     saveTimerRef.current = setTimeout(() => {
       try {
-        localStorage.setItem('pofo.state', JSON.stringify(state));
+        saveDoc(activeId, state);
+        // 목록 메타(회사·수정시각) 갱신
+        setDocs((prev) => {
+          const next = prev.map((d) =>
+            d.id === activeId
+              ? { ...d, company: state.target?.company?.trim() || '', updatedAt: Date.now() }
+              : d
+          );
+          saveIndex(next);
+          return next;
+        });
         if (saveError) setSaveError(false);
         setSaveStatus('saved');
         clearTimeout(savedTimerRef.current);
@@ -330,7 +396,7 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
       }
     }, 400);
     return () => clearTimeout(saveTimerRef.current);
-  }, [state]);
+  }, [state, activeId]);
 
   const updateState = (updates: Partial<PortfolioState>) => {
     setState(prev => { pushHistory(prev); syncUndoRedo(); return { ...prev, ...updates }; });
@@ -344,6 +410,10 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
     setState(prev => { pushHistory(prev); syncUndoRedo(); return { ...prev, theme: { ...prev.theme, ...updates } }; });
   };
 
+  const updateTarget = (updates: Partial<PortfolioState['target']>) => {
+    setState(prev => { pushHistory(prev); syncUndoRedo(); return { ...prev, target: { ...prev.target, ...updates } }; });
+  };
+
   const replaceState = (next: PortfolioState) => {
     setState(prev => { pushHistory(prev); syncUndoRedo(); return validateAndNormalizeState(next); });
   };
@@ -354,6 +424,106 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
 
   const resetContentOnly = () => {
     setState(prev => { pushHistory(prev); syncUndoRedo(); return { ...createEmptyState(), theme: prev.theme }; });
+  };
+
+  // ── 다중 포트폴리오 ─────────────────────────────
+  const resetHistory = () => {
+    historyRef.current = [];
+    futureRef.current = [];
+    setCanUndo(false);
+    setCanRedo(false);
+  };
+
+  const persistActive = () => {
+    try { saveDoc(activeId, state); } catch { /* quota */ }
+  };
+
+  const openDoc = (id: string, st: PortfolioState) => {
+    setActiveIdState(id);
+    setActiveId(id);
+    isUndoRedoRef.current = true;
+    setState(st);
+    isUndoRedoRef.current = false;
+    resetHistory();
+  };
+
+  const addDoc = (st: PortfolioState, name: string): string => {
+    persistActive();
+    const id = genId();
+    saveDoc(id, st);
+    setDocs(prev => {
+      const next = [...prev, makeMeta(id, name, st)];
+      saveIndex(next);
+      return next;
+    });
+    openDoc(id, st);
+    return id;
+  };
+
+  const switchDoc = (id: string) => {
+    if (id === activeId) return;
+    persistActive();
+    const raw = loadDocRaw(id);
+    openDoc(id, raw ? validateAndNormalizeState(raw) : createEmptyState());
+  };
+
+  const createDoc = (opts?: { onboard?: boolean }) => {
+    addDoc(createEmptyState(), '내 포트폴리오');
+    setSelectedPresetId('');
+    if (opts?.onboard) setShowOnboarding(true);
+  };
+
+  const renameDoc = (id: string, name: string) => {
+    setDocs(prev => {
+      const next = prev.map(d => d.id === id ? { ...d, name: name.trim() || d.name } : d);
+      saveIndex(next);
+      return next;
+    });
+  };
+
+  const duplicateDoc = (id: string) => {
+    const rawSrc = id === activeId ? state : loadDocRaw(id);
+    const src = id === activeId ? state : (rawSrc ? validateAndNormalizeState(rawSrc) : createEmptyState());
+    const meta = docs.find(d => d.id === id);
+    addDoc(structuredClone(src), `${meta?.name || defaultDocName(src)} 복사본`);
+  };
+
+  const duplicateForCompany = (company: string) => {
+    const c = company.trim();
+    if (!c) return;
+    const copy = structuredClone(state);
+    copy.target = { ...copy.target, company: c };
+    addDoc(copy, `${c} 지원용`);
+  };
+
+  // JSON 파일에서 새 포트폴리오로 추가
+  const importDoc = (raw: any) => {
+    const st = validateAndNormalizeState(raw);
+    addDoc(st, defaultDocName(st));
+  };
+
+  const deleteDoc = (id: string) => {
+    removeDoc(id);
+    const remaining = docs.filter(d => d.id !== id);
+    if (remaining.length === 0) {
+      // 모두 삭제하면 빈 문서로 초기화하고 학과 선택부터 다시 시작
+      const st = createEmptyState();
+      const newId = genId();
+      saveDoc(newId, st);
+      const next = [makeMeta(newId, '내 포트폴리오', st)];
+      setDocs(next);
+      saveIndex(next);
+      openDoc(newId, st);
+      try { localStorage.removeItem('pofo.presetId'); } catch { /* noop */ }
+      setSelectedPresetId('');
+      setShowOnboarding(true);
+      return;
+    }
+    setDocs(() => { saveIndex(remaining); return remaining; });
+    if (id === activeId) {
+      const raw = loadDocRaw(remaining[0].id);
+      openDoc(remaining[0].id, raw ? validateAndNormalizeState(raw) : createEmptyState());
+    }
   };
 
   const [shareError, setShareError] = useState(false);
@@ -388,6 +558,7 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
       updateState,
       updateProfile,
       updateTheme,
+      updateTarget,
       replaceState,
       resetState,
       resetContentOnly,
@@ -410,7 +581,16 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
       shareError,
       dismissShareError: () => setShareError(false),
       showManual,
-      setShowManual
+      setShowManual,
+      docs,
+      activeId,
+      createDoc,
+      switchDoc,
+      renameDoc,
+      duplicateDoc,
+      deleteDoc,
+      duplicateForCompany,
+      importDoc,
     }}>
       {children}
     </PortfolioContext.Provider>

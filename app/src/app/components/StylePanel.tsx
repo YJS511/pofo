@@ -165,15 +165,24 @@ export function StylePanel() {
         </div>
       </div>
 
-      {/* Section Order */}
+      {/* Section Order + 활성/비활성 */}
       <div>
-        <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-2">
           <List className="w-4 h-4 text-gray-600 dark:text-gray-400" />
-          <h3 className="text-sm font-bold text-gray-900 dark:text-white">섹션 순서</h3>
+          <h3 className="text-sm font-bold text-gray-900 dark:text-white">섹션 순서 · 표시</h3>
         </div>
+        <p className="text-xs text-gray-500 dark:text-gray-400 mb-3 leading-relaxed">
+          눈 아이콘으로 섹션을 켜고 끌 수 있어요. 끈 섹션은 미리보기와 발표 슬라이드 모두에서 빠집니다.
+        </p>
         <SectionOrderEditor
           state={state}
           onChange={(sectionOrder) => updateState({ sectionOrder })}
+          onToggleHidden={(key) => {
+            const set = new Set(state.hidden || []);
+            if (set.has(key)) set.delete(key);
+            else set.add(key);
+            updateState({ hidden: Array.from(set) });
+          }}
         />
       </div>
     </div>

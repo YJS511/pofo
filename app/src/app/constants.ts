@@ -170,6 +170,7 @@ export const TOOL_CATS = [
 ];
 
 export const STEPS = [
+  { id: 'target', icon: 'Target', nav: '지원 회사', title: '지원 회사 맞춤' },
   { id: 'profile', icon: 'User', nav: '기본 정보', title: '기본 정보' },
   { id: 'contact', icon: 'Mail', nav: '연락처 · 링크', title: '연락처 및 링크' },
   { id: 'about', icon: 'Lightbulb', nav: '소개', title: '자기소개' },
@@ -303,6 +304,9 @@ export const PAGE_CSS = `
 .np-callout{display:flex;gap:13px;background:var(--callout-bg);border-radius:9px;padding:16px 17px;margin:6px 0 30px;line-height:1.6;font-size:15px}
 .np-callout .ce{font-size:19px;line-height:1.4}
 .np-callout .ct{color:var(--text);white-space:pre-wrap}
+.np-target-badge{display:inline-flex;align-items:center;gap:5px;background:var(--accent);color:#fff;font-size:12px;font-weight:600;padding:4px 11px;border-radius:999px;margin-bottom:12px;line-height:1.3;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.np-callout-target{background:color-mix(in srgb,var(--accent) 12%,transparent);margin-bottom:12px}
+.np-callout-target .ct b{color:var(--accent);font-weight:700}
 .np-section{margin-bottom:30px}
 .np-h{display:flex;align-items:center;gap:9px;font-size:21px;font-weight:700;letter-spacing:-.01em;margin-bottom:14px;padding-bottom:0}
 .np-h .he{font-size:20px}
@@ -565,8 +569,10 @@ function renderPageHTML(st, opts){
 
   var propsBlock = props.length ? '<div class="np-props">'+props.join('')+'</div>' : '';
 
-  var callout='';
-  if(st.about.trim()) callout='<div class="np-callout"><span class="ce">💡</span><span class="ct">'+esc(st.about)+'</span></div>';
+  var tgt=st.target||{};
+  var motivCallout = (tgt.motivation&&tgt.motivation.trim()) ? '<div class="np-callout np-callout-target"><span class="ce">🎯</span><span class="ct"><b>지원 동기</b> · '+esc(tgt.motivation)+'</span></div>' : '';
+  var aboutCallout = st.about.trim() ? '<div class="np-callout"><span class="ce">💡</span><span class="ct">'+esc(st.about)+'</span></div>' : '';
+  var callout = motivCallout + aboutCallout;
 
   var tags=st.skills.split(',').map(t=>t.trim()).filter(Boolean);
   var skillsInner;
@@ -628,7 +634,8 @@ function renderPageHTML(st, opts){
   var iconEl='';
   if(iconInner) iconEl = '<div class="np-icon">'+iconInner+'</div>';
   var noIconCls = iconInner?'':' no-icon';
-  var titleEl = '<h1 class="'+titleCls+'">'+esc(titleTxt)+'</h1>';
+  var targetBadge = (tgt.company&&tgt.company.trim()) ? '<div class="np-target-badge">🎯 '+esc(tgt.company)+' 지원용'+(tgt.position&&tgt.position.trim()?' · '+esc(tgt.position):'')+'</div>' : '';
+  var titleEl = targetBadge+'<h1 class="'+titleCls+'">'+esc(titleTxt)+'</h1>';
   var tagEl = p.tagline?'<div class="np-tagline">'+esc(p.tagline)+'</div>':'';
 
   var customMap={};
@@ -705,18 +712,21 @@ function buildSlidesHTML(st){
   var band='<div class="slide-cover band" style="background:'+cover+'"></div>';
   var listInner=(emoji,title,items)=>'<div class="sl-kicker">'+title+'</div><div class="sl-h"><span>'+emoji+'</span>'+title+'</div><div class="sl-list">'+items+'</div>';
   var slides=[];
+  var hidden=st.hidden||[]; var show=function(k){return hidden.indexOf(k)<0;};
 
   slides.push('<div style="position:relative;display:flex;flex-direction:column;height:100%"><div class="sl-emoji">'+slEmoji+'</div><div class="sl-name">'+esc(p.name||'Your Name')+'</div><div class="sl-role">'+esc(p.role||'Your Role')+'</div>'+(p.tagline?'<div class="sl-tag">“'+esc(p.tagline)+'”</div>':'<div style="margin-top:auto"></div>')+'</div>');
 
-  slides.push('<div class="sl-kicker">소개</div>'+(st.about?'<div class="sl-callout"><span class="e">💡</span><span>'+esc(st.about)+'</span></div>':'')+'<div class="sl-h"><span>🛠️</span>기술 스택</div><div class="sl-tags">'+(tags.length?tags.map(t=>chip(t,true)).join(''):'<span style="color:var(--text-faint)">—</span>')+'</div>');
+  var aboutPart=st.about?'<div class="sl-callout"><span class="e">💡</span><span>'+esc(st.about)+'</span></div>':'';
+  var skillsPart=show('skills')?'<div class="sl-h"><span>🛠️</span>기술 스택</div><div class="sl-tags">'+(tags.length?tags.map(t=>chip(t,true)).join(''):'<span style="color:var(--text-faint)">—</span>')+'</div>':'';
+  if(aboutPart||skillsPart) slides.push('<div class="sl-kicker">'+(aboutPart?'소개':'기술 스택')+'</div>'+aboutPart+skillsPart);
 
   var selT=st.tools||[];
-  if(selT.length) slides.push('<div class="sl-kicker">서비스 · 도구</div><div class="sl-h"><span>🧰</span>서비스 · 도구</div><div class="sl-tags">'+selT.map(t=>chip(t,true)).join('')+'</div>');
+  if(show('tools')&&selT.length) slides.push('<div class="sl-kicker">서비스 · 도구</div><div class="sl-h"><span>🧰</span>서비스 · 도구</div><div class="sl-tags">'+selT.map(t=>chip(t,true)).join('')+'</div>');
 
   var exItems = st.experience.length? st.experience.slice(0,4).map(x=>'<div><div class="sl-li-top"><div><span class="sl-li-title">'+esc(x.role||'')+'</span> <span class="sl-li-sub">· '+esc(x.company||'')+(x.level?' · '+esc(x.level):'')+'</span></div><span class="sl-li-period">'+esc(x.period||'')+'</span></div>'+(x.desc?'<div class="sl-li-desc">'+esc(x.desc)+'</div>':'')+'</div>').join('') : '<div style="color:var(--text-faint)">경력 정보 없음</div>';
-  slides.push(listInner('💼','경력',exItems));
+  if(show('experience')) slides.push(listInner('💼','경력',exItems));
 
-  if(st.projects.length){
+  if(show('projects')&&st.projects.length){
     st.projects.forEach((x,pi)=>{
       var t=(x.tech||'').split(',').map(s=>s.trim()).filter(Boolean);
       var star=x.stars?'<span class="sl-li-period" style="font-size:19px;align-self:center;white-space:nowrap">★ '+x.stars+'</span>':'';
@@ -726,11 +736,12 @@ function buildSlidesHTML(st){
       if(demo)urls.push('🌐 '+esc(String(demo).replace(/^https?:\\/\\//,'')));
       slides.push('<div class="sl-kicker">프로젝트 '+ (pi+1) +' / '+st.projects.length+'</div><div class="sl-h" style="justify-content:space-between;align-items:flex-start;gap:20px"><span><span style="margin-right:14px">🚀</span>'+esc(x.name||'프로젝트')+'</span>'+star+'</div>'+(meta.length?'<div class="sl-li-sub" style="margin:-18px 0 22px;font-size:21px">'+meta.join('  ·  ')+'</div>':'')+(x.desc?'<div class="sl-li-desc" style="font-size:22px;line-height:1.65;margin-bottom:18px">'+esc(x.desc)+'</div>':'')+(x.result?'<div class="sl-li-desc" style="font-size:20px;margin-bottom:18px">🏆 '+esc(x.result)+'</div>':'')+(t.length?'<div class="sl-tags">'+t.map(s=>chip(s,true)).join('')+'</div>':'')+(urls.length?'<div class="sl-li-desc" style="color:var(--text-faint);margin-top:20px;font-size:17px">'+urls.join('     ')+'</div>':''));
     });
-  } else {
+  } else if(show('projects')) {
     slides.push(listInner('🚀','프로젝트','<div style="color:var(--text-faint)">프로젝트 정보 없음</div>'));
   }
 
   (st.custom||[]).forEach(cs=>{
+    if(!show('cs:'+cs.id)) return;
     var items=(cs.items||[]).filter(it=>it.title);
     if(!cs.title || !items.length) return;
     var ci=items.slice(0,4).map(it=>'<div><div class="sl-li-top"><div><span class="sl-li-title">'+esc(it.title)+'</span>'+(it.sub?' <span class="sl-li-sub">· '+esc(it.sub)+'</span>':'')+'</div>'+(it.period?'<span class="sl-li-period">'+esc(it.period)+'</span>':'')+'</div>'+(it.desc?'<div class="sl-li-desc">'+esc(it.desc)+'</div>':'')+'</div>').join('');
@@ -743,7 +754,9 @@ function buildSlidesHTML(st){
   if(p.github)contacts.push('<div>🐙 '+esc(p.github)+'</div>');
   if(p.website)contacts.push('<div>🌐 '+esc(p.website)+'</div>');
   if(p.location)contacts.push('<div>📍 '+esc(p.location)+'</div>');
-  slides.push('<div class="sl-kicker">교육 · 연락처</div><div class="sl-h"><span>🎓</span>교육</div><div class="sl-list">'+eduItems+'</div>'+(contacts.length?'<div class="sl-h" style="font-size:30px;margin-top:34px"><span>📬</span>연락처</div><div class="sl-contact">'+contacts.join('')+'</div>':''));
+  if(show('education')) slides.push('<div class="sl-kicker">교육 · 연락처</div><div class="sl-h"><span>🎓</span>교육</div><div class="sl-list">'+eduItems+'</div>'+(contacts.length?'<div class="sl-h" style="font-size:30px;margin-top:34px"><span>📬</span>연락처</div><div class="sl-contact">'+contacts.join('')+'</div>':''));
+
+  if(!slides.length) slides.push('<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--text-faint)"><div style="font-size:40px;margin-bottom:16px">🗂️</div><div style="font-size:22px">표시할 슬라이드가 없습니다</div></div>');
 
   var total=slides.length, pad=n=>String(n).padStart(2,'0');
   return slides.map((inner,i)=>'<div class="slide" data-i="'+i+'">'+band+inner+'<div class="sl-pageno">'+pad(i+1)+' / '+pad(total)+'</div></div>').join('');

@@ -52,6 +52,8 @@ export function DepartmentPicker() {
     if ((!merged.experience || merged.experience.length === 0) && preset.state.experience) merged.experience = preset.state.experience;
     if ((!merged.projects || merged.projects.length === 0) && preset.state.projects) merged.projects = preset.state.projects;
     if ((!merged.education || merged.education.length === 0) && preset.state.education) merged.education = preset.state.education;
+    if ((!merged.certifications || merged.certifications.length === 0) && preset.state.certifications) merged.certifications = preset.state.certifications;
+    if ((!merged.custom || merged.custom.length === 0) && preset.state.custom) merged.custom = preset.state.custom;
     if (preset.state.theme) merged.theme = { ...merged.theme, ...preset.state.theme };
 
     replaceState(merged);

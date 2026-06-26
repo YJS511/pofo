@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react';
 import { usePortfolio } from '../hooks/usePortfolioState';
 import { GRADIENTS, makeGradient, TAG_LIGHT, TAG_DARK, FONT_STACKS } from '../constants';
-import { Github, ExternalLink, Wrench, Box, Briefcase, Rocket, GraduationCap, ScrollText, Lightbulb, Pin, PenLine } from 'lucide-react';
+import { Github, ExternalLink, Wrench, Box, Briefcase, Rocket, GraduationCap, ScrollText, Lightbulb, Pin, PenLine, Target } from 'lucide-react';
 import { PreviewControlBar } from './PreviewControlBar';
 
 
@@ -411,14 +411,15 @@ export function NotionPreview() {
     secMap['cs:' + cs.id] = renderCustomSec(cs);
   });
 
-  // Build ordered list of sections
+  // Build ordered list of sections (비활성 섹션 제외)
+  const hiddenSet = state.hidden || [];
   const secKeys: string[] = [];
   state.sectionOrder.forEach((k) => {
-    if (secMap[k]) secKeys.push(k);
+    if (secMap[k] && !hiddenSet.includes(k)) secKeys.push(k);
   });
   state.custom?.forEach((cs) => {
     const key = 'cs:' + cs.id;
-    if (renderCustomSec(cs)) {
+    if (renderCustomSec(cs) && !hiddenSet.includes(key)) {
       secKeys.push(key);
     }
   });
@@ -475,10 +476,20 @@ export function NotionPreview() {
 
   const iconEl = iconInner ? <div className="np-icon">{iconInner}</div> : null;
 
+  const targetBadgeEl = state.target?.company ? (
+    <div className="np-target-badge">
+      <Target className="w-3.5 h-3.5" />
+      <span>{state.target.company} 지원용{state.target.position ? ` · ${state.target.position}` : ''}</span>
+    </div>
+  ) : null;
+
   const titleEl = (
-    <h1 className={`np-title ${state.profile.name ? '' : 'faint'}`}>
-      {state.profile.name || '제목 없음'}
-    </h1>
+    <>
+      {targetBadgeEl}
+      <h1 className={`np-title ${state.profile.name ? '' : 'faint'}`}>
+        {state.profile.name || '제목 없음'}
+      </h1>
+    </>
   );
 
   const tagEl = state.profile.tagline ? (
@@ -509,14 +520,28 @@ export function NotionPreview() {
     </div>
   ) : null;
 
-  const calloutEl = state.about && (
+  const motivationEl = state.target?.motivation ? (
+    <div className="np-callout np-callout-target">
+      <span className="ce"><Target className="w-5 h-5" /></span>
+      <span className="ct"><b>지원 동기</b> · {state.target.motivation}</span>
+    </div>
+  ) : null;
+
+  const aboutCalloutEl = state.about ? (
     <div className="np-callout">
       <span className="ce"><Lightbulb className="w-5 h-5" /></span>
       <span className="ct">{state.about}</span>
     </div>
-  );
+  ) : null;
 
-  const isEmpty = !state.profile.name?.trim() && secKeys.length === 0 && !state.about?.trim();
+  const calloutEl = (motivationEl || aboutCalloutEl) ? (
+    <>
+      {motivationEl}
+      {aboutCalloutEl}
+    </>
+  ) : null;
+
+  const isEmpty = !state.profile.name?.trim() && secKeys.length === 0 && !state.about?.trim() && !state.target?.company?.trim();
 
   const emptyGuide = isEmpty ? (
     <div className="flex flex-col items-center justify-center py-16 px-6 text-center opacity-60">

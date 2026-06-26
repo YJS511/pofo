@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import { ChevronUp, ChevronDown, Trash2, Plus } from 'lucide-react';
+import { useDialog } from './Dialog';
 
 interface Field {
   key: string;
@@ -69,6 +70,7 @@ export function RepeaterForm<T extends Record<string, any>>({
   emptyItem,
   renderExtra
 }: RepeaterFormProps<T>) {
+  const { confirm } = useDialog();
   const [expandedIndex, setExpandedIndex] = useState<number | null>(
     items.length > 0 ? 0 : null
   );
@@ -78,8 +80,8 @@ export function RepeaterForm<T extends Record<string, any>>({
     setExpandedIndex(items.length);
   };
 
-  const removeItem = (index: number) => {
-    if (confirm(`이 ${label}을(를) 삭제할까요?`)) {
+  const removeItem = async (index: number) => {
+    if (await confirm({ title: `${label} 삭제`, message: '이 항목을 삭제할까요?', danger: true, confirmText: '삭제' })) {
       onChange(items.filter((_, i) => i !== index));
       setExpandedIndex(null);
     }

@@ -79,8 +79,15 @@ export interface Certification {
   date: string;
 }
 
+export interface TargetCompany {
+  company: string;
+  position: string;
+  motivation: string;
+}
+
 export interface PortfolioState {
   profile: Profile;
+  target: TargetCompany;
   about: string;
   skills: string;
   tools: string[];
@@ -91,6 +98,7 @@ export interface PortfolioState {
   custom: CustomSection[];
   theme: Theme;
   sectionOrder: string[];
+  hidden: string[];
   github: {
     user: string;
     repos: any[];

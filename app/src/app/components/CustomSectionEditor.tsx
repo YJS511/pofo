@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { CustomSection, CustomItem } from '../types';
 import { Trash2, ChevronDown, Plus } from 'lucide-react';
+import { useDialog } from './Dialog';
 
 interface CustomSectionEditorProps {
   sections: CustomSection[];
@@ -17,6 +18,7 @@ const QUICK_PRESETS = [
 ];
 
 export function CustomSectionEditor({ sections, onChange }: CustomSectionEditorProps) {
+  const { confirm } = useDialog();
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set());
   const [showEmojiPicker, setShowEmojiPicker] = useState<string | null>(null);
 
@@ -44,9 +46,9 @@ export function CustomSectionEditor({ sections, onChange }: CustomSectionEditorP
     setExpandedSections(new Set([...expandedSections, newSection.id]));
   };
 
-  const removeSection = (id: string) => {
+  const removeSection = async (id: string) => {
     const section = sections.find((s) => s.id === id);
-    if (section && !confirm(`"${section.title || '섹션'}"을(를) 삭제할까요?`)) {
+    if (section && !(await confirm({ title: `'${section.title || '섹션'}' 삭제`, message: '이 섹션과 모든 항목이 삭제됩니다.', danger: true, confirmText: '삭제' }))) {
       return;
     }
     onChange(sections.filter((s) => s.id !== id));

@@ -1,9 +1,10 @@
 import { useState, useRef } from 'react';
-import { ChevronDown, Check, X, ImagePlus, User, Mail, Lightbulb, Wrench, Box, Briefcase, Rocket, GraduationCap, Sparkles } from 'lucide-react';
+import { ChevronDown, Check, X, ImagePlus, User, Mail, Lightbulb, Wrench, Box, Briefcase, Rocket, GraduationCap, Sparkles, Target } from 'lucide-react';
 import { usePortfolio } from '../hooks/usePortfolioState';
 import { STEPS, TOOL_CATS, EXP_FIELDS, PROJ_FIELDS, EDU_FIELDS, LINK_FIELDS } from '../constants';
 import { getDeptData } from '../departmentData';
 import { RepeaterForm } from './RepeaterForm';
+import { useDialog } from './Dialog';
 import { IconControl } from './IconControl';
 import { CustomSectionEditor } from './CustomSectionEditor';
 import { SkillSuggestions } from './SkillSuggestions';
@@ -12,10 +13,11 @@ import { Experience, Project, Education, Link, CustomSection } from '../types';
 import type { DeptToolCat } from '../departmentData';
 
 function ProjectImageUpload({ image, onChange }: { image: string; onChange: (v: string) => void }) {
+  const { notify } = useDialog();
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (file.size > 5 * 1024 * 1024) { alert('5MB 이하의 이미지만 업로드할 수 있습니다.'); return; }
+    if (file.size > 5 * 1024 * 1024) { notify('5MB 이하의 이미지만 업로드할 수 있습니다.', 'error'); return; }
     try {
       const { compressImage } = await import('../utils/image');
       const dataUrl = await compressImage(file, 800);
@@ -51,6 +53,7 @@ function ProjectImageUpload({ image, onChange }: { image: string; onChange: (v: 
 }
 
 const stepIconMap: Record<string, React.ReactNode> = {
+  Target: <Target className="w-4 h-4 inline" />,
   User: <User className="w-4 h-4 inline" />,
   Mail: <Mail className="w-4 h-4 inline" />,
   Lightbulb: <Lightbulb className="w-4 h-4 inline" />,
@@ -139,13 +142,15 @@ function ToolEditor({ tools, onChange, cats }: { tools: string[]; onChange: (t: 
 }
 
 export function AccordionEditor() {
-  const { state, updateProfile, updateState, selectedPresetId } = usePortfolio();
+  const { state, updateProfile, updateState, updateTarget, selectedPresetId } = usePortfolio();
   const deptToolCats = getDeptData(selectedPresetId).toolCats;
   const [openSteps, setOpenSteps] = useState<Set<number>>(new Set([0]));
 
   const t = (s: string) => s?.trim().length > 0;
   const isStepComplete = (stepId: string): boolean => {
     switch (stepId) {
+      case 'target':
+        return t(state.target?.company);
       case 'profile':
         return t(state.profile.name) && t(state.profile.role);
       case 'contact':
@@ -169,8 +174,10 @@ export function AccordionEditor() {
     }
   };
 
-  const completedCount = STEPS.filter(s => isStepComplete(s.id)).length;
-  const totalCount = STEPS.length;
+  // 지원 회사는 선택 항목이라 완성도 계산에서 제외
+  const scored = STEPS.filter(s => s.id !== 'target');
+  const completedCount = scored.filter(s => isStepComplete(s.id)).length;
+  const totalCount = scored.length;
   const pct = Math.round((completedCount / totalCount) * 100);
 
   const toggleStep = (index: number) => {
@@ -185,6 +192,50 @@ export function AccordionEditor() {
 
   const renderStepContent = (stepId: string, stepIndex: number) => {
     switch (stepId) {
+      case 'target':
+        return (
+          <div className="space-y-4">
+            <p className="text-[12.5px] text-gray-500 dark:text-gray-400 leading-relaxed -mt-1">
+              지원할 회사·직무를 입력하면 미리보기 상단에 맞춤 배지와 지원 동기가 표시되고, 내보내기 파일명에도 회사명이 반영됩니다. <span className="text-gray-400 dark:text-gray-500">(선택 사항)</span>
+            </p>
+            <div>
+              <input
+                type="text"
+                value={state.target?.company || ''}
+                onChange={(e) => updateTarget({ company: e.target.value })}
+                placeholder="지원 회사명 (예: 네이버)"
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600"
+              />
+            </div>
+            <div>
+              <input
+                type="text"
+                value={state.target?.position || ''}
+                onChange={(e) => updateTarget({ position: e.target.value })}
+                placeholder="지원 직무 (예: 프론트엔드 개발)"
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600"
+              />
+            </div>
+            <div>
+              <textarea
+                value={state.target?.motivation || ''}
+                onChange={(e) => updateTarget({ motivation: e.target.value })}
+                placeholder="지원 동기 한 줄 (예: 사용자 중심 서비스를 함께 만들고 싶습니다)"
+                rows={2}
+                className="w-full px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600 resize-none"
+              />
+            </div>
+            {state.target?.company && (
+              <button
+                onClick={() => updateTarget({ company: '', position: '', motivation: '' })}
+                className="text-xs text-gray-500 dark:text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors"
+              >
+                지원 회사 정보 지우기
+              </button>
+            )}
+          </div>
+        );
+
       case 'profile':
         return (
           <div className="space-y-4">

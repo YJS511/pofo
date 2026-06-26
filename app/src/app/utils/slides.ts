@@ -66,8 +66,10 @@ export function buildSlidesHTML(st: PortfolioState): string {
     <div class="sl-list">${items}</div>`;
   
   const slides: string[] = [];
+  const hidden = st.hidden || [];
+  const show = (key: string) => !hidden.includes(key);
 
-  // 1. Title Slide
+  // 1. Title Slide (항상 표시)
   slides.push(`<div style="position:relative;display:flex;flex-direction:column;height:100%">
       <div class="sl-emoji">${slEmoji}</div>
       <div class="sl-name">${esc(p.name || 'Your Name')}</div>
@@ -75,7 +77,7 @@ export function buildSlidesHTML(st: PortfolioState): string {
       ${p.tagline ? `<div class="sl-tag">“${esc(p.tagline)}”</div>` : '<div style="margin-top:auto"></div>'}
     </div>`);
 
-  // 2. About
+  // 2. About (자기소개 내용이 있으면 표시)
   if (st.about) {
     slides.push(`<div class="sl-kicker">소개</div>
       <div class="sl-h"><span>💡</span>소개</div>
@@ -83,13 +85,13 @@ export function buildSlidesHTML(st: PortfolioState): string {
   }
 
   // 3. Skills
-  slides.push(`<div class="sl-kicker">기술 스택</div>
+  if (show('skills')) slides.push(`<div class="sl-kicker">기술 스택</div>
     <div class="sl-h"><span>🛠️</span>기술 스택</div>
     <div class="sl-tags">${tags.length ? tags.map(t => chip(t, true)).join('') : '<span style="color:var(--text-faint)">—</span>'}</div>`);
 
   // 3. Tools
   const selT = st.tools || [];
-  if (selT.length) {
+  if (show('tools') && selT.length) {
     slides.push(`<div class="sl-kicker">서비스 · 도구</div>
       <div class="sl-h"><span>🧰</span>서비스 · 도구</div>
       <div class="sl-tags">${selT.map(t => chip(t, true)).join('')}</div>`);
@@ -99,10 +101,10 @@ export function buildSlidesHTML(st: PortfolioState): string {
   const exItems = st.experience.length
     ? st.experience.slice(0, 4).map(x => `<div><div class="sl-li-top"><div><span class="sl-li-title">${esc(x.role || '')}</span> <span class="sl-li-sub">· ${esc(x.company || '')}${x.level ? ` · ${esc(x.level)}` : ''}</span></div><span class="sl-li-period">${esc(x.period || '')}</span></div>${x.desc ? `<div class="sl-li-desc">${esc(x.desc)}</div>` : ''}</div>`).join('')
     : '<div style="color:var(--text-faint)">경력 정보 없음</div>';
-  slides.push(listInner('💼', '경력', exItems));
+  if (show('experience')) slides.push(listInner('💼', '경력', exItems));
 
   // 5. Projects
-  if (st.projects.length) {
+  if (show('projects') && st.projects.length) {
     st.projects.forEach((x, pi) => {
       const techList = (x.tech || '').split(',').map(s => s.trim()).filter(Boolean);
       const star = x.stars ? `<span class="sl-li-period" style="font-size:19px;align-self:center;white-space:nowrap">★ ${x.stars}</span>` : '';
@@ -121,12 +123,13 @@ export function buildSlidesHTML(st: PortfolioState): string {
         ${techList.length ? `<div class="sl-tags">${techList.map(s => chip(s, true)).join('')}</div>` : ''}
         ${urls.length ? `<div class="sl-li-desc" style="color:var(--text-faint);margin-top:20px;font-size:17px">${urls.join('     ')}</div>` : ''}`);
     });
-  } else {
+  } else if (show('projects')) {
     slides.push(listInner('🚀', '프로젝트', '<div style="color:var(--text-faint)">프로젝트 정보 없음</div>'));
   }
 
   // 6. Custom Sections
   (st.custom || []).forEach(cs => {
+    if (!show('cs:' + cs.id)) return;
     const items = (cs.items || []).filter(it => it.title);
     if (!cs.title || !items.length) return;
     const ci = items.slice(0, 4).map(it => `<div><div class="sl-li-top"><div><span class="sl-li-title">${esc(it.title)}</span>${it.sub ? ` <span class="sl-li-sub">· ${esc(it.sub)}</span>` : ''}</div>${it.period ? `<span class="sl-li-period">${esc(it.period)}</span>` : ''}</div>${it.desc ? `<div class="sl-li-desc">${esc(it.desc)}</div>` : ''}</div>`).join('');
@@ -142,10 +145,19 @@ export function buildSlidesHTML(st: PortfolioState): string {
   if (p.github) contacts.push(`<div>🐙 ${esc(p.github)}</div>`);
   if (p.website) contacts.push(`<div>🌐 ${esc(p.website)}</div>`);
   if (p.location) contacts.push(`<div>📍 ${esc(p.location)}</div>`);
-  slides.push(`<div class="sl-kicker">교육 · 연락처</div>
+  if (show('education')) slides.push(`<div class="sl-kicker">교육 · 연락처</div>
     <div class="sl-h"><span>🎓</span>교육</div>
     <div class="sl-list">${eduItems}</div>
     ${contacts.length ? `<div class="sl-h" style="font-size:30px;margin-top:34px"><span>📬</span>연락처</div><div class="sl-contact">${contacts.join('')}</div>` : ''}`);
+
+  // 모든 슬라이드를 제외한 경우 안내 슬라이드 1장
+  if (!slides.length) {
+    slides.push(`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:var(--text-faint)">
+      <div style="font-size:40px;margin-bottom:16px">🗂️</div>
+      <div style="font-size:22px">표시할 슬라이드가 없습니다</div>
+      <div style="font-size:16px;margin-top:8px">스타일 → 발표 슬라이드에서 포함할 페이지를 선택하세요</div>
+    </div>`);
+  }
 
   const total = slides.length;
   const pad = (n: number) => String(n).padStart(2, '0');

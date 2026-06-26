@@ -7,6 +7,7 @@ import { Preview } from './components/Preview';
 import { GuideOverlay } from './components/GuideOverlay';
 import { DepartmentPicker } from './components/DepartmentPicker';
 import { ManualOverlay } from './components/ManualOverlay';
+import { DialogProvider } from './components/Dialog';
 import { PenLine, Eye, AlertTriangle, X } from 'lucide-react';
 
 function AppContent() {
@@ -82,7 +83,9 @@ export default function App() {
   return (
     <ErrorBoundary>
       <PortfolioProvider>
-        <AppContent />
+        <DialogProvider>
+          <AppContent />
+        </DialogProvider>
       </PortfolioProvider>
     </ErrorBoundary>
   );

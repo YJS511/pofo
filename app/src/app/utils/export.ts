@@ -7,6 +7,13 @@ export function toMarkdown(state: PortfolioState): string {
   const p = state.profile;
   let md = '';
 
+  const tgt = state.target;
+  if (tgt?.company?.trim()) {
+    md += `> 🎯 **${tgt.company} 지원용**${tgt.position?.trim() ? ` · ${tgt.position}` : ''}\n`;
+    if (tgt.motivation?.trim()) md += `>\n> 지원 동기 · ${tgt.motivation}\n`;
+    md += `\n`;
+  }
+
   md += `# ${p.emoji || '👋'} ${p.name || '이름'}\n\n`;
   md += `**${p.role || '직무'}** — ${p.tagline || '한 줄 태그라인'}\n\n`;
 
