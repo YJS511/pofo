@@ -40,9 +40,7 @@ export function PortfolioSwitcher() {
   };
 
   const handleDelete = async (id: string, name: string) => {
-    const ok = docs.length <= 1
-      ? await confirm({ title: '마지막 포트폴리오 삭제', message: '삭제하면 빈 포트폴리오로 초기화되고 학과 선택부터 다시 시작합니다.', danger: true, confirmText: '삭제' })
-      : await confirm({ title: `'${name}' 삭제`, message: '이 작업은 되돌릴 수 없습니다.', danger: true, confirmText: '삭제' });
+    const ok = await confirm({ title: `${name} 삭제`, message: '이 작업은 되돌릴 수 없습니다.', danger: true, confirmText: '삭제' });
     if (ok) deleteDoc(id);
   };
 
