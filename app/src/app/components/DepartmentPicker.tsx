@@ -24,11 +24,25 @@ export function DepartmentPicker() {
   }, []);
 
   const [activeTab, setActiveTab] = useState(groups[0]?.dept || '');
+  const [customSchool, setCustomSchool] = useState('');
+  const [customMajor, setCustomMajor] = useState('');
 
   const activePresets = useMemo(
     () => groups.find(g => g.dept === activeTab)?.presets || [],
     [groups, activeTab]
   );
+
+  const handleCustom = () => {
+    const school = customSchool.trim();
+    const major = customMajor.trim();
+    if (!school && !major) return;
+    const merged: any = { ...state };
+    merged.education = [{ school, degree: major, period: '2022.03 ~ 현재' }];
+    replaceState(merged);
+    setSelectedPresetId('custom');
+    setShowOnboarding(false);
+    setShowGuide(true);
+  };
 
   const handleSelect = (preset: PortfolioPreset) => {
     const merged: any = { ...state };
@@ -110,7 +124,7 @@ export function DepartmentPicker() {
           </div>
 
           {/* 학부 탭 */}
-          <div className="flex justify-center gap-1.5 mb-6">
+          <div className="flex flex-wrap justify-center gap-1.5 mb-6">
             {groups.map(({ dept }) => (
               <button
                 key={dept}
@@ -124,9 +138,49 @@ export function DepartmentPicker() {
                 {dept}
               </button>
             ))}
+            <button
+              onClick={() => setActiveTab('__custom__')}
+              className={`px-3 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border ${
+                activeTab === '__custom__'
+                  ? 'bg-gray-900 dark:bg-white text-white dark:text-gray-900 border-transparent shadow-sm'
+                  : 'bg-white dark:bg-gray-900/40 text-gray-700 dark:text-gray-300 border-dashed border-gray-300 dark:border-gray-600 hover:border-gray-400 dark:hover:border-gray-500'
+              }`}
+            >
+              + 직접 입력
+            </button>
           </div>
 
-          {/* 전공 목록 */}
+          {activeTab === '__custom__' ? (
+            /* 직접 입력 (다른 학교·학과) */
+            <div className="max-w-[420px] mx-auto space-y-3">
+              <p className="text-[13px] text-gray-500 dark:text-gray-400 leading-relaxed text-center mb-1">
+                유한대학교 학생이 아니어도 괜찮아요.<br />학교와 전공을 입력하면 그 정보로 시작합니다.
+              </p>
+              <input
+                type="text"
+                value={customSchool}
+                onChange={(e) => setCustomSchool(e.target.value)}
+                placeholder="학교명 (예: ○○대학교)"
+                className="w-full px-3.5 py-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600"
+              />
+              <input
+                type="text"
+                value={customMajor}
+                onChange={(e) => setCustomMajor(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter') handleCustom(); }}
+                placeholder="전공/학과 (예: 컴퓨터공학과)"
+                className="w-full px-3.5 py-3 rounded-xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600"
+              />
+              <button
+                onClick={handleCustom}
+                disabled={!customSchool.trim() && !customMajor.trim()}
+                className="w-full h-11 rounded-xl text-sm font-semibold bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              >
+                이 정보로 시작
+              </button>
+            </div>
+          ) : (
+          /* 전공 목록 */
           <div className="grid grid-cols-2 gap-2">
             {activePresets.map((pr) => (
               <button
@@ -148,6 +202,7 @@ export function DepartmentPicker() {
               </button>
             ))}
           </div>
+          )}
         </div>
       </div>
 

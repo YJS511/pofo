@@ -523,7 +523,7 @@ function coverBg(st){
     }
     return st.theme.gradientCustom;
   }
-  return (st.theme&&st.theme.coverImg)?'center/cover no-repeat url(\\''+st.theme.coverImg+'\\')':gradientCss(st.theme&&st.theme.cover||'graphite');
+  return (st.theme&&st.theme.coverImg)?'center/cover no-repeat url(\\''+esc(st.theme.coverImg)+'\\')':gradientCss(st.theme&&st.theme.cover||'graphite');
 }
 function accentHex(st){
   if(st.theme&&st.theme.accent) return st.theme.accent;
@@ -630,7 +630,7 @@ function renderPageHTML(st, opts){
   var titleCls = p.name?'np-title':'np-title faint';
   var titleTxt = p.name||'제목 없음';
   var shapeCls = p.iconShape==='circle'?' circ':'';
-  var iconInner = p.iconImg ? '<img class="np-icon-img'+shapeCls+'" src="'+p.iconImg+'" alt="">' : (p.emoji||'');
+  var iconInner = p.iconImg ? '<img class="np-icon-img'+shapeCls+'" src="'+esc(p.iconImg)+'" alt="">' : esc(p.emoji||'');
   var iconEl='';
   if(iconInner) iconEl = '<div class="np-icon">'+iconInner+'</div>';
   var noIconCls = iconInner?'':' no-icon';
@@ -705,7 +705,7 @@ function renderPageHTML(st, opts){
 function buildSlidesHTML(st){
   var dark=false; var p=st.profile;
   var cover=coverBg(st);
-  var slEmoji = p.iconImg?'<img class="sl-emoji-img" src="'+p.iconImg+'" alt="">':p.emoji;
+  var slEmoji = p.iconImg?'<img class="sl-emoji-img" src="'+esc(p.iconImg)+'" alt="">':esc(p.emoji||'');
   var tags=st.skills.split(',').map(t=>t.trim()).filter(Boolean);
   var chip=(t,big)=>{const c=tagColor(t,dark);return '<span class="'+(big?'sl-tag-chip':'np-tag')+'" style="background:'+c.bg+';color:'+c.fg+'">'+esc(t)+'</span>';};
 

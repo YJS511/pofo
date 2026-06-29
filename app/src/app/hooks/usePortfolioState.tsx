@@ -90,6 +90,28 @@ const createEmptyState = (): PortfolioState => ({
   github: { user: '', repos: [] }
 });
 
+// ── 보안: 신뢰할 수 없는 입력(가져온 JSON·공유 링크) 값 정화 ──
+// 이미지: data:image/... 또는 http(s) URL만 허용
+function sanitizeImageUrl(v: any): string {
+  const s = String(v || '').trim();
+  if (!s) return '';
+  if (/^data:image\/(png|jpe?g|gif|webp|svg\+xml|avif);/i.test(s)) return s;
+  if (/^https?:\/\//i.test(s)) return s;
+  return '';
+}
+// 색상: #hex 또는 단순 rgb/rgba/hsl/hsla 만 허용 (CSS·HTML 탈출 문자 차단)
+function sanitizeColor(v: any): string {
+  const s = String(v || '').trim();
+  if (!s) return '';
+  if (/^#[0-9a-fA-F]{3,8}$/.test(s)) return s;
+  if (/^(rgb|rgba|hsl|hsla)\([0-9.,%\s/]+\)$/i.test(s)) return s;
+  return '';
+}
+// 그라데이션 프리셋 키 등: 영숫자·하이픈·언더스코어만
+function sanitizeToken(v: any): string {
+  return String(v || '').trim().replace(/[^a-zA-Z0-9_-]/g, '');
+}
+
 export function validateAndNormalizeState(input: any): PortfolioState {
   const base = createEmptyState();
   if (!input || typeof input !== 'object') return base;
@@ -106,6 +128,8 @@ export function validateAndNormalizeState(input: any): PortfolioState {
               url: String(l?.url || '')
             }))
           : [];
+      } else if (k === 'iconImg') {
+        profile.iconImg = sanitizeImageUrl(input.profile.iconImg);
       } else if (input.profile[k] !== undefined) {
         profile[k] = String(input.profile[k]);
       }
@@ -117,10 +141,17 @@ export function validateAndNormalizeState(input: any): PortfolioState {
   if (input.theme && typeof input.theme === 'object') {
     Object.keys(theme).forEach((key) => {
       const k = key as keyof typeof theme;
+      if (input.theme[k] === undefined) return;
       if (k === 'wide' || k === 'noCover') {
-        theme[k] = input.theme[k] === undefined ? base.theme[k] : Boolean(input.theme[k]);
-      } else if (input.theme[k] !== undefined) {
-        theme[k] = input.theme[k];
+        (theme[k] as boolean) = Boolean(input.theme[k]);
+      } else if (k === 'accent' || k === 'solidColor' || k === 'gradientCustom') {
+        (theme[k] as string) = sanitizeColor(input.theme[k]);
+      } else if (k === 'coverImg') {
+        theme.coverImg = sanitizeImageUrl(input.theme.coverImg);
+      } else if (k === 'cover') {
+        theme.cover = sanitizeToken(input.theme.cover);
+      } else {
+        (theme[k] as any) = String(input.theme[k]);
       }
     });
   }

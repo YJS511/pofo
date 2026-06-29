@@ -53,7 +53,7 @@ export function buildSlidesHTML(st: PortfolioState): string {
   const dark = false;
   const p = st.profile;
   const cover = coverBg(st);
-  const slEmoji = p.iconImg ? `<img class="sl-emoji-img" src="${p.iconImg}" alt="">` : (p.emoji || '👋');
+  const slEmoji = p.iconImg ? `<img class="sl-emoji-img" src="${esc(p.iconImg)}" alt="">` : (esc(p.emoji) || '👋');
   const tags = st.skills.split(',').map(t => t.trim()).filter(Boolean);
   const chip = (t: string, big?: boolean) => {
     const c = tagColor(t, dark);

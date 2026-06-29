@@ -39,7 +39,11 @@ var SEC_LABEL = ${JSON.stringify(SEC_LABEL)};
 `;
 
   const helpers = consts + '\n' + STANDALONE_HELPERS;
-  const data = JSON.stringify(state);
+  // 보안: 인라인 <script>에 박을 때 </script> 및 U+2028/2029로 인한 태그 탈출 방지
+  const data = JSON.stringify(state)
+    .replace(/</g, '\\u003c')
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029');
   const title = `${state.profile.name || '포트폴리오'} — 포트폴리오`;
 
   const coverBgForBuild = (st: PortfolioState) => {
@@ -59,7 +63,7 @@ var SEC_LABEL = ${JSON.stringify(SEC_LABEL)};
       return st.theme.gradientCustom;
     }
     const g = GRADIENTS[st.theme.cover] || GRADIENTS.graphite;
-    return st.theme.coverImg ? `center/cover no-repeat url('${st.theme.coverImg}')` : g;
+    return st.theme.coverImg ? `center/cover no-repeat url('${st.theme.coverImg.replace(/['"()\\]/g, encodeURIComponent)}')` : g;
   };
 
   return `<!DOCTYPE html>
@@ -97,7 +101,7 @@ ${SLIDE_CSS}
 </head>
 <body>
 <div class="viewer-bar">
-  <span class="vb-brand"><span class="lg">${state.profile.iconImg ? `<img src="${state.profile.iconImg}" style="width:100%;height:100%;object-fit:cover" alt="">` : state.profile.emoji || ''}</span>${escapeHtml(state.profile.name || 'Portfolio')}</span>
+  <span class="vb-brand"><span class="lg">${state.profile.iconImg ? `<img src="${escapeHtml(state.profile.iconImg)}" style="width:100%;height:100%;object-fit:cover" alt="">` : escapeHtml(state.profile.emoji || '')}</span>${escapeHtml(state.profile.name || 'Portfolio')}</span>
   <span class="sp"></span>
   <button class="vbtn" id="v-font" title="폰트 변경">Aa</button>
   <button class="vbtn" id="v-mode">☀︎ / ☾</button>
