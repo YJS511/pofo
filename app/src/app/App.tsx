@@ -7,11 +7,12 @@ import { Preview } from './components/Preview';
 import { GuideOverlay } from './components/GuideOverlay';
 import { DepartmentPicker } from './components/DepartmentPicker';
 import { ManualOverlay } from './components/ManualOverlay';
+import { ResumeOverlay } from './components/ResumeOverlay';
 import { DialogProvider } from './components/Dialog';
 import { PenLine, Eye, AlertTriangle, X } from 'lucide-react';
 
 function AppContent() {
-  const { showGuide, setShowGuide, showOnboarding, saveError, shareError, dismissShareError, showManual, setShowManual } = usePortfolio();
+  const { showGuide, setShowGuide, showOnboarding, saveError, shareError, dismissShareError, showManual, setShowManual, showResume, setShowResume } = usePortfolio();
   const [mobileView, setMobileView] = useState<'editor' | 'preview'>('editor');
 
   return (
@@ -75,6 +76,7 @@ function AppContent() {
       {showOnboarding && <DepartmentPicker />}
       {showGuide && !showOnboarding && <GuideOverlay onClose={() => setShowGuide(false)} />}
       {showManual && <ManualOverlay onClose={() => setShowManual(false)} />}
+      {showResume && <ResumeOverlay onClose={() => setShowResume(false)} />}
     </>
   );
 }

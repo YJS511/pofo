@@ -35,6 +35,8 @@ interface PortfolioContextType {
   dismissShareError: () => void;
   showManual: boolean;
   setShowManual: (show: boolean) => void;
+  showResume: boolean;
+  setShowResume: (show: boolean) => void;
   // 다중 포트폴리오
   docs: DocMeta[];
   activeId: string;
@@ -376,6 +378,7 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
   const [currentStep, setCurrentStep] = useState(0);
   const [showGuide, setShowGuide] = useState(false);
   const [showManual, setShowManual] = useState(false);
+  const [showResume, setShowResume] = useState(false);
   const [viewMode, setViewMode] = useState<'desktop' | 'mobile'>('desktop');
   const [selectedPresetId, setSelectedPresetIdRaw] = useState(() => {
     try { return localStorage.getItem('pofo.presetId') || ''; } catch { return ''; }
@@ -613,6 +616,8 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
       dismissShareError: () => setShareError(false),
       showManual,
       setShowManual,
+      showResume,
+      setShowResume,
       docs,
       activeId,
       createDoc,

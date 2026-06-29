@@ -13,20 +13,22 @@ import {
   downloadZip,
   toMarkdown,
 } from '../utils/export';
+import { exportResumePDF } from '../utils/export-resume';
 
 interface ExportMenuProps {
   isOpen: boolean;
   onClose: () => void;
 }
  
-type Fmt = 'json' | 'html' | 'md' | 'pdf' | 'pptx' | 'zip';
+type Fmt = 'resume' | 'json' | 'html' | 'md' | 'pdf' | 'pptx' | 'zip';
 
 const FORMATS: { value: Fmt; label: string; hint: string; copy: boolean }[] = [
+  { value: 'resume', label: '이력서 (PDF)', hint: '유한대학교 이력서 양식(A4) — 새 창에서 인쇄하여 PDF로 저장', copy: false },
   { value: 'html', label: 'HTML (.html)', hint: '현재 디자인한 테마, 컬러, 커버, 이모지가 완벽 보존된 단독 HTML', copy: true },
   { value: 'zip', label: '배포용 ZIP (.zip)', hint: 'Netlify Drop 등에 드래그하여 바로 웹사이트를 개설할 수 있는 압축 파일', copy: false },
   { value: 'md', label: 'Markdown (.md)', hint: 'GitHub README, Notion, 블로그 등에 바로 붙여넣기 가능', copy: true },
   { value: 'json', label: 'JSON 데이터 (.json)', hint: '구조화된 백업본 — 다른 기기로 이전', copy: true },
-  { value: 'pdf', label: 'PDF 문서', hint: '인쇄형 문서 — 복사는 지원하지 않아요', copy: false },
+  { value: 'pdf', label: '포트폴리오 PDF', hint: '현재 포트폴리오를 인쇄형 문서로 — 복사는 지원하지 않아요', copy: false },
   { value: 'pptx', label: 'PowerPoint (.pptx)', hint: '편집 가능한 슬라이드 — 복사는 지원하지 않아요', copy: false }
 ];
  
@@ -61,7 +63,10 @@ export function ExportMenu({ isOpen, onClose }: ExportMenuProps) {
  
   const handleDownload = async () => {
     try {
-      if (fmt === 'json') {
+      if (fmt === 'resume') {
+        exportResumePDF(state);
+        onClose();
+      } else if (fmt === 'json') {
         downloadFile(`${fname}.json`, exportJSON(state), 'application/json');
         flash('🗂️ JSON(.json)을 다운로드했어요');
       } else if (fmt === 'md') {
